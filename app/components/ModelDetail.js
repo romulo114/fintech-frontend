@@ -1,24 +1,27 @@
 import React from 'react'
-import {fetchAccounts} from '../utils/api'
-import {useTable} from "react-table"
+import {fetchModelDetail} from "../utils/api";
+import {useTable} from "react-table";
 import {Button, Row} from "react-bootstrap";
 
-export default function Accounts() {
-    const [accounts, setAccounts] = React.useState([])
+export default function ModelDetail() {
+    const [model, setModel] = React.useState([])
     const [loading, setLoading] = React.useState(null)
+
 
     React.useEffect(() => {
         setLoading(true)
-        fetchAccounts().then((data) => {
-            setAccounts(data)
+        fetchModelDetail().then((data) => {
+            setModel(data)
             setLoading(false)
         })
     }, [])
-    const data = React.useMemo(() => accounts, [accounts])
+    const data = React.useMemo(() => model, [model])
     const columns = React.useMemo(
         () => [
-            {Header: "Account Number", accessor: "account_number"},
-            {Header: "Broker", accessor: "broker_name"},
+            {
+                Header: "Label", accessor: "label",
+            },
+            {Header: "Description", accessor: "description"},
         ],
         []
     )
@@ -69,10 +72,6 @@ export default function Accounts() {
                     </tbody>
                 </table>
             </Row>
-            <Row>
-                <Button>Button</Button>
-            </Row>
         </React.Fragment>
     )
 }
-

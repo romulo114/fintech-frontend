@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/Nav'
 import Portfolios from "./Portfolios";
 import Models from "./Models";
 import Accounts from "./Accounts";
+import ModelDetail from "./ModelDetail";
 
 
 export function TopNav() {
@@ -13,13 +14,11 @@ export function TopNav() {
         <React.Fragment>
             <Row>
                 <Col md={{span: 6, offset: 5}}>
-
                     <Nav activeKey="/home">
                         <Router>
                             <Nav.Link>Blog</Nav.Link> |
                             <Nav.Link> Tutorials</Nav.Link> |
                             <Nav.Link eventKey="disabled" disabled> Support</Nav.Link>
-
                         </Router>
                     </Nav>
                 </Col>
@@ -41,7 +40,7 @@ export function SideNav() {
                 <Col lg={2}>
                     <Nav className="flex-column">
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/models">Dashboard</Nav.Link>
+                            <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link as={Link} to="/accounts/account_summary">Accounts</Nav.Link>
@@ -62,12 +61,10 @@ export function SideNav() {
                 </Col>
                 <Col lg={10}>
                     <Route exact path='/' component={Portfolios}/>
-                    <Route path='/model/model_summary' component={Models}/>
-                    <Route path='/accounts/account_summary'
-                           render={(props) => (
-                               <Accounts {...props} name='Rye'/>
-                           )}
-                    />
+                    <Route exact path='/model/model_summary' component={Models}/>
+                    <Route path={`/model/model_detail/:id`} component={ModelDetail}></Route>
+
+                    <Route path='/accounts/account_summary' component={Accounts}/>
                 </Col>
             </Router>
         </Row>

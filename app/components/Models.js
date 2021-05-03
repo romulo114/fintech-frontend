@@ -1,55 +1,83 @@
 import React from 'react'
-import {fetchModels} from '../utils/api'
+import {fetchModelSummary} from '../utils/api'
+import {useTable} from "react-table"
+import {Button, Row} from "react-bootstrap";
+import { Link, } from "react-router-dom";
 
-export default class Models extends React.Component {
-    constructor(props) {
-        super(props);
+export default function Models() {
+    const [models, setModels] = React.useState([])
+    const [loading, setLoading] = React.useState(null)
 
-        this.state = {
-            models: [],
-            error: null
-        }
+    React.useEffect(() => {
+        setLoading(true)
+        fetchModelSummary().then((data) => {
 
-        this.updateModels = this.updateModels.bind(this)
-        this.isLoading = this.isLoading.bind(this)
-
-    }
-    componentDidMount() {
-        this.updateModels()
-    }
-
-
-    updateModels() {
-        fetchModels().then((models) => this.setState({
-            models,
-            error: null,
-        })).catch((error) => {
-            console.warn('Error fetching repos: ', error)
-            this.setState({
-                error: `There was an error fetching the repositories.`
-            })
+            setModels(data)
+            setLoading(false)
         })
+    }, [])
+    const data = React.useMemo(() => models, [models])
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: "Name",
+                accessor: "label",
+                Cell: ({row}) => <Link to={`/model/model_detail/${row.original.id}`}>{String(row.original.label)}</Link>
+            },
+            {Header: "Description", accessor: "description"},
+        ],
+        []
+    )
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable({columns, data})
+
+
+    if (loading === true) {
+        return <p>Loading...</p>
     }
-
-    isLoading() {
-        return this.state.models.length === 0 && this.state.error === null
-    }
-
-
-    render() {
-        const {models, error} = this.state;
-        return (
-            <React.Fragment>
-                {this.isLoading() && <p>LOADING</p>}
-
-                {error && <p>{error}</p>}
-
-                <ul>
-                    {models.map((task) => (
-                        <li key={task}>{task}</li>
-                    ))}
-                </ul>
-            </React.Fragment>
-        )
-    }
+    return (<React.Fragment>
+            <Row>
+                <table {...getTableProps()}>
+                    <thead>
+                    {
+                        headerGroups.map(headerGroup => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {
+                                    headerGroup.headers.map(column => (
+                                        <th {...column.getHeaderProps()}>
+                                            {column.render('Header')}
+                                        </th>
+                                    ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                    {
+                        rows.map(row => {
+                            prepareRow(row)
+                            return (
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map(cell => {
+                                        return (
+                                            <td {...cell.getCellProps()}>
+                                                {cell.render('Cell')}
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </Row>
+            <Row>
+                <Button>Button</Button>
+            </Row>
+        </React.Fragment>
+    )
 }

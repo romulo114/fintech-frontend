@@ -1,4 +1,4 @@
-export async function fetchModels () {
+export async function fetchModelSummary () {
     return fetch('/api/model/model_summary')
         .then((res) => res.json())
         .then((data) => {
@@ -16,6 +16,13 @@ export async function fetchPortfolios () {
 
 export async function fetchAccounts () {
     return fetch('/api/accounts/account_summary')
+        .then((res) => res.json())
+        .then((data) => {
+            return data
+        })
+}
+export async function fetchModelDetail () {
+    return fetch('/api/model/model_detail/:id')
         .then((res) => res.json())
         .then((data) => {
             return data
