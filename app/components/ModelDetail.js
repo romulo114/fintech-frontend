@@ -2,26 +2,30 @@ import React from 'react'
 import {fetchModelDetail} from "../utils/api";
 import {useTable} from "react-table";
 import {Button, Row} from "react-bootstrap";
+import { useParams } from 'react-router-dom';
 
 export default function ModelDetail() {
+    const { id } = useParams()
     const [model, setModel] = React.useState([])
     const [loading, setLoading] = React.useState(null)
 
 
     React.useEffect(() => {
         setLoading(true)
-        fetchModelDetail().then((data) => {
-            setModel(data)
+        fetchModelDetail(id).then((data) => {
+            setModel(data['assetModel']['positions'])
             setLoading(false)
         })
     }, [])
+
     const data = React.useMemo(() => model, [model])
+
     const columns = React.useMemo(
         () => [
             {
-                Header: "Label", accessor: "label",
+                Header: "Symbol", accessor: "symbol",
             },
-            {Header: "Description", accessor: "description"},
+            {Header: "Weight", accessor: "weight"},
         ],
         []
     )
@@ -37,6 +41,7 @@ export default function ModelDetail() {
     if (loading === true) {
         return <p>Loading...</p>
     }
+
     return (<React.Fragment>
             <Row>
                 <table {...getTableProps()}>

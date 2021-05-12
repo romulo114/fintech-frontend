@@ -43,13 +43,13 @@ export function SideNav() {
                             <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/accounts/account_summary">Accounts</Nav.Link>
+                            <Nav.Link as={Link} to="/accounts">Accounts</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link as={Link} to="/trade/trade_summary">Trades</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/model/model_summary">Strategies</Nav.Link>
+                            <Nav.Link as={Link} to="/models">Strategies</Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
                             <Nav.Link as={Link} to="/portfolio/portfolio_summary">Portfolios</Nav.Link>
@@ -60,11 +60,10 @@ export function SideNav() {
                     </Nav>
                 </Col>
                 <Col lg={10}>
-                    <Route exact path='/' component={Portfolios}/>
-                    <Route exact path='/model/model_summary' component={Models}/>
-                    <Route path={`/model/model_detail/:id`} component={ModelDetail}></Route>
+                    <Route exact path='/'><Models/></Route>
+                    <Route exact path='/models'><Models/></Route>
+                    <Route exact path='/models/:id'><ModelDetail/></Route>
 
-                    <Route path='/accounts/account_summary' component={Accounts}/>
                 </Col>
             </Router>
         </Row>

@@ -2,7 +2,9 @@ import React from 'react'
 import {fetchModelSummary} from '../utils/api'
 import {useTable} from "react-table"
 import {Button, Row} from "react-bootstrap";
-import { Link, } from "react-router-dom";
+import {Link, Router, Route} from "react-router-dom";
+import ModelDetail from "./ModelDetail";
+import Nav from "react-bootstrap/Nav";
 
 export default function Models() {
     const [models, setModels] = React.useState([])
@@ -12,7 +14,7 @@ export default function Models() {
         setLoading(true)
         fetchModelSummary().then((data) => {
 
-            setModels(data)
+            setModels(data["assetModels"])
             setLoading(false)
         })
     }, [])
@@ -22,7 +24,7 @@ export default function Models() {
             {
                 Header: "Name",
                 accessor: "label",
-                Cell: ({row}) => <Link to={`/model/model_detail/${row.original.id}`}>{String(row.original.label)}</Link>
+                Cell: ({row}) =><Nav.Link as={Link} to={`/models/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
             },
             {Header: "Description", accessor: "description"},
         ],
@@ -61,15 +63,16 @@ export default function Models() {
                         rows.map(row => {
                             prepareRow(row)
                             return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map(cell => {
-                                        return (
-                                            <td {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
+                                    <tr {...row.getRowProps()}>
+                                        {row.cells.map(cell => {
+                                            return (
+                                              <td {...cell.getCellProps()}>
+                                                    {cell.render('Cell')}
+                                                </td>
+
+                                            )
+                                        })}
+                                    </tr>
                             )
                         })}
                     </tbody>

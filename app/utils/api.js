@@ -1,18 +1,18 @@
 export async function fetchModelSummary () {
-    return fetch('/api/model/model_summary')
+    return fetch('/api/assetModels')
         .then((res) => res.json())
         .then((data) => {
             return data
         })
 }
 
-export async function fetchPortfolios () {
-    return fetch('/api/portfolios')
-        .then((res) => res.json())
-        .then((data) => {
-            return data
-        })
-}
+// export async function fetchPortfolios () {
+//     return fetch('/api/portfolios')
+//         .then((res) => res.json())
+//         .then((data) => {
+//             return data
+//         })
+// }
 
 export async function fetchAccounts () {
     return fetch('/api/accounts/account_summary')
@@ -21,8 +21,8 @@ export async function fetchAccounts () {
             return data
         })
 }
-export async function fetchModelDetail () {
-    return fetch('/api/model/model_detail/:id')
+export async function fetchModelDetail (id) {
+    return fetch(`/api/assetModels/${id}`)
         .then((res) => res.json())
         .then((data) => {
             return data

@@ -1,29 +1,22 @@
 import {createServer, Model} from "miragejs"
 
 export default function () {
-    createServer(
-        {
+    createServer({
+
             models: {
-                user: Model
-            },
-            seeds(server) {
-                server.create("user", {text: "User_1"})
+                assetModel: Model
             },
             routes() {
-                this.get("/api/portfolios", () => (
-                        ["Portfolio 1", "Portfolio 2", "            "
-                        ]
-                    )
-                ),
-                    this.get("/api/model/model_summary", () => (
-                            [{
-                                label: "Model-001",
-                                id: "100001",
-                                description: "Strategy for the ages",
-                                is_public: "false"
-                            },]
-                        )
-                    ),
+                this.namespace = "api"
+
+                    this.get("/assetModels", (schema, request) => {
+                        return schema.assetModels.all()
+                    }),
+                    this.get("/assetModels/:id", (schema, request) => {
+                        let id = request.params.id
+
+                        return schema.assetModels.find(id)
+                    }),
                     this.get("/api/accounts/account_summary", () => (
                             [
                                 {
@@ -32,26 +25,24 @@ export default function () {
                                 },
                             ]
                         )
-                    ),
-                    this.get("/api/model/model_detail/:id", () => (
-                            [{
-                                id: "100001",
-                                label: "USA",
-                                keywords: ["USA"],
-                                allocation: "null",
-                                description: "Strategy for the USA",
-                                is_public: "false",
-                                user_id: "100001",
-                                positions: [{
-                                    "model_id": "100001",
-                                    symbol: "AGG",
-                                    weight: 0.2
-                                }]
-                            }]
-                        )
                     )
-            }
 
+            },
+            seeds(server) {
+                server.create("assetModel",  {
+                    label: "USA",
+                    keywords: ["USA"],
+                    allocation: "null",
+                    description: "Strategy for the USA",
+                    is_public: "false",
+                    user_id: "100001",
+                    positions: [{
+                        "model_id": "100001",
+                        symbol: "AGG",
+                        weight: 0.2
+                    }]
+                })
+            },
         }
     )
 }

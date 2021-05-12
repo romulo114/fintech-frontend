@@ -1,5 +1,5 @@
 import React from 'react'
-import {fetchPortfolios} from '../utils/api'
+// import {fetchPortfolios} from '../utils/api'
 
 export default class Portfolios extends React.Component {
     constructor(props) {
