@@ -1,24 +1,32 @@
 import React from 'react'
-import {fetchModelDetail} from "../utils/api";
-import {useTable} from "react-table";
 import {Button, Row} from "react-bootstrap";
 import { useParams } from 'react-router-dom';
+import {useTable} from "react-table";
+
+import {EditableCell} from "./EditableCell"
+import {fetchModelDetail} from "../utils/api";
+
+// Set our editable cell renderer as the default Cell renderer
+const defaultColumn = {
+    Cell: EditableCell,
+}
 
 export default function ModelDetail() {
     const { id } = useParams()
-    const [model, setModel] = React.useState([])
+    const [positions, setPositions] = React.useState([])
+    const [model, setModel] = React.useState({})
     const [loading, setLoading] = React.useState(null)
-
 
     React.useEffect(() => {
         setLoading(true)
-        fetchModelDetail(id).then((data) => {
-            setModel(data['assetModel']['positions'])
+        fetchModelDetail(id).then((response) => {
+            setPositions(response['assetModel']['positions'])
+            setModel(response['assetModel'])
             setLoading(false)
         })
     }, [])
 
-    const data = React.useMemo(() => model, [model])
+    const data = React.useMemo(() => positions, [positions])
 
     const columns = React.useMemo(
         () => [
@@ -29,20 +37,22 @@ export default function ModelDetail() {
         ],
         []
     )
+
+
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
         rows,
         prepareRow,
-    } = useTable({columns, data})
+    } = useTable({columns, data, defaultColumn})
 
 
     if (loading === true) {
         return <p>Loading...</p>
     }
-
     return (<React.Fragment>
+
             <Row>
                 <table {...getTableProps()}>
                     <thead>
