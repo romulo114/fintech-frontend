@@ -3,7 +3,6 @@ import {fetchModelSummary} from '../utils/api'
 import {useTable} from "react-table"
 import {Button, Row} from "react-bootstrap";
 import {Link, Router, Route} from "react-router-dom";
-import ModelDetail from "./ModelDetail";
 import Nav from "react-bootstrap/Nav";
 
 export default function Models() {
@@ -24,7 +23,8 @@ export default function Models() {
             {
                 Header: "Name",
                 accessor: "label",
-                Cell: ({row}) =><Nav.Link as={Link} to={`/models/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
+                Cell: ({row}) => <Nav.Link as={Link}
+                                           to={`/models/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
             },
             {Header: "Description", accessor: "description"},
         ],
@@ -63,16 +63,16 @@ export default function Models() {
                         rows.map(row => {
                             prepareRow(row)
                             return (
-                                    <tr {...row.getRowProps()}>
-                                        {row.cells.map(cell => {
-                                            return (
-                                              <td {...cell.getCellProps()}>
-                                                    {cell.render('Cell')}
-                                                </td>
+                                <tr {...row.getRowProps()}>
+                                    {row.cells.map(cell => {
+                                        return (
+                                            <td {...cell.getCellProps()}>
+                                                {cell.render('Cell')}
+                                            </td>
 
-                                            )
-                                        })}
-                                    </tr>
+                                        )
+                                    })}
+                                </tr>
                             )
                         })}
                     </tbody>

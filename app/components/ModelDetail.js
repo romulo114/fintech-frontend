@@ -1,6 +1,6 @@
 import React from 'react'
 import {Button, Row} from "react-bootstrap";
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import {useTable} from "react-table";
 
 import {EditableCell} from "./EditableCell"
@@ -11,29 +11,64 @@ const defaultColumn = {
     Cell: EditableCell,
 }
 
+
 export default function ModelDetail() {
-    const { id } = useParams()
+    const {id} = useParams()
     const [positions, setPositions] = React.useState([])
     const [model, setModel] = React.useState({})
     const [loading, setLoading] = React.useState(null)
+    const [skipPageReset, setSkipPageReset] = React.useState(false)
+    React.useEffect(() => {
+        setSkipPageReset(false)
+    }, [data])
+
+    const updateMyData = (rowIndex, columnId, value) => {
+        // We also turn on the flag to not reset the page
+        setSkipPageReset(true)
+        setData(old =>
+            old.map((row, index) => {
+                if (index === rowIndex) {
+                    return {
+                        ...old[rowIndex],
+                        [columnId]: value,
+                    }
+                }
+                return row
+            })
+        )
+    }
+
 
     React.useEffect(() => {
         setLoading(true)
         fetchModelDetail(id).then((response) => {
+            response['assetModel']['positions'].forEach((item, index)=>{
+                item.add_row = "+"
+                item.delete_row = "-"
+            })
+            return response
+        }).then((response) => {
             setPositions(response['assetModel']['positions'])
             setModel(response['assetModel'])
             setLoading(false)
         })
     }, [])
-
     const data = React.useMemo(() => positions, [positions])
-
+    const addRow = () => {
+        setPositions(positions.concat([{"model_id": "10002", "symbol": "SPY", "weight": 0.1}]))
+    }
     const columns = React.useMemo(
         () => [
+            {
+                Header: "", accessor: "add_row",
+                Cell:  ({ value }) => String(value)
+            },
             {
                 Header: "Symbol", accessor: "symbol",
             },
             {Header: "Weight", accessor: "weight"},
+            {Header: "", accessor: "delete_row",
+                Cell:  ({ value }) => String(value)}
         ],
         []
     )
@@ -45,14 +80,13 @@ export default function ModelDetail() {
         headerGroups,
         rows,
         prepareRow,
-    } = useTable({columns, data, defaultColumn})
 
+    } = useTable({columns, data, defaultColumn, autoResetPage: !skipPageReset, updateMyData})
 
     if (loading === true) {
         return <p>Loading...</p>
     }
     return (<React.Fragment>
-
             <Row>
                 <table {...getTableProps()}>
                     <thead>
@@ -86,6 +120,9 @@ export default function ModelDetail() {
                         })}
                     </tbody>
                 </table>
+            </Row>
+            <Row>
+                <Button onClick={addRow}>Button</Button>
             </Row>
         </React.Fragment>
     )

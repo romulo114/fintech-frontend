@@ -63,7 +63,6 @@ export function SideNav() {
                     <Route exact path='/'><Models/></Route>
                     <Route exact path='/models'><Models/></Route>
                     <Route exact path='/models/:id'><ModelDetail/></Route>
-
                 </Col>
             </Router>
         </Row>
