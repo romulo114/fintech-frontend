@@ -1,10 +1,10 @@
 import React from 'react'
-import {Button, Row} from "react-bootstrap";
+import {Button, Row, Form} from "react-bootstrap";
 import {useParams} from 'react-router-dom';
 import {useTable} from "react-table";
 
-import {EditableCell} from "./EditableCell"
-import {fetchModelDetail} from "../utils/api";
+import {EditableCell, EditableCheckbox} from "./EditableCell"
+import {fetchModelDetail, postModelPositions} from "../utils/api";
 
 // Set our editable cell renderer as the default Cell renderer
 const defaultColumn = {
@@ -25,7 +25,8 @@ export default function ModelDetail() {
     const updateMyData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        setData(old =>
+        if (typeof value === "boolean" ) value =! value
+        setPositions(old =>
             old.map((row, index) => {
                 if (index === rowIndex) {
                     return {
@@ -37,38 +38,36 @@ export default function ModelDetail() {
             })
         )
     }
-
+    const saveData = () => {
+        postModelPositions(model.id, positions)
+    }
 
     React.useEffect(() => {
         setLoading(true)
         fetchModelDetail(id).then((response) => {
-            response['assetModel']['positions'].forEach((item, index)=>{
-                item.add_row = "+"
-                item.delete_row = "-"
+            response['modelPositions'].forEach((item, index)=>{
+            //      item.add_row = "+"
+                 item.delete_row = false
             })
             return response
         }).then((response) => {
-            setPositions(response['assetModel']['positions'])
+            setPositions(response['modelPositions'])
             setModel(response['assetModel'])
             setLoading(false)
         })
     }, [])
     const data = React.useMemo(() => positions, [positions])
     const addRow = () => {
-        setPositions(positions.concat([{"model_id": "10002", "symbol": "SPY", "weight": 0.1}]))
+        setPositions(positions.concat([{"model_id": "10002", "symbol": "", "weight": 0.0, "Delete": false}]))
     }
     const columns = React.useMemo(
         () => [
             {
-                Header: "", accessor: "add_row",
-                Cell:  ({ value }) => String(value)
-            },
-            {
                 Header: "Symbol", accessor: "symbol",
             },
             {Header: "Weight", accessor: "weight"},
-            {Header: "", accessor: "delete_row",
-                Cell:  ({ value }) => String(value)}
+            {Header: "Delete", accessor: "delete_row",
+                Cell: EditableCheckbox}
         ],
         []
     )
@@ -122,7 +121,8 @@ export default function ModelDetail() {
                 </table>
             </Row>
             <Row>
-                <Button onClick={addRow}>Button</Button>
+                <Button onClick={addRow}>Add Asset</Button>
+                <Button onClick={saveData}>Save Updates</Button>
             </Row>
         </React.Fragment>
     )

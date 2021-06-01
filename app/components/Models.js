@@ -1,9 +1,18 @@
 import React from 'react'
-import {fetchModelSummary} from '../utils/api'
+import {fetchModelSummary, postModel} from '../utils/api'
 import {useTable} from "react-table"
-import {Button, Row} from "react-bootstrap";
-import {Link, Router, Route} from "react-router-dom";
-import Nav from "react-bootstrap/Nav";
+import {Button, Row} from "react-bootstrap"
+import {Link, Router, Route} from "react-router-dom"
+import Nav from "react-bootstrap/Nav"
+
+function NewModel(prop_a) {
+    console.log(prop_a)
+    const [models, setModels] = React.useState([prop_a])
+    const addModel = () => {
+        postModel().then(() => {return data})
+    }
+    return <Button onClick={addModel}>Button</Button>
+}
 
 export default function Models() {
     const [models, setModels] = React.useState([])
@@ -17,6 +26,8 @@ export default function Models() {
             setLoading(false)
         })
     }, [])
+
+
     const data = React.useMemo(() => models, [models])
     const columns = React.useMemo(
         () => [
@@ -43,6 +54,7 @@ export default function Models() {
         return <p>Loading...</p>
     }
     return (<React.Fragment>
+
             <Row>
                 <table {...getTableProps()}>
                     <thead>
@@ -79,7 +91,7 @@ export default function Models() {
                 </table>
             </Row>
             <Row>
-                <Button>Button</Button>
+                <NewModel prop_a={data}/>
             </Row>
         </React.Fragment>
     )
