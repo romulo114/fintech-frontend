@@ -23,14 +23,21 @@ export default function () {
                     return schema.assetModels.all()
                 })
                 this.post("/assetModels", (schema, request) => {
-                    return schema.assetModels.create()
+                    schema.assetModels.create()
+                    return schema.assetModels.all()
                 })
                 this.get("/assetModels/:id", (schema, request) => {
                     let assetModelId = request.params.id
                     return schema.assetModels.find(assetModelId)
                 })
+                this.post("/assetModels/:id", (schema, request) => {
+                    let assetModel = schema.assetModels.find(request.params.id)
+                    assetModel.update({ label: request.requestBody['name']})
+                    return assetModel
+                })
                 this.post("/assetModels/:id/modelPositions", (schema, request) => {
                     let assetModelId = request.params.id
+
                     request.requestBody.forEach((item, index) => {
                         if (item.delete_row == true) {
                             schema.modelPositions.find(item.id).destroy();

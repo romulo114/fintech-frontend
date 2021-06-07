@@ -38,8 +38,8 @@ export async function postModelPositions(id, body) {
         })
 }
 
-export async function postModel(body) {
-    return fetch(`/api/assetModels`,
+export async function postModelDetails(id, body) {
+    return fetch(`/api/assetModels/${id}`,
         {'method': 'POST', 'body': body}).then((res) => res.json())
         .then((data) => {
             return data

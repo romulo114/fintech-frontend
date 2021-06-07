@@ -1,9 +1,9 @@
 import React from 'react'
-import {Button, Row, Form} from "react-bootstrap";
+import {Button, Row, Form, Col} from "react-bootstrap";
 import {useParams} from 'react-router-dom';
 import {useTable} from "react-table";
 
-import {EditableCell, EditableCheckbox} from "./EditableCell"
+import {EditableCell, EditableCheckbox, LoadingForm} from "./UtilityComponents"
 import {fetchModelDetail, postModelPositions} from "../utils/api";
 
 // Set our editable cell renderer as the default Cell renderer
@@ -15,7 +15,7 @@ const defaultColumn = {
 export default function ModelDetail() {
     const {id} = useParams()
     const [positions, setPositions] = React.useState([])
-    const [model, setModel] = React.useState({})
+    const [model, setModel] = React.useState({"label": ""})
     const [loading, setLoading] = React.useState(null)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
     React.useEffect(() => {
@@ -25,7 +25,7 @@ export default function ModelDetail() {
     const updateMyData = (rowIndex, columnId, value) => {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
-        if (typeof value === "boolean" ) value =! value
+        if (typeof value === "boolean") value = !value
         setPositions(old =>
             old.map((row, index) => {
                 if (index === rowIndex) {
@@ -42,12 +42,13 @@ export default function ModelDetail() {
         postModelPositions(model.id, positions)
     }
 
+
     React.useEffect(() => {
         setLoading(true)
         fetchModelDetail(id).then((response) => {
-            response['modelPositions'].forEach((item, index)=>{
-            //      item.add_row = "+"
-                 item.delete_row = false
+            response['modelPositions'].forEach((item, index) => {
+                //      item.add_row = "+"
+                item.delete_row = false
             })
             return response
         }).then((response) => {
@@ -66,8 +67,10 @@ export default function ModelDetail() {
                 Header: "Symbol", accessor: "symbol",
             },
             {Header: "Weight", accessor: "weight"},
-            {Header: "Delete", accessor: "delete_row",
-                Cell: EditableCheckbox}
+            {
+                Header: "Delete", accessor: "delete_row",
+                Cell: EditableCheckbox
+            }
         ],
         []
     )
@@ -86,6 +89,9 @@ export default function ModelDetail() {
         return <p>Loading...</p>
     }
     return (<React.Fragment>
+            <Row>
+                <LoadingForm id={model.id}/>
+            </Row>
             <Row>
                 <table {...getTableProps()}>
                     <thead>
@@ -121,8 +127,12 @@ export default function ModelDetail() {
                 </table>
             </Row>
             <Row>
-                <Button onClick={addRow}>Add Asset</Button>
-                <Button onClick={saveData}>Save Updates</Button>
+                <Col>
+                    <Button onClick={addRow}>Add Asset</Button>
+                </Col>
+                <Col>
+                    <Button onClick={saveData}>Update Model Positions</Button>
+                </Col>
             </Row>
         </React.Fragment>
     )

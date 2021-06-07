@@ -1,15 +1,16 @@
 import React from 'react'
-import {fetchModelSummary, postModel} from '../utils/api'
+import {fetchModelSummary} from '../utils/api'
 import {useTable} from "react-table"
 import {Button, Row} from "react-bootstrap"
 import {Link, Router, Route} from "react-router-dom"
 import Nav from "react-bootstrap/Nav"
 
-function NewModel(prop_a) {
-    console.log(prop_a)
-    const [models, setModels] = React.useState([prop_a])
+function NewModel(props) {
     const addModel = () => {
-        postModel().then(() => {return data})
+        postModel().then((data) => {
+            props.prop_b(data["assetModels"])
+        })
+
     }
     return <Button onClick={addModel}>Button</Button>
 }
@@ -91,7 +92,7 @@ export default function Models() {
                 </table>
             </Row>
             <Row>
-                <NewModel prop_a={data}/>
+                <NewModel prop_b={setModels}/>
             </Row>
         </React.Fragment>
     )

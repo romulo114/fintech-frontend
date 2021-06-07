@@ -34,6 +34,7 @@ export function TopNav() {
 }
 
 export function SideNav() {
+
     return (
         <Row>
             <Router>
@@ -61,7 +62,7 @@ export function SideNav() {
                 </Col>
                 <Col lg={10}>
                     <Route exact path='/'><Models/></Route>
-                    <Route exact path='/models'><Models/></Route>
+                    {/*<Route exact path='/models'><Models/></Route>*/}
                     <Route exact path='/models/:id'><ModelDetail/></Route>
                 </Col>
             </Router>
