@@ -16,18 +16,17 @@ export function TopNav() {
                 <Col md={{span: 6, offset: 5}}>
                     <Nav activeKey="/home">
                         <Router>
-                            <Nav.Link>Blog</Nav.Link> |
-                            <Nav.Link> Tutorials</Nav.Link> |
-                            <Nav.Link eventKey="disabled" disabled> Support</Nav.Link>
+                            <Nav.Link disabled>Blog</Nav.Link> |
+                            <Nav.Link disabled> Tutorials</Nav.Link> |
+                            <Nav.Link disabled> Support</Nav.Link>
                         </Router>
                     </Nav>
                 </Col>
-                <Col></Col>
+                <Col>Logout</Col>
             </Row>
             <Row>
-                <Col>fithm</Col>
+                <Col><h3>DIYInvesting</h3></Col>
                 <Col md={{span: 10}}></Col>
-                <Col>Logout</Col>
             </Row>
         </React.Fragment>
     )
@@ -39,25 +38,25 @@ export function SideNav() {
         <Row>
             <Router>
                 <Col lg={2}>
-                    <Nav className="flex-column">
+                    <Nav className="flex-column bg-light">
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/">Dashboard</Nav.Link>
+                            <Nav.Link as={Link} to="/">Strategies</Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/accounts">Accounts</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/trade/trade_summary">Trades</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/models">Strategies</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/portfolio/portfolio_summary">Portfolios</Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link as={Link} to="/main/profile">Profile</Nav.Link>
-                        </Nav.Item>
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to="/accounts">Accounts</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to="/trade/trade_summary">Trades</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to="/models">Strategies</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to="/portfolio/portfolio_summary">Portfolios</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to="/main/profile">Profile</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
                     </Nav>
                 </Col>
                 <Col lg={10}>

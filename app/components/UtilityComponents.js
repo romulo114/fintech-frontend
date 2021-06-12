@@ -58,8 +58,7 @@ export function EditableCheckbox(
 
 }
 
-export function LoadingForm(id) {
-    const [isLoading, setLoading] = React.useState(false);
+export function LoadingForm(props) {
     const [form, setForm] = React.useState({})
     const [errors, setErrors] = React.useState({})
     const setField = (field, value) => {
@@ -92,7 +91,7 @@ export function LoadingForm(id) {
             setErrors(newErrors)
         } else {
             // No errors! Put any logic here for the form submission!
-            postModelDetails(id.id, form).then((response) =>
+            postModelDetails(props.model.id, form).then((response) =>
                 alert("Updated!"))
         }
     }
@@ -103,12 +102,12 @@ export function LoadingForm(id) {
             <Form.Group>
                 <Form.Label>Name</Form.Label>
                 <Form.Control type='text' onChange={e => setField('name', e.target.value)}
-                              isInvalid={!!errors.name}/>
+                              isInvalid={!!errors.name} placeholder={props.model.label}/>
                 <Form.Control.Feedback type='invalid'>
                     {errors.name}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Button type='submit'>Update Name</Button>
+            <Button type='submit'>Update Model Name</Button>
         </Form>
     );
 }

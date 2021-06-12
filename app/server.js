@@ -4,8 +4,12 @@ export default function () {
     createServer({
 
             models: {
+                user: Model.extend({
+                   assetModels: hasMany(),
+                }),
                 assetModel: Model.extend({
                     modelPositions: hasMany(),
+                    user: belongsTo(),
                 }),
                 modelPosition: Model.extend({
                     assetModel: belongsTo(),
@@ -15,12 +19,19 @@ export default function () {
                 assetModel: RestSerializer.extend({
                     include: ["modelPositions"],
                 }),
+                user: RestSerializer.extend({
+                    include: ["assetModels"]
+                })
             },
             routes() {
                 this.namespace = "api"
+                this.post("/user/assetModels/:id", (schema, request) => {
+                    schema.assetModels.create({userId: request.params.id, label: "Name Me", description: "Describe me"})
+                    return schema.assetModels.all()
+                })
 
                 this.get("/assetModels", (schema, request) => {
-                    return schema.assetModels.all()
+                    return schema.users.all()
                 })
                 this.post("/assetModels", (schema, request) => {
                     schema.assetModels.create()
@@ -52,14 +63,16 @@ export default function () {
                 })
             },
             seeds(server) {
+                let user_alpha = server.create("user", {
+                    label: "Jon Galt",
+                })
                 let usa_model = server.create("assetModel", {
                     label: "USA",
                     keywords: ["USA"],
                     allocation: "null",
                     description: "Strategy for the USA",
                     is_public: "false",
-                    user_id: "100001",
-
+                    user: user_alpha,
                 })
                 server.create("modelPosition", {
                         assetModel: usa_model,

@@ -90,7 +90,7 @@ export default function ModelDetail() {
     }
     return (<React.Fragment>
             <Row>
-                <LoadingForm id={model.id}/>
+                <LoadingForm model={model}/>
             </Row>
             <Row>
                 <table {...getTableProps()}>

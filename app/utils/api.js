@@ -45,3 +45,11 @@ export async function postModelDetails(id, body) {
             return data
         })
 }
+
+export async function postCollectionModel() {
+    return fetch(`/api/user/assetModels/1`,
+        {'method': 'POST', body: {}}).then((res) => res.json())
+        .then((data) => {
+            return data
+        })
+}
