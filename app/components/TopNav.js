@@ -22,7 +22,6 @@ export function TopNav() {
                         </Router>
                     </Nav>
                 </Col>
-                <Col>Logout</Col>
             </Row>
             <Row>
                 <Col><h3>DIYInvesting</h3></Col>

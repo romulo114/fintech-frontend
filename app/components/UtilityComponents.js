@@ -1,6 +1,6 @@
 import React from "react";
 import {Form, Button} from "react-bootstrap";
-import {postModelDetails} from "../utils/api";
+import {postItem} from "../utils/api";
 
 export function EditableCell(
     {
@@ -91,7 +91,7 @@ export function LoadingForm(props) {
             setErrors(newErrors)
         } else {
             // No errors! Put any logic here for the form submission!
-            postModelDetails(props.model.id, form).then((response) =>
+            postItem('/api/assetModels/',props.model.id, form).then((response) =>
                 alert("Updated!"))
         }
     }
@@ -107,7 +107,7 @@ export function LoadingForm(props) {
                     {errors.name}
                 </Form.Control.Feedback>
             </Form.Group>
-            <Button type='submit'>Update Model Name</Button>
+            <Button type='submit'>Save Name</Button>
         </Form>
     );
 }

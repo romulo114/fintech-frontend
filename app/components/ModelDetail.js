@@ -1,16 +1,25 @@
 import React from 'react'
 import {Button, Row, Form, Col} from "react-bootstrap";
-import {useParams} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 import {useTable} from "react-table";
 
 import {EditableCell, EditableCheckbox, LoadingForm} from "./UtilityComponents"
-import {fetchModelDetail, postModelPositions} from "../utils/api";
+import {deleteItem, getItem, postCollection} from "../utils/api";
 
 // Set our editable cell renderer as the default Cell renderer
 const defaultColumn = {
     Cell: EditableCell,
 }
 
+function DeleteModel(props) {
+    const deleteModel = () => {
+        deleteItem(`/api/assetModels/${props.id}`).then((data) => {
+            alert("Model Deleted")
+        })
+    }
+    return <Link to="/">
+    <Button onClick={deleteModel}>Delete Strategy</Button></Link>
+}
 
 export default function ModelDetail() {
     const {id} = useParams()
@@ -39,13 +48,14 @@ export default function ModelDetail() {
         )
     }
     const saveData = () => {
-        postModelPositions(model.id, positions)
+        postCollection(`/api/assetModels/${model.id}/modelPositions`, positions).then(()=> setPositions(positions)).then(() =>
+            alert("Positions Updated!"))
     }
 
 
     React.useEffect(() => {
         setLoading(true)
-        fetchModelDetail(id).then((response) => {
+        getItem('/api/assetModels/', id).then((response) => {
             response['modelPositions'].forEach((item, index) => {
                 //      item.add_row = "+"
                 item.delete_row = false
@@ -64,7 +74,7 @@ export default function ModelDetail() {
     const columns = React.useMemo(
         () => [
             {
-                Header: "Symbol", accessor: "symbol",
+                Header: "Name", accessor: "symbol",
             },
             {Header: "Weight", accessor: "weight"},
             {
@@ -74,7 +84,6 @@ export default function ModelDetail() {
         ],
         []
     )
-
 
     const {
         getTableProps,
@@ -131,8 +140,11 @@ export default function ModelDetail() {
                     <Button onClick={addRow}>Add Asset</Button>
                 </Col>
                 <Col>
-                    <Button onClick={saveData}>Update Model Positions</Button>
+                    <Button onClick={saveData}>Save Positions</Button>
                 </Col>
+            </Row>
+            <Row>
+                <DeleteModel id={id}/>
             </Row>
         </React.Fragment>
     )

@@ -1,54 +1,39 @@
-export async function fetchModelSummary() {
-    return fetch('/api/assetModels')
+export async function getCollection(url) {
+    return fetch(url)
         .then((res) => res.json())
         .then((data) => {
             return data
         })
 }
 
-// export async function fetchPortfolios () {
-//     return fetch('/api/portfolios')
-//         .then((res) => res.json())
-//         .then((data) => {
-//             return data
-//         })
-// }
 
-export async function fetchAccounts() {
-    return fetch('/api/accounts/account_summary')
+export async function getItem(url, id) {
+    return fetch(`${url}${id}`)
         .then((res) => res.json())
         .then((data) => {
             return data
         })
 }
 
-export async function fetchModelDetail(id) {
-    return fetch(`/api/assetModels/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-            return data
-        })
-}
-
-export async function postModelPositions(id, body) {
-    return fetch(`/api/assetModels/${id}/modelPositions`,
+export async function postCollection(url, body) {
+    return fetch(`${url}`,
         {'method': 'POST', 'body': body}).then((res) => res.json())
         .then((data) => {
             return data
         })
 }
 
-export async function postModelDetails(id, body) {
-    return fetch(`/api/assetModels/${id}`,
+export async function postItem(url, id, body) {
+    return fetch(`${url}${id}`,
         {'method': 'POST', 'body': body}).then((res) => res.json())
         .then((data) => {
             return data
         })
 }
 
-export async function postCollectionModel() {
-    return fetch(`/api/user/assetModels/1`,
-        {'method': 'POST', body: {}}).then((res) => res.json())
+export async function deleteItem(url) {
+    return fetch(`${url}`,
+        {'method': 'DELETE', 'body': {}}).then((res) => res.json())
         .then((data) => {
             return data
         })

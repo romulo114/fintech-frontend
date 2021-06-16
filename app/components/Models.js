@@ -1,5 +1,5 @@
 import React from 'react'
-import {fetchModelSummary, postCollectionModel} from '../utils/api'
+import {getCollection, postCollection} from '../utils/api'
 import {useTable} from "react-table"
 import {Button, Row} from "react-bootstrap"
 import {Link, Router, Route} from "react-router-dom"
@@ -7,7 +7,7 @@ import Nav from "react-bootstrap/Nav"
 
 function NewModel(props) {
     const addModel = () => {
-        postCollectionModel().then((data) => {
+        postCollection('/api/assetModels').then((data) => {
             props.setModels(data["assetModels"])
         })
     }
@@ -20,7 +20,7 @@ export default function Models() {
 
     React.useEffect(() => {
         setLoading(true)
-        fetchModelSummary().then((data) => {
+        getCollection('/api/assetModels').then((data) => {
             setModels(data["assetModels"])
             setLoading(false)
         })
@@ -36,7 +36,7 @@ export default function Models() {
                 Cell: ({row}) => <Nav.Link as={Link}
                                            to={`/models/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
             },
-            {Header: "Description", accessor: "description"},
+            // {Header: "Description", accessor: "description"},
         ],
         []
     )
@@ -92,6 +92,7 @@ export default function Models() {
             <Row>
                 <NewModel setModels={setModels}/>
             </Row>
+
         </React.Fragment>
     )
 }
