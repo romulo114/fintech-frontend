@@ -1,6 +1,6 @@
 import React from "react";
 import {Form, Button} from "react-bootstrap";
-import {postItem} from "../utils/api";
+import {postCollection, postItem} from "../utils/api";
 
 export function EditableCell(
     {
@@ -110,4 +110,50 @@ export function LoadingForm(props) {
             <Button type='submit'>Save Name</Button>
         </Form>
     );
+}
+
+export function NewItem(props) {
+    const addItem = () => {
+        postCollection(props.url,
+            JSON.stringify(props.seed)).then((data) => {
+            props.setItems(props.items.concat(data[props.itemType]))
+        })
+    }
+    return <Button onClick={addItem}>{props.buttonLabel}</Button>
+}
+
+export function StandardTable(props) {
+    return <table {...props.getTableProps()}>
+        <thead>
+        {
+            props.headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                    {
+                        headerGroup.headers.map(column => (
+                            <th {...column.getHeaderProps()}>
+                                {column.render('Header')}
+                            </th>
+                        ))}
+                </tr>
+            ))}
+        </thead>
+        <tbody {...props.getTableBodyProps()}>
+        {
+            props.rows.map(row => {
+                props.prepareRow(row)
+                return (
+                    <tr {...row.getRowProps()}>
+                        {row.cells.map(cell => {
+                            return (
+                                <td {...cell.getCellProps()}>
+                                    {cell.render('Cell')}
+                                </td>
+
+                            )
+                        })}
+                    </tr>
+                )
+            })}
+        </tbody>
+    </table>
 }

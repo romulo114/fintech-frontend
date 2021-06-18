@@ -39,7 +39,7 @@ export function SideNav() {
                 <Col lg={2}>
                     <Nav className="flex-column bg-light">
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/">Strategies</Nav.Link>
+                            <Nav.Link as={Link} to="/">Portfolios</Nav.Link>
                         </Nav.Item>
                         {/*<Nav.Item>*/}
                         {/*    <Nav.Link as={Link} to="/accounts">Accounts</Nav.Link>*/}
@@ -47,12 +47,12 @@ export function SideNav() {
                         {/*<Nav.Item>*/}
                         {/*    <Nav.Link as={Link} to="/trade/trade_summary">Trades</Nav.Link>*/}
                         {/*</Nav.Item>*/}
-                        {/*<Nav.Item>*/}
-                        {/*    <Nav.Link as={Link} to="/models">Strategies</Nav.Link>*/}
-                        {/*</Nav.Item>*/}
                         <Nav.Item>
-                            <Nav.Link as={Link} to="/portfolio/portfolio_summary">Portfolios</Nav.Link>
+                            <Nav.Link as={Link} to="/models">Strategies</Nav.Link>
                         </Nav.Item>
+                        {/*<Nav.Item>*/}
+                        {/*    <Nav.Link as={Link} to="/portfolio/portfolio_summary">Portfolios</Nav.Link>*/}
+                        {/*</Nav.Item>*/}
                         {/*<Nav.Item>*/}
                         {/*    <Nav.Link as={Link} to="/main/profile">Profile</Nav.Link>*/}
                         {/*</Nav.Item>*/}
@@ -60,7 +60,7 @@ export function SideNav() {
                 </Col>
                 <Col lg={10}>
                     <Route exact path='/'><Portfolios/></Route>
-                    {/*<Route exact path='/models'><Models/></Route>*/}
+                    <Route exact path='/models'><Models/></Route>
                     <Route exact path='/models/:id'><ModelDetail/></Route>
                 </Col>
             </Router>

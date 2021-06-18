@@ -4,16 +4,8 @@ import {useTable} from "react-table"
 import {Button, Row} from "react-bootstrap"
 import {Link, Router, Route} from "react-router-dom"
 import Nav from "react-bootstrap/Nav"
+import {NewItem, StandardTable} from "./UtilityComponents";
 
-function NewPortfolio(props) {
-    const addPortfolio = () => {
-        postCollection('/api/portfolios',
-            JSON.stringify({"portfolio": {"label": "Name Me"}})).then((data) => {
-            props.setPortfolios(props.portfolios.concat(data["portfolio"]))
-        })
-    }
-    return <Button onClick={addPortfolio}>Add Portfolio</Button>
-}
 
 export default function Portfolios() {
     const [portfolios, setPortfolios] = React.useState([])
@@ -55,42 +47,22 @@ export default function Portfolios() {
     }
     return (<React.Fragment>
             <Row>
-                <table {...getTableProps()}>
-                    <thead>
-                    {
-                        headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {
-                                    headerGroup.headers.map(column => (
-                                        <th {...column.getHeaderProps()}>
-                                            {column.render('Header')}
-                                        </th>
-                                    ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                    {
-                        rows.map(row => {
-                            prepareRow(row)
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map(cell => {
-                                        return (
-                                            <td {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
-                                            </td>
-
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                <StandardTable
+                    getTableProps={getTableProps}
+                    getTableBodyProps={getTableBodyProps}
+                    headerGroups={headerGroups}
+                    rows={rows}
+                    prepareRow={prepareRow}
+                />
             </Row>
             <Row>
-                <NewPortfolio portfolios={portfolios} setPortfolios={setPortfolios}/>
+                <NewItem url='/api/portfolios'
+                         items={portfolios}
+                         setItems={setPortfolios}
+                         seed={{"portfolio": {"label": "Name Me"}}}
+                         buttonLabel='Add Portfolio'
+                         itemType='portfolio'
+                />
             </Row>
 
         </React.Fragment>

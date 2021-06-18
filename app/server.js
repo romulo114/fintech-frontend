@@ -38,8 +38,7 @@ export default function () {
                 })
                 this.post("/assetModels", function (schema, request) {
                     let user = schema.users.findBy({label: "Jon Galt"})
-                    schema.assetModels.create({user: user, label: "Name Me"})
-                    return schema.assetModels.all()
+                    return schema.assetModels.create({user: user, label: "Name Me"})
                 })
                 this.post("/assetModels/:id", (schema, request) => {
                     let assetModel = schema.assetModels.find(request.params.id)
