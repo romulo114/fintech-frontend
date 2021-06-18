@@ -1,11 +1,12 @@
-import {belongsTo, createServer, hasMany, Model, RestSerializer, } from "miragejs"
+import {belongsTo, createServer, hasMany, Model, RestSerializer,} from "miragejs"
 
 export default function () {
     createServer({
 
             models: {
                 user: Model.extend({
-                   assetModels: hasMany(),
+                    assetModels: hasMany(),
+
                 }),
                 assetModel: Model.extend({
                     modelPositions: hasMany(),
@@ -13,7 +14,8 @@ export default function () {
                 }),
                 modelPosition: Model.extend({
                     assetModel: belongsTo(),
-                })
+                }),
+                portfolio: Model.extend({})
             },
             serializers: {
                 assetModel: RestSerializer.extend({
@@ -21,7 +23,8 @@ export default function () {
                 }),
                 user: RestSerializer.extend({
                     include: ["assetModels"]
-                })
+                }),
+                portfolio: RestSerializer.extend()
             },
             routes() {
                 this.namespace = "api"
@@ -33,14 +36,14 @@ export default function () {
                     let assetModelId = request.params.id
                     return schema.assetModels.find(assetModelId)
                 })
-                this.post("/assetModels", (schema, request) => {
+                this.post("/assetModels", function (schema, request) {
                     let user = schema.users.findBy({label: "Jon Galt"})
-                    schema.assetModels.create({user: user})
+                    schema.assetModels.create({user: user, label: "Name Me"})
                     return schema.assetModels.all()
                 })
                 this.post("/assetModels/:id", (schema, request) => {
                     let assetModel = schema.assetModels.find(request.params.id)
-                    assetModel.update({ label: request.requestBody['name']})
+                    assetModel.update({label: request.requestBody['name']})
                     return assetModel
                 })
                 this.del("/assetModels/:id")
@@ -59,6 +62,9 @@ export default function () {
                     })
                     return schema.assetModels.find(assetModelId)
                 })
+
+                //Portfolio routes
+                this.resource("portfolios")
             },
             seeds(server) {
                 let user_alpha = server.create("user", {
@@ -79,6 +85,7 @@ export default function () {
                         id: 1
                     }
                 )
+                server.create("portfolio", {label: "Index Portfolio"})
             },
         }
     )
