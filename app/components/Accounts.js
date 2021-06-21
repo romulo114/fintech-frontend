@@ -1,7 +1,11 @@
 import React from 'react'
-import {fetchAccounts} from '../utils/api'
+import {getCollection, postCollection} from '../utils/api'
 import {useTable} from "react-table"
-import {Button, Row} from "react-bootstrap";
+import {Button, Row} from "react-bootstrap"
+import {Link, Router, Route} from "react-router-dom"
+import Nav from "react-bootstrap/Nav"
+import {NewItem, StandardTable} from "./UtilityComponents";
+
 
 export default function Accounts() {
     const [accounts, setAccounts] = React.useState([])
@@ -9,16 +13,23 @@ export default function Accounts() {
 
     React.useEffect(() => {
         setLoading(true)
-        fetchAccounts().then((data) => {
-            setAccounts(data)
+        getCollection('/api/accounts').then((data) => {
+            setAccounts(data["accounts"])
             setLoading(false)
         })
     }, [])
+
+
     const data = React.useMemo(() => accounts, [accounts])
     const columns = React.useMemo(
         () => [
-            {Header: "Account Number", accessor: "account_number"},
-            {Header: "Broker", accessor: "broker_name"},
+            {
+                Header: "Name",
+                accessor: "label",
+                Cell: ({row}) => <Nav.Link as={Link}
+                                           to={`/accounts/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
+            },
+            // {Header: "Description", accessor: "description"},
         ],
         []
     )
@@ -36,43 +47,24 @@ export default function Accounts() {
     }
     return (<React.Fragment>
             <Row>
-                <table {...getTableProps()}>
-                    <thead>
-                    {
-                        headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {
-                                    headerGroup.headers.map(column => (
-                                        <th {...column.getHeaderProps()}>
-                                            {column.render('Header')}
-                                        </th>
-                                    ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                    {
-                        rows.map(row => {
-                            prepareRow(row)
-                            return (
-                                <tr {...row.getRowProps()}>
-                                    {row.cells.map(cell => {
-                                        return (
-                                            <td {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        })}
-                    </tbody>
-                </table>
+                <StandardTable
+                    getTableProps={getTableProps}
+                    getTableBodyProps={getTableBodyProps}
+                    headerGroups={headerGroups}
+                    rows={rows}
+                    prepareRow={prepareRow}
+                />
             </Row>
             <Row>
-                <Button>Button</Button>
+                <NewItem url='/api/accounts'
+                         items={accounts}
+                         setItems={setAccounts}
+                         seed={{"account": {"label": "Name Me"}}}
+                         buttonLabel='Add Account'
+                         itemType='account'
+                />
             </Row>
+
         </React.Fragment>
     )
 }
-

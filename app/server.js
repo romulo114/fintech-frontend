@@ -15,16 +15,28 @@ export default function () {
                 modelPosition: Model.extend({
                     assetModel: belongsTo(),
                 }),
-                portfolio: Model.extend({})
+                portfolio: Model.extend({}),
+                account: Model.extend({
+                    accountPositions: hasMany(),
+                    user: belongsTo(),
+                }),
+                accountPosition: Model.extend({
+                    account: belongsTo()
+                }),
             },
             serializers: {
+                application: RestSerializer,
                 assetModel: RestSerializer.extend({
                     include: ["modelPositions"],
                 }),
                 user: RestSerializer.extend({
                     include: ["assetModels"]
                 }),
-                portfolio: RestSerializer.extend()
+                portfolio: RestSerializer.extend(
+                ),
+                account: RestSerializer.extend({
+                    include: ["accountPositions"]
+                })
             },
             routes() {
                 this.namespace = "api"
@@ -62,8 +74,12 @@ export default function () {
                     return schema.assetModels.find(assetModelId)
                 })
 
+
                 //Portfolio routes
                 this.resource("portfolios")
+
+                //Account routes
+                this.resource("accounts")
             },
             seeds(server) {
                 let user_alpha = server.create("user", {
@@ -81,10 +97,11 @@ export default function () {
                         assetModel: usa_model,
                         symbol: "AGG",
                         weight: 0.2,
-                        id: 1
                     }
                 )
                 server.create("portfolio", {label: "Index Portfolio"})
+                let robinHeed = server.create("account", {label: "Robinheed"})
+                server.create("accountPosition", {account: robinHeed, symbol: "AGG", shares: 10})
             },
         }
     )

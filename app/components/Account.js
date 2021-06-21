@@ -11,20 +11,20 @@ const defaultColumn = {
     Cell: EditableCell,
 }
 
-function DeleteModel(props) {
-    const deleteModel = () => {
-        deleteItem(`/api/assetModels/${props.id}`).then((data) => {
-            alert("Model Deleted")
+function DeleteAccount(props) {
+    const deleteAccount = () => {
+        deleteItem(`/api/accounts/${props.id}`).then((data) => {
+            alert("Account Deleted")
         })
     }
     return <Link to="/">
-    <Button onClick={deleteModel}>Delete Strategy</Button></Link>
+        <Button onClick={deleteAccount}>Delete Strategy</Button></Link>
 }
 
-export default function ModelDetail() {
+export default function AccountDetail() {
     const {id} = useParams()
     const [positions, setPositions] = React.useState([])
-    const [model, setModel] = React.useState({"label": ""})
+    const [account, setAccount] = React.useState({"label": ""})
     const [loading, setLoading] = React.useState(null)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
     React.useEffect(() => {
@@ -48,35 +48,36 @@ export default function ModelDetail() {
         )
     }
     const saveData = () => {
-        postCollection(`/api/assetModels/${model.id}/modelPositions`, positions).then(()=> setPositions(positions)).then(() =>
+        postCollection(`/api/accounts/${account.id}/accountPositions`, positions).then(()=> setPositions(positions)).then(() =>
             alert("Positions Updated!"))
     }
 
 
     React.useEffect(() => {
         setLoading(true)
-        getItem('/api/assetModels/', id).then((response) => {
-            response['modelPositions'].forEach((item, index) => {
+        getItem('/api/accounts/', id).then((response) => {
+            console.log(response)
+            response['accountPositions'].forEach((item, index) => {
                 //      item.add_row = "+"
                 item.delete_row = false
             })
             return response
         }).then((response) => {
-            setPositions(response['modelPositions'])
-            setModel(response['assetModel'])
+            setPositions(response['accountPositions'])
+            setAccount(response['account'])
             setLoading(false)
         })
     }, [])
     const data = React.useMemo(() => positions, [positions])
     const addRow = () => {
-        setPositions(positions.concat([{"model_id": "10002", "symbol": "", "weight": 0.0, "Delete": false}]))
+        setPositions(positions.concat([{"account_id": "10002", "symbol": "", "shares": 0.0, "Delete": false}]))
     }
     const columns = React.useMemo(
         () => [
             {
                 Header: "Name", accessor: "symbol",
             },
-            {Header: "Weight", accessor: "weight"},
+            {Header: "Shares", accessor: "shares"},
             {
                 Header: "Delete", accessor: "delete_row",
                 Cell: EditableCheckbox
@@ -99,7 +100,7 @@ export default function ModelDetail() {
     }
     return (<React.Fragment>
             <Row>
-                <LoadingForm model={model}/>
+                <LoadingForm model={account}/>
             </Row>
             <Row>
                 <StandardTable
@@ -119,7 +120,7 @@ export default function ModelDetail() {
                 </Col>
             </Row>
             <Row>
-                <DeleteModel id={id}/>
+                <DeleteAccount id={id}/>
             </Row>
         </React.Fragment>
     )
