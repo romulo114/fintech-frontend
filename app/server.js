@@ -2,11 +2,9 @@ import {belongsTo, createServer, hasMany, Model, RestSerializer,} from "miragejs
 
 export default function () {
     createServer({
-
             models: {
                 user: Model.extend({
                     assetModels: hasMany(),
-
                 }),
                 assetModel: Model.extend({
                     modelPositions: hasMany(),
@@ -15,10 +13,12 @@ export default function () {
                 modelPosition: Model.extend({
                     assetModel: belongsTo(),
                 }),
-                portfolio: Model.extend({}),
+                portfolio: Model.extend({
+                    accounts: hasMany()
+                }),
                 account: Model.extend({
                     accountPositions: hasMany(),
-                    user: belongsTo(),
+                    portfolio: belongsTo()
                 }),
                 accountPosition: Model.extend({
                     account: belongsTo()
@@ -32,7 +32,8 @@ export default function () {
                 user: RestSerializer.extend({
                     include: ["assetModels"]
                 }),
-                portfolio: RestSerializer.extend(
+                portfolio: RestSerializer.extend( {
+                    include: ["accounts"] }
                 ),
                 account: RestSerializer.extend({
                     include: ["accountPositions"]
@@ -74,9 +75,17 @@ export default function () {
                     return schema.assetModels.find(assetModelId)
                 })
 
-
                 //Portfolio routes
-                this.resource("portfolios")
+                this.resource("portfolios", { except: ["update"] })
+                this.post("/portfolios/:id", (schema, request) => {
+                    request.requestBody.forEach((item, index) => {
+                        if (item.delete_row == true) {
+                            schema.accounts.find(item.id).update({portfolio: null})
+                        }
+                    })
+                    return
+                })
+
 
                 //Account routes
                 this.resource("accounts")
@@ -99,8 +108,8 @@ export default function () {
                         weight: 0.2,
                     }
                 )
-                server.create("portfolio", {label: "Index Portfolio"})
-                let robinHeed = server.create("account", {label: "Robinheed"})
+                let index_portfolio = server.create("portfolio", {label: "Index Portfolio"})
+                let robinHeed = server.create("account", {portfolio: index_portfolio, label: "Robinheed"})
                 server.create("accountPosition", {account: robinHeed, symbol: "AGG", shares: 10})
             },
         }

@@ -23,8 +23,8 @@ export async function postCollection(url, body) {
         })
 }
 
-export async function postItem(url, id, body) {
-    return fetch(`${url}${id}`,
+export async function postItem(url, body) {
+    return fetch(`${url}`,
         {'method': 'POST', 'body': body}).then((res) => res.json())
         .then((data) => {
             return data

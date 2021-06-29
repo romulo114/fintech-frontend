@@ -8,6 +8,7 @@ import Models from "./Models";
 import Accounts from "./Accounts";
 import ModelDetail from "./ModelDetail";
 import AccountDetail from "./Account";
+import PortfolioDetail from "./Portfolio";
 
 
 export function TopNav() {
@@ -65,6 +66,7 @@ export function SideNav() {
                     <Route exact path='/models'><Models/></Route>
                     <Route exact path='/models/:id'><ModelDetail/></Route>
                     <Route exact path='/accounts/:id'><AccountDetail/></Route>
+                    <Route exact path='/portfolios/:id'><PortfolioDetail/></Route>
                 </Col>
             </Router>
         </Row>
