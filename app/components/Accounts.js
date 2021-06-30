@@ -13,7 +13,9 @@ export default function Accounts() {
 
     React.useEffect(() => {
         setLoading(true)
-        getCollection('/api/accounts').then((data) => {
+        let url = '/api/accounts'
+        if ('portfolio_id' in props) {url = url + `?portfolio_id=${props.portfolio_id}`}
+        getCollection(url).then((data) => {
             setAccounts(data["accounts"])
             setLoading(false)
         })

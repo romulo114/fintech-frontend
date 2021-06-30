@@ -5,6 +5,7 @@ import {useTable} from "react-table";
 
 import {EditableCheckbox, LoadingForm, StandardTable} from "./UtilityComponents"
 import {deleteItem, getItem, postCollection, postItem} from "../utils/api";
+import Accounts from "./Accounts";
 
 
 function DeletePortfolio(props) {
@@ -107,6 +108,9 @@ export default function PortfolioDetail() {
             </Row>
             <Row>
                 <DeletePortfolio id={id}/>
+            </Row>
+            <Row>
+            <Accounts/>
             </Row>
         </React.Fragment>
     )

@@ -88,7 +88,17 @@ export default function () {
 
 
                 //Account routes
-                this.resource("accounts")
+                this.resource("accounts", {except: ["index"]})
+                this.get("/accounts", (schema, request) => {
+                    if ('portfolio_id' in request.queryParams) {
+                        return schema.accounts.where(account => account.portfolio_id == request.queryParams.portfolio_id)
+                    }
+                    else
+                    {
+                        return schema.accounts.all()
+                    }
+
+                })
             },
             seeds(server) {
                 let user_alpha = server.create("user", {
