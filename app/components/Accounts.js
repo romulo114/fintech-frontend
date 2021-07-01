@@ -7,18 +7,23 @@ import Nav from "react-bootstrap/Nav"
 import {NewItem, StandardTable} from "./UtilityComponents";
 
 
-export default function Accounts() {
+export default function Accounts(props) {
     const [accounts, setAccounts] = React.useState([])
     const [loading, setLoading] = React.useState(null)
 
     React.useEffect(() => {
+        let unmounted = false
         setLoading(true)
         let url = '/api/accounts'
         if ('portfolio_id' in props) {url = url + `?portfolio_id=${props.portfolio_id}`}
         getCollection(url).then((data) => {
+            if (unmounted) {
+                return; // not mounted anymore. bail.
+            }
             setAccounts(data["accounts"])
             setLoading(false)
         })
+        return () => unmounted = true;
     }, [])
 
 

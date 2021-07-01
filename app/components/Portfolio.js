@@ -52,11 +52,10 @@ export default function PortfolioDetail() {
     React.useEffect(() => {
         setLoading(true)
         getItem('/api/portfolios/', id).then((response) => {
+
             response['accounts'].forEach((item, index) => {
                 item.delete_row = false
             })
-            return response
-        }).then((response) => {
             setAccounts(response['accounts'])
             setPortfolio(response['portfolio'])
             setLoading(false)
@@ -110,7 +109,7 @@ export default function PortfolioDetail() {
                 <DeletePortfolio id={id}/>
             </Row>
             <Row>
-            <Accounts/>
+            <Accounts portfolio_id={id}/>
             </Row>
         </React.Fragment>
     )
