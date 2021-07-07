@@ -56,7 +56,6 @@ export default function AccountDetail() {
     React.useEffect(() => {
         setLoading(true)
         getItem('/api/accounts/', id).then((response) => {
-            console.log(response)
             response['accountPositions'].forEach((item, index) => {
                 //      item.add_row = "+"
                 item.delete_row = false

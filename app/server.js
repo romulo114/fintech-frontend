@@ -90,14 +90,30 @@ export default function () {
                 //Account routes
                 this.resource("accounts", {except: ["index"]})
                 this.get("/accounts", (schema, request) => {
-                    if ('portfolio_id' in request.queryParams) {
-                        return schema.accounts.where(account => account.portfolio_id == request.queryParams.portfolio_id)
+                    if ('portfolioId' in request.queryParams) {
+                        if ('not' in request.queryParams) {
+                            return schema.accounts.where(account => account.portfolioId != request.queryParams.portfolioId)
+                        }
+                        return schema.accounts.where(account => account.portfolioId == request.queryParams.portfolioId)
                     }
                     else
                     {
                         return schema.accounts.all()
                     }
 
+                })
+                this.post("/accounts/assign/:id", (schema, request) => {
+                    request.requestBody.forEach((item, index) => {
+
+                        if (item.delete_row == true) {
+                            let account = schema.accounts.find(item.id)
+                            console.log(account)
+                            console.log(request.params)
+                            schema.accounts.find(item.id).update({portfolioId: request.params.id})
+                        }
+                    })
+
+                    return
                 })
             },
             seeds(server) {
@@ -121,6 +137,8 @@ export default function () {
                 let index_portfolio = server.create("portfolio", {label: "Index Portfolio"})
                 let robinHeed = server.create("account", {portfolio: index_portfolio, label: "Robinheed"})
                 server.create("accountPosition", {account: robinHeed, symbol: "AGG", shares: 10})
+                server.create("account", {label:"TOAmTrade"})
+
             },
         }
     )

@@ -122,6 +122,15 @@ export function NewItem(props) {
     return <Button onClick={addItem}>{props.buttonLabel}</Button>
 }
 
+export function AssignItem(props) {
+    const addItem = () => {
+        postItem(props.url, props.items).then(() => {
+            alert("Assigned")
+        })
+    }
+    return <Button onClick={addItem}>{props.buttonLabel}</Button>
+}
+
 export function StandardTable(props) {
     return <table {...props.getTableProps()}>
         <thead>

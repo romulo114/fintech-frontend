@@ -109,7 +109,7 @@ export default function PortfolioDetail() {
                 <DeletePortfolio id={id}/>
             </Row>
             <Row>
-            <Accounts portfolio_id={id}/>
+            <Accounts portfolioId={id} not={true} port={true}/>
             </Row>
         </React.Fragment>
     )
