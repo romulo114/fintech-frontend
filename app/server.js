@@ -14,7 +14,8 @@ export default function () {
                     assetModel: belongsTo(),
                 }),
                 portfolio: Model.extend({
-                    accounts: hasMany()
+                    accounts: hasMany(),
+                    trade: belongsTo()
                 }),
                 account: Model.extend({
                     accountPositions: hasMany(),
@@ -22,6 +23,9 @@ export default function () {
                 }),
                 accountPosition: Model.extend({
                     account: belongsTo()
+                }),
+                trade: Model.extend({
+                    portfolio: hasMany()
                 }),
             },
             serializers: {
@@ -37,7 +41,10 @@ export default function () {
                 ),
                 account: RestSerializer.extend({
                     include: ["accountPositions"]
-                })
+                }),
+                trade: RestSerializer.extend({
+                    include: ["portfolios"]}
+                )
             },
             routes() {
                 this.namespace = "api"
@@ -76,11 +83,15 @@ export default function () {
                 })
 
                 //Portfolio routes
-                this.resource("portfolios", { except: ["update"] })
+                this.resource("portfolios", {except: ["update"]})
                 this.post("/portfolios/:id", (schema, request) => {
+                    return schema.portfolios.find(request.params.id).update({label: request.requestBody.name})
+                })
+                this.post("/portfolios/unassign/:id", (schema, request) => {
                     request.requestBody.forEach((item, index) => {
                         if (item.delete_row == true) {
-                            schema.accounts.find(item.id).update({portfolio: null})
+                            let account = schema.accounts.find(item.id)
+                            schema.accounts.find(item.id).update({portfolioId: null})
                         }
                     })
                     return
@@ -88,7 +99,10 @@ export default function () {
 
 
                 //Account routes
-                this.resource("accounts", {except: ["index"]})
+                this.resource("accounts", {except: ["index", "update"]})
+                this.post("/accounts/:id", (schema, request) => {
+                    return schema.accounts.find(request.params.id).update({label: request.requestBody.name})
+                })
                 this.get("/accounts", (schema, request) => {
                     if ('portfolioId' in request.queryParams) {
                         if ('not' in request.queryParams) {
@@ -103,17 +117,21 @@ export default function () {
 
                 })
                 this.post("/accounts/assign/:id", (schema, request) => {
-                    request.requestBody.forEach((item, index) => {
 
+                    request.requestBody.forEach((item, index) => {
                         if (item.delete_row == true) {
                             let account = schema.accounts.find(item.id)
-                            console.log(account)
-                            console.log(request.params)
                             schema.accounts.find(item.id).update({portfolioId: request.params.id})
                         }
                     })
 
                     return
+                })
+
+                //Trade routes
+                this.resource("trades", { except: ["update"] })
+                this.post("/trades/:id", (schema, request) => {
+                    return schema.trades.find(request.params.id).update({label: request.requestBody.name})
                 })
             },
             seeds(server) {
@@ -134,7 +152,8 @@ export default function () {
                         weight: 0.2,
                     }
                 )
-                let index_portfolio = server.create("portfolio", {label: "Index Portfolio"})
+                let first_trade = server.create("trade", {label:"First Trade"})
+                let index_portfolio = server.create("portfolio", {label: "Index Portfolio", trade: first_trade})
                 let robinHeed = server.create("account", {portfolio: index_portfolio, label: "Robinheed"})
                 server.create("accountPosition", {account: robinHeed, symbol: "AGG", shares: 10})
                 server.create("account", {label:"TOAmTrade"})

@@ -45,7 +45,7 @@ export default function PortfolioDetail() {
         )
     }
     const saveData = () => {
-        postItem(`/api/portfolios/${portfolio.id}`, accounts).then(()=> setAccounts(accounts)).then(() =>
+        postItem(`/api/portfolios/unassign/${portfolio.id}`, accounts).then(()=> setAccounts(accounts)).then(() =>
             alert("Accounts Updated!"))
     }
 
@@ -89,7 +89,7 @@ export default function PortfolioDetail() {
     }
     return (<React.Fragment>
             <Row>
-                <LoadingForm model={portfolio}/>
+                <LoadingForm model={portfolio} url={`/api/portfolios/${id}`}/>
             </Row>
             <Row>
                 <StandardTable

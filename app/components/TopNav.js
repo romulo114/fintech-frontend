@@ -9,6 +9,8 @@ import Accounts from "./Accounts";
 import ModelDetail from "./ModelDetail";
 import AccountDetail from "./Account";
 import PortfolioDetail from "./Portfolio";
+import Trades from "./Trades";
+import TradeDetail from "./Trade";
 
 
 export function TopNav() {
@@ -46,9 +48,9 @@ export function SideNav() {
                         <Nav.Item>
                             <Nav.Link as={Link} to="/portfolios">Portfolios</Nav.Link>
                         </Nav.Item>
-                        {/*<Nav.Item>*/}
-                        {/*    <Nav.Link as={Link} to="/trade/trade_summary">Trades</Nav.Link>*/}
-                        {/*</Nav.Item>*/}
+                        <Nav.Item>
+                            <Nav.Link as={Link} to="/trades">Trades</Nav.Link>
+                        </Nav.Item>
                         <Nav.Item>
                             <Nav.Link as={Link} to="/models">Strategies</Nav.Link>
                         </Nav.Item>
@@ -67,6 +69,8 @@ export function SideNav() {
                     <Route exact path='/models/:id'><ModelDetail/></Route>
                     <Route exact path='/accounts/:id'><AccountDetail/></Route>
                     <Route exact path='/portfolios/:id'><PortfolioDetail/></Route>
+                    <Route exact path='/trades'><Trades/></Route>
+                    <Route exact path='/trades/:id'><TradeDetail/></Route>
                 </Col>
             </Router>
         </Row>

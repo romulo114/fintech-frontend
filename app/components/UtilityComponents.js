@@ -91,7 +91,7 @@ export function LoadingForm(props) {
             setErrors(newErrors)
         } else {
             // No errors! Put any logic here for the form submission!
-            postItem('/api/assetModels/',props.model.id, form).then((response) =>
+            postItem(props.url, form).then((response) =>
                 alert("Updated!"))
         }
     }

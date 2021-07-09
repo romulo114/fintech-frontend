@@ -99,7 +99,7 @@ export default function ModelDetail() {
     }
     return (<React.Fragment>
             <Row>
-                <LoadingForm model={model}/>
+                <LoadingForm model={model} url={`/api/assetModels/${id}`}/>
             </Row>
             <Row>
                 <StandardTable
