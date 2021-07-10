@@ -25,7 +25,7 @@ export default function () {
                     account: belongsTo()
                 }),
                 trade: Model.extend({
-                    portfolio: hasMany()
+                    portfolios: hasMany()
                 }),
             },
             serializers: {
@@ -157,7 +157,6 @@ export default function () {
                 let robinHeed = server.create("account", {portfolio: index_portfolio, label: "Robinheed"})
                 server.create("accountPosition", {account: robinHeed, symbol: "AGG", shares: 10})
                 server.create("account", {label:"TOAmTrade"})
-
             },
         }
     )

@@ -6,6 +6,7 @@ import {useTable} from "react-table";
 import {EditableCheckbox, LoadingForm, StandardTable} from "./UtilityComponents"
 import {deleteItem, getItem, postCollection, postItem} from "../utils/api";
 import Accounts from "./Accounts";
+import Portfolios from "./Portfolios";
 
 
 function DeleteTrade(props) {
@@ -20,7 +21,7 @@ function DeleteTrade(props) {
 
 export default function TradeDetail() {
     const {id} = useParams()
-    const [accounts, setAccounts] = React.useState([])
+    const [portfolios, setPortfolios] = React.useState([])
     const [trade, setTrade] = React.useState({"label": ""})
     const [loading, setLoading] = React.useState(null)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
@@ -32,7 +33,7 @@ export default function TradeDetail() {
         // We also turn on the flag to not reset the page
         setSkipPageReset(true)
         if (typeof value === "boolean") value = !value
-        setAccounts(old =>
+        setPortfolios(old =>
             old.map((row, index) => {
                 if (index === rowIndex) {
                     return {
@@ -45,7 +46,7 @@ export default function TradeDetail() {
         )
     }
     const saveData = () => {
-        postItem(`/api/trades/${trade.id}`, accounts).then(()=> setAccounts(accounts)).then(() =>
+        postItem(`/api/trades/${trade.id}`, portfolios).then(()=> setPortfolios(portfolios)).then(() =>
             alert("Trades Updated!"))
     }
 
@@ -53,15 +54,15 @@ export default function TradeDetail() {
         setLoading(true)
         getItem('/api/trades/', id).then((response) => {
 
-            response['trade']['portfolios'].forEach((item, index) => {
+            response['portfolios'].forEach((item, index) => {
                 item.delete_row = false
             })
-            setAccounts(response['trade']['portfolios'])
+            setPortfolios(response['portfolios'])
             setTrade(response['trade'])
             setLoading(false)
         })
     }, [])
-    const data = React.useMemo(() => accounts, [accounts])
+    const data = React.useMemo(() => portfolios, [portfolios])
     const columns = React.useMemo(
         () => [
             {
@@ -109,7 +110,7 @@ export default function TradeDetail() {
                 <DeleteTrade id={id}/>
             </Row>
             <Row>
-            {/*<Accounts tradeId={id} not={true} port={true}/>*/}
+                {/*<Portfolios tradeId={id} not={true} trade={true}/>*/}
             </Row>
         </React.Fragment>
     )
