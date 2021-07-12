@@ -83,9 +83,22 @@ export default function () {
                 })
 
                 //Portfolio routes
-                this.resource("portfolios", {except: ["update"]})
+                this.resource("portfolios", {except: ["index", "update"]})
                 this.post("/portfolios/:id", (schema, request) => {
                     return schema.portfolios.find(request.params.id).update({label: request.requestBody.name})
+                })
+                this.get("/portfolios", (schema, request) => {
+                    if ('tradeId' in request.queryParams) {
+                        if ('not' in request.queryParams) {
+                            return schema.portfolios.where(portfolio => portfolio.tradeId != request.queryParams.tradeId)
+                        }
+                        return schema.portfolios.where(portfolio => portfolio.tradeId == request.queryParams.tradeId)
+                    }
+                    else
+                    {
+                        return schema.portfolios.all()
+                    }
+
                 })
                 this.post("/portfolios/unassign/:id", (schema, request) => {
                     request.requestBody.forEach((item, index) => {
@@ -94,6 +107,17 @@ export default function () {
                             schema.accounts.find(item.id).update({portfolioId: null})
                         }
                     })
+                    return
+                })
+                this.post("/portfolios/assign/:id", (schema, request) => {
+
+                    request.requestBody.forEach((item, index) => {
+                        if (item.delete_row == true) {
+                            let account = schema.portfolios.find(item.id)
+                            schema.portfolios.find(item.id).update({tradeId: request.params.id})
+                        }
+                    })
+
                     return
                 })
 
@@ -132,6 +156,15 @@ export default function () {
                 this.resource("trades", { except: ["update"] })
                 this.post("/trades/:id", (schema, request) => {
                     return schema.trades.find(request.params.id).update({label: request.requestBody.name})
+                })
+                this.post("/trades/unassign/:id", (schema, request) => {
+                    request.requestBody.forEach((item, index) => {
+                        if (item.delete_row == true) {
+                            let portfolio = schema.portfolios.find(item.id)
+                            schema.portfolios.find(item.id).update({tradeId: null})
+                        }
+                    })
+                    return
                 })
             },
             seeds(server) {

@@ -101,12 +101,12 @@ export default function Accounts(props) {
                 />
             </Row>
             <Row>
-                {props.port ? <p><AssignItem url={`/api/accounts/assign/${props.portfolioId}`}
+                {props.port ? <AssignItem url={`/api/accounts/assign/${props.portfolioId}`}
                                              items={accounts}
                                              setItems={setAccounts}
                                              buttonLabel='Assign Account'
                                              itemType='account'
-                /></p> : <NewItem url='/api/accounts'
+                /> : <NewItem url='/api/accounts'
                                   items={accounts}
                                   setItems={setAccounts}
                                   seed={{"account": {"label": "Name Me"}}}

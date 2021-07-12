@@ -46,7 +46,7 @@ export default function TradeDetail() {
         )
     }
     const saveData = () => {
-        postItem(`/api/trades/${trade.id}`, portfolios).then(()=> setPortfolios(portfolios)).then(() =>
+        postItem(`/api/trades/unassign/${trade.id}`, portfolios).then(()=> setPortfolios(portfolios)).then(() =>
             alert("Trades Updated!"))
     }
 
@@ -110,7 +110,7 @@ export default function TradeDetail() {
                 <DeleteTrade id={id}/>
             </Row>
             <Row>
-                {/*<Portfolios tradeId={id} not={true} trade={true}/>*/}
+                <Portfolios tradeId={id} not={true} trade={true}/>
             </Row>
         </React.Fragment>
     )

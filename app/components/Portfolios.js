@@ -4,7 +4,7 @@ import {useTable} from "react-table"
 import {Button, Row} from "react-bootstrap"
 import {Link, Router, Route} from "react-router-dom"
 import Nav from "react-bootstrap/Nav"
-import {NewItem, StandardTable} from "./UtilityComponents";
+import {AssignItem, EditableCheckbox, NewItem, StandardTable} from "./UtilityComponents";
 
 
 export default function Portfolios(props) {
@@ -35,7 +35,14 @@ export default function Portfolios(props) {
     React.useEffect(() => {
         let unmounted = false
         setLoading(true)
-        getCollection('/api/portfolios').then((data) => {
+        let url = '/api/portfolios'
+        if ('tradeId' in props) {
+            url = url + `?tradeId=${props.tradeId}`
+        }
+        if ('not' in props) {
+            url = url + `&not=${props.not}`
+        }
+        getCollection(url).then((data) => {
             if (unmounted) {
                 return; // not mounted anymore. bail.
             }
@@ -54,15 +61,24 @@ export default function Portfolios(props) {
 
     const data = React.useMemo(() => portfolios, [portfolios])
     const columns = React.useMemo(
-        () => [
-            {
-                Header: "Name",
-                accessor: "label",
-                Cell: ({row}) => <Nav.Link as={Link}
-                                           to={`/portfolios/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
-            },
-            // {Header: "Description", accessor: "description"},
-        ],
+        () => {
+            let columnAttrs = [
+                {
+                    Header: "Name",
+                    accessor: "label",
+                    Cell: ({row}) => <Nav.Link as={Link}
+                                               to={`/portfolios/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
+                },
+                // {Header: "Description", accessor: "description"},
+            ]
+            if (props.trade) {
+                columnAttrs.push({
+                    Header: "Delete", accessor: "delete_row",
+                    Cell: EditableCheckbox
+                })
+            }
+            return columnAttrs
+        },
         []
     )
     const {
@@ -88,13 +104,18 @@ export default function Portfolios(props) {
                 />
             </Row>
             <Row>
-                <NewItem url='/api/portfolios'
-                         items={portfolios}
-                         setItems={setPortfolios}
-                         seed={{"portfolio": {"label": "Name Me"}}}
-                         buttonLabel='Add Portfolio'
-                         itemType='portfolio'
-                />
+                {props.trade ? <AssignItem url={`/api/portfolios/assign/${props.tradeId}`}
+                                           items={portfolios}
+                                           setItems={setPortfolios}
+                                           buttonLabel='Assign Portfolio'
+                                           itemType='portfolio'
+                /> : <NewItem url='/api/portfolios'
+                              items={portfolios}
+                              setItems={setPortfolios}
+                              seed={{"portfolio": {"label": "Name Me"}}}
+                              buttonLabel='Add Portfolio'
+                              itemType='portfolio'
+                />}
             </Row>
 
         </React.Fragment>
