@@ -33,29 +33,32 @@ export default function Portfolios(props) {
     }
 
     React.useEffect(() => {
-        let unmounted = false
-        setLoading(true)
-        let url = '/api/portfolios'
-        if ('tradeId' in props) {
-            url = url + `?tradeId=${props.tradeId}`
-        }
-        if ('not' in props) {
-            url = url + `&not=${props.not}`
-        }
-        getCollection(url).then((data) => {
-            if (unmounted) {
-                return; // not mounted anymore. bail.
+        if (props.loading == false || Object.keys(props).length === 0
+        ) {
+            let unmounted = false
+            setLoading(true)
+            let url = '/api/portfolios'
+            if ('tradeId' in props) {
+                url = url + `?tradeId=${props.tradeId}`
             }
-            if (props.trade) {
-                data['portfolios'].forEach((item, index) => {
-                    //      item.add_row = "+"
-                    item.delete_row = false
-                })
+            if ('not' in props) {
+                url = url + `&not=${props.not}`
             }
-            setPortfolios(data["portfolios"])
-            setLoading(false)
-        })
-        return () => unmounted = true;
+            getCollection(url).then((data) => {
+                if (unmounted) {
+                    return; // not mounted anymore. bail.
+                }
+                if (props.trade) {
+                    data['portfolios'].forEach((item, index) => {
+                        //      item.add_row = "+"
+                        item.delete_row = false
+                    })
+                }
+                setPortfolios(data["portfolios"])
+                setLoading(false)
+            })
+            return () => unmounted = true;
+        }
     }, [])
 
 

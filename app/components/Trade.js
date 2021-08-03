@@ -23,7 +23,7 @@ export default function TradeDetail() {
     const {id} = useParams()
     const [portfolios, setPortfolios] = React.useState([])
     const [trade, setTrade] = React.useState({"label": ""})
-    const [loading, setLoading] = React.useState(null)
+    const [loading, setLoading] = React.useState(true)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
     React.useEffect(() => {
         setSkipPageReset(false)
@@ -51,7 +51,6 @@ export default function TradeDetail() {
     }
 
     React.useEffect(() => {
-        setLoading(true)
         getItem('/api/trades/', id).then((response) => {
 
             response['portfolios'].forEach((item, index) => {
@@ -110,7 +109,7 @@ export default function TradeDetail() {
                 <DeleteTrade id={id}/>
             </Row>
             <Row>
-                <Portfolios tradeId={id} not={true} trade={true}/>
+                <Portfolios tradeId={id} not={true} trade={true} loading={loading}/>
             </Row>
         </React.Fragment>
     )
