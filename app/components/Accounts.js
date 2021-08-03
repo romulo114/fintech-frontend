@@ -9,7 +9,7 @@ import {AssignItem, EditableCheckbox, NewItem, StandardTable} from "./UtilityCom
 
 export default function Accounts(props) {
     const [accounts, setAccounts] = React.useState([])
-    const [loading, setLoading] = React.useState(null)
+    const [loading, setLoading] = React.useState(true)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
     React.useEffect(() => {
         setSkipPageReset(false)
@@ -33,30 +33,31 @@ export default function Accounts(props) {
     }
 
     React.useEffect(() => {
-        let unmounted = false
-        setLoading(true)
-        let url = '/api/accounts'
-        if ('portfolioId' in props) {
-            url = url + `?portfolioId=${props.portfolioId}`
-        }
-        if ('not' in props) {
-            url = url + `&not=${props.not}`
-        }
-        getCollection(url).then((data) => {
-            if (unmounted) {
-                return; // not mounted anymore. bail.
+        if (props.loading == false || Object.keys(props).length === 0
+        ) {
+            let unmounted = false
+            let url = '/api/accounts'
+            if ('portfolioId' in props) {
+                url = url + `?portfolioId=${props.portfolioId}`
             }
-            if (props.port) {
-                data['accounts'].forEach((item, index) => {
-                    //      item.add_row = "+"
-                    item.delete_row = false
-                })
+            if ('not' in props) {
+                url = url + `&not=${props.not}`
             }
-            setAccounts(data["accounts"])
-            setLoading(false)
-        })
-        return () => unmounted = true;
-    }, [])
+            getCollection(url).then((data) => {
+                if (unmounted) {
+                    return; // not mounted anymore. bail.
+                }
+                if (props.port) {
+                    data['accounts'].forEach((item, index) => {
+                        //      item.add_row = "+"
+                        item.delete_row = false
+                    })
+                }
+                setAccounts(data["accounts"])
+                setLoading(false)
+            })
+            return () => unmounted = true;
+        }}, [])
 
 
     const data = React.useMemo(() => accounts, [accounts])

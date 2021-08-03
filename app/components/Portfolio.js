@@ -22,7 +22,7 @@ export default function PortfolioDetail() {
     const {id} = useParams()
     const [accounts, setAccounts] = React.useState([])
     const [portfolio, setPortfolio] = React.useState({"label": ""})
-    const [loading, setLoading] = React.useState(null)
+    const [loading, setLoading] = React.useState(true)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
     React.useEffect(() => {
         setSkipPageReset(false)
@@ -50,7 +50,6 @@ export default function PortfolioDetail() {
     }
 
     React.useEffect(() => {
-        setLoading(true)
         getItem('/api/portfolios/', id).then((response) => {
 
             response['accounts'].forEach((item, index) => {
@@ -109,7 +108,7 @@ export default function PortfolioDetail() {
                 <DeletePortfolio id={id}/>
             </Row>
             <Row>
-            <Accounts portfolioId={id} not={true} port={true}/>
+            <Accounts portfolioId={id} not={true} port={true} loading={loading}/>
             </Row>
         </React.Fragment>
     )
