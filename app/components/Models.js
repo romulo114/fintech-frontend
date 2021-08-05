@@ -15,7 +15,7 @@ function NewModel(props) {
     return <Button onClick={addModel}>Add Strategy</Button>
 }
 
-export default function Models() {
+export default function Models(props) {
     const [models, setModels] = React.useState([])
     const [loading, setLoading] = React.useState(null)
 
@@ -30,15 +30,28 @@ export default function Models() {
 
     const data = React.useMemo(() => models, [models])
     const columns = React.useMemo(
-        () => [
-            {
-                Header: "Name",
-                accessor: "label",
-                Cell: ({row}) => <Nav.Link as={Link}
-                                           to={`/models/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
-            },
-            // {Header: "Description", accessor: "description"},
-        ],
+        () => {
+            if (!props.assign) {
+                return [
+                    {
+                        Header: "Name",
+                        accessor: "label",
+                        Cell: ({row}) => <Nav.Link as={Link}
+                                                   to={`/models/${row.original.id}`}>{String(row.original.label)}</Nav.Link>
+                    },
+                    // {Header: "Description", accessor: "description"},
+                ]
+            }
+            else {
+                return [
+                    {
+                        Header: "Name",
+                        accessor: "label",
+                    },
+                ]
+
+            }
+        },
         []
     )
     const {

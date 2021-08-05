@@ -21,7 +21,8 @@ function DeletePortfolio(props) {
 export default function PortfolioDetail() {
     const {id} = useParams()
     const [accounts, setAccounts] = React.useState([])
-    const [portfolio, setPortfolio] = React.useState({"label": ""})
+    const [portfolio, setPortfolio] = React.useState({})
+    const [assetModel, setAssetModel] = React.useState({})
     const [loading, setLoading] = React.useState(true)
     const [skipPageReset, setSkipPageReset] = React.useState(false)
     React.useEffect(() => {
@@ -45,19 +46,21 @@ export default function PortfolioDetail() {
         )
     }
     const saveData = () => {
-        postItem(`/api/portfolios/unassign/${portfolio.id}`, accounts).then(()=> setAccounts(accounts)).then(() =>
+        postItem(`/api/portfolios/unassign/${portfolio.id}`, accounts).then(() => setAccounts(accounts)).then(() =>
             alert("Accounts Updated!"))
     }
 
     React.useEffect(() => {
         getItem('/api/portfolios/', id).then((response) => {
-
             response['accounts'].forEach((item, index) => {
                 item.delete_row = false
             })
             setAccounts(response['accounts'])
             setPortfolio(response['portfolio'])
             setLoading(false)
+            getItem(`/api/assetModels/`, response['portfolio']['assetModel']).then((response) => {
+                setAssetModel(response['assetModel'])
+            })
         })
     }, [])
     const data = React.useMemo(() => accounts, [accounts])
@@ -88,7 +91,13 @@ export default function PortfolioDetail() {
     }
     return (<React.Fragment>
             <Row>
-                <LoadingForm model={portfolio} url={`/api/portfolios/${id}`}/>
+                <Col>
+                    <LoadingForm model={portfolio} url={`/api/portfolios/${id}`}/>
+                </Col>
+                <Col>
+                    <p>Asset Model: {assetModel['label']}</p>
+                    <Link to="/">Assign</Link>
+                </Col>
             </Row>
             <Row>
                 <StandardTable
@@ -108,7 +117,7 @@ export default function PortfolioDetail() {
                 <DeletePortfolio id={id}/>
             </Row>
             <Row>
-            <Accounts portfolioId={id} not={true} port={true} loading={loading}/>
+                <Accounts portfolioId={id} not={true} port={true} loading={loading}/>
             </Row>
         </React.Fragment>
     )

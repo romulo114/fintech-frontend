@@ -8,6 +8,7 @@ export default function () {
                 }),
                 assetModel: Model.extend({
                     modelPositions: hasMany(),
+                    portfolios: hasMany(),
                     user: belongsTo(),
                 }),
                 modelPosition: Model.extend({
@@ -15,7 +16,8 @@ export default function () {
                 }),
                 portfolio: Model.extend({
                     accounts: hasMany(),
-                    trade: belongsTo()
+                    trade: belongsTo(),
+                    assetModel: belongsTo()
                 }),
                 account: Model.extend({
                     accountPositions: hasMany(),
@@ -31,19 +33,21 @@ export default function () {
             serializers: {
                 application: RestSerializer,
                 assetModel: RestSerializer.extend({
-                    include: ["modelPositions"],
+                    include: ["modelPositions", "portfolios"],
                 }),
                 user: RestSerializer.extend({
                     include: ["assetModels"]
                 }),
-                portfolio: RestSerializer.extend( {
-                    include: ["accounts"] }
+                portfolio: RestSerializer.extend({
+                        include: ["accounts", "assetModels"]
+                    }
                 ),
                 account: RestSerializer.extend({
                     include: ["accountPositions"]
                 }),
                 trade: RestSerializer.extend({
-                    include: ["portfolios"]}
+                        include: ["portfolios"]
+                    }
                 )
             },
             routes() {
@@ -93,9 +97,7 @@ export default function () {
                             return schema.portfolios.where(portfolio => portfolio.tradeId != request.queryParams.tradeId)
                         }
                         return schema.portfolios.where(portfolio => portfolio.tradeId == request.queryParams.tradeId)
-                    }
-                    else
-                    {
+                    } else {
                         return schema.portfolios.all()
                     }
 
@@ -133,9 +135,7 @@ export default function () {
                             return schema.accounts.where(account => account.portfolioId != request.queryParams.portfolioId)
                         }
                         return schema.accounts.where(account => account.portfolioId == request.queryParams.portfolioId)
-                    }
-                    else
-                    {
+                    } else {
                         return schema.accounts.all()
                     }
 
@@ -153,7 +153,7 @@ export default function () {
                 })
 
                 //Trade routes
-                this.resource("trades", { except: ["update"] })
+                this.resource("trades", {except: ["update"]})
                 this.post("/trades/:id", (schema, request) => {
                     return schema.trades.find(request.params.id).update({label: request.requestBody.name})
                 })
@@ -185,11 +185,11 @@ export default function () {
                         weight: 0.2,
                     }
                 )
-                let first_trade = server.create("trade", {label:"First Trade"})
-                let index_portfolio = server.create("portfolio", {label: "Index Portfolio", trade: first_trade})
+                let first_trade = server.create("trade", {label: "First Trade"})
+                let index_portfolio = server.create("portfolio", {label: "Index Portfolio", trade: first_trade, assetModel: usa_model})
                 let robinHeed = server.create("account", {portfolio: index_portfolio, label: "Robinheed"})
                 server.create("accountPosition", {account: robinHeed, symbol: "AGG", shares: 10})
-                server.create("account", {label:"TOAmTrade"})
+                server.create("account", {label: "TOAmTrade"})
             },
         }
     )
