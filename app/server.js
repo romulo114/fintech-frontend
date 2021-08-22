@@ -112,15 +112,17 @@ export default function () {
                     return
                 })
                 this.post("/portfolios/assign/:id", (schema, request) => {
-
                     request.requestBody.forEach((item, index) => {
                         if (item.delete_row == true) {
                             let account = schema.portfolios.find(item.id)
                             schema.portfolios.find(item.id).update({tradeId: request.params.id})
                         }
                     })
-
                     return
+                })
+                this.post("/portfolios/assignModel", (schema, request) => {
+                    let portfolio = schema.portfolios.find(request.requestBody.portfolioId).update({
+                        assetModelId: request.requestBody.modelId} )
                 })
 
 

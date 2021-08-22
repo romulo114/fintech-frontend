@@ -96,7 +96,7 @@ export default function PortfolioDetail() {
                 </Col>
                 <Col>
                     <p>Asset Model: {assetModel['label']}</p>
-                    <Link to="/">Assign</Link>
+                    <Link to={`/portfolio_assign_strategy/${id}`}>Assign</Link>
                 </Col>
             </Row>
             <Row>

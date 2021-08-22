@@ -11,6 +11,7 @@ import AccountDetail from "./Account";
 import PortfolioDetail from "./Portfolio";
 import Trades from "./Trades";
 import TradeDetail from "./Trade";
+import PortfolioAssignStrategy from "./PortfolioAssignStrategy";
 
 
 export function TopNav() {
@@ -71,6 +72,7 @@ export function SideNav() {
                     <Route exact path='/portfolios/:id'><PortfolioDetail/></Route>
                     <Route exact path='/trades'><Trades/></Route>
                     <Route exact path='/trades/:id'><TradeDetail/></Route>
+                    <Route exact path='/portfolio_assign_strategy/:id'><PortfolioAssignStrategy assign={true}/></Route>
                 </Col>
             </Router>
         </Row>
