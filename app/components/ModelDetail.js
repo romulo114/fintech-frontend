@@ -18,7 +18,7 @@ function DeleteModel(props) {
         })
     }
     return <Link to="/">
-    <Button onClick={deleteModel}>Delete Strategy</Button></Link>
+    <Button variant="danger" onClick={deleteModel}>Delete Strategy</Button></Link>
 }
 
 export default function ModelDetail() {
@@ -117,9 +117,9 @@ export default function ModelDetail() {
                 <Col>
                     <Button onClick={saveData}>Save Positions</Button>
                 </Col>
-            </Row>
-            <Row>
-                <DeleteModel id={id}/>
+                <Col>
+                    <DeleteModel id={id}/>
+                </Col>
             </Row>
         </React.Fragment>
     )

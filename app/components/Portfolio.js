@@ -15,7 +15,7 @@ function DeletePortfolio(props) {
         })
     }
     return <Link to="/">
-        <Button onClick={deletePortfolio}>Delete Strategy</Button></Link>
+        <Button variant="danger" onClick={deletePortfolio}>Delete Portfolio</Button></Link>
 }
 
 export default function PortfolioDetail() {
@@ -112,13 +112,12 @@ export default function PortfolioDetail() {
                 <Col>
                     <Button onClick={saveData}>Save Positions</Button>
                 </Col>
+                <Col>
+                    <DeletePortfolio id={id}/>
+                </Col>
             </Row>
-            <Row>
-                <DeletePortfolio id={id}/>
-            </Row>
-            <Row>
-                <Accounts portfolioId={id} not={true} port={true} loading={loading}/>
-            </Row>
+            <Accounts portfolioId={id} not={true} port={true} loading={loading}/>
+
         </React.Fragment>
     )
 }

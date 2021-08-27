@@ -154,6 +154,22 @@ export default function () {
                     return
                 })
 
+                this.post("/accounts/:id/positions", (schema, request) => {
+                    let account = schema.accounts.find(request.params.id)
+
+                    request.requestBody.forEach((item, index) => {
+                        if (item.delete_row == true) {
+                            schema.accountPositions.find(item.id).destroy();
+                            return
+                        }
+
+                        item.account = account
+                        schema.accountPositions.create(item)
+
+                    })
+                    return schema.accounts.find(request.params.id)
+                })
+
                 //Trade routes
                 this.resource("trades", {except: ["update"]})
                 this.post("/trades/:id", (schema, request) => {

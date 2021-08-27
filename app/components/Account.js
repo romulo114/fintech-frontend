@@ -18,7 +18,7 @@ function DeleteAccount(props) {
         })
     }
     return <Link to="/">
-        <Button onClick={deleteAccount}>Delete Strategy</Button></Link>
+        <Button variant="danger" onClick={deleteAccount}>Delete Account</Button></Link>
 }
 
 export default function AccountDetail() {
@@ -48,7 +48,7 @@ export default function AccountDetail() {
         )
     }
     const saveData = () => {
-        postCollection(`/api/accounts/${account.id}/accountPositions`, positions).then(()=> setPositions(positions)).then(() =>
+        postCollection(`/api/accounts/${account.id}/positions`, positions).then(()=> setPositions(positions)).then(() =>
             alert("Positions Updated!"))
     }
 
@@ -117,9 +117,9 @@ export default function AccountDetail() {
                 <Col>
                     <Button onClick={saveData}>Save Positions</Button>
                 </Col>
-            </Row>
-            <Row>
-                <DeleteAccount id={id}/>
+                <Col>
+                    <DeleteAccount id={id} />
+                </Col>
             </Row>
         </React.Fragment>
     )
