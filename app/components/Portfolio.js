@@ -110,7 +110,7 @@ export default function PortfolioDetail() {
             </Row>
             <Row>
                 <Col>
-                    <Button onClick={saveData}>Save Positions</Button>
+                    <Button onClick={saveData}>Update Accounts</Button>
                 </Col>
                 <Col>
                     <DeletePortfolio id={id}/>

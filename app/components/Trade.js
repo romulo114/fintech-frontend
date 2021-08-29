@@ -16,7 +16,7 @@ function DeleteTrade(props) {
         })
     }
     return <Link to="/">
-        <Button onClick={deleteTrade}>Delete Strategy</Button></Link>
+        <Button variant="danger" onClick={deleteTrade}>Delete Trade</Button></Link>
 }
 
 export default function TradeDetail() {
@@ -102,7 +102,7 @@ export default function TradeDetail() {
             </Row>
             <Row>
                 <Col>
-                    <Button onClick={saveData}>Save Positions</Button>
+                    <Button onClick={saveData}>Update Portfolios</Button>
                 </Col>
                 <Col>
                     <DeleteTrade id={id}/>

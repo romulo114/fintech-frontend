@@ -80,7 +80,7 @@ export default function Models(props) {
                          items={models}
                          setItems={setModels}
                          seed={{"assetModel": {"label": "Name Me"}}}
-                         buttonLabel='Add Model'
+                         buttonLabel='Add Strategy'
                          itemType='assetModel'
                 />
             </Row>
