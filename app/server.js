@@ -52,6 +52,14 @@ export default function () {
             },
             routes() {
                 this.namespace = "api"
+                this.post("/users/login", (schema) => {
+                    // log in for 24 hours
+                    let now = new Date()
+                    let cookieExpiration = new Date(now.getTime() + 24 * 3600 * 1000)
+                    document.cookie = `remember_me=cookie-content-here; domain=.dev-domain; path=/; expires=${cookieExpiration.toUTCString()};`
+
+                    return schema.users.find(1)
+                })
 
                 this.get("/assetModels", (schema, request) => {
                     return schema.users.all()
