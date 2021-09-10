@@ -4,12 +4,10 @@ import { AppRouter } from 'containers/router';
 
 import './app.scss';
 
-export const App: React.FC = () => {
-  return (
-    <main className="app">
-      <BrowserRouter>
-        <AppRouter />
-      </BrowserRouter>
-    </main>
-  );
-}
+export const App: React.FC = () => (
+  <main className="app">
+    <BrowserRouter>
+      <AppRouter />
+    </BrowserRouter>
+  </main>
+);
