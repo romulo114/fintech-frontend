@@ -1,0 +1,25 @@
+name: ESLint Analysis
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: install node v14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: yarn install
+      run: yarn install
+    - uses: a-b-r-o-w-n/eslint-action@v2
+      with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          files: "src/*"
+          extensions: ".js,.ts,.tsx"
+          working-directory: "./fithm_front"
+          quiet: "false"
