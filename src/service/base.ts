@@ -1,3 +1,77 @@
 import Axios from 'axios'
 
-export { Axios }
+class HttpClient {
+
+  private _accessToken: string = ''
+  private _refreshToken: string = ''
+
+  static instance: HttpClient | null = null
+  public static getInstance() {
+    if (!HttpClient.instance) {
+      HttpClient.instance = new HttpClient()
+    }
+
+    return HttpClient.instance
+  }
+
+  private constructor() {}
+
+  set accessToken(token: string) {
+    this._accessToken = token
+  }
+
+  get accessToken(): string {
+    return this._accessToken
+  }
+
+  set refreshToken(token: string) {
+    this._refreshToken = token
+  }
+
+  get refreshToken(): string {
+    return this._refreshToken
+  }
+
+  get = async (url: string, params: object = {}) => {
+    const { data } = await Axios.get(url, {
+      params,
+      headers: {}
+    })
+
+    return data
+  }
+
+  post = async (url: string, body: object, params: object = {}) => {
+    const { data } = await Axios.post(url, body, {
+      params,
+      headers: {}
+    })
+
+    return data
+  }
+
+  put = async (url: string, body: object, params: object = {}) => {
+    const { data } = await Axios.put(url, body, {
+      params,
+      headers: {}
+    })
+
+    return data
+  }
+
+  delete = async (url: string, params: object = {}) => {
+    const { data } = await Axios.delete(url, {
+      params,
+      headers: {}
+    })
+
+    return data
+  }
+
+  authGet = async (token: string, url: string, params: object = {}) => {
+
+  }
+}
+
+export const httpClient = HttpClient.getInstance()
+export const BASE_URL = 'http://localhost:5000/api/v1'
