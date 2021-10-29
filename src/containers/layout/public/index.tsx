@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 
 import { Header, Footer } from '../shared'
 
 export const PublicLayout: React.FC<PropsWithChildren<{}>> = ({children}) => {
   return (
-    <Box>
+    <Box className='public-layout'>
       <Header />
       <Box component='main'>
         {children}

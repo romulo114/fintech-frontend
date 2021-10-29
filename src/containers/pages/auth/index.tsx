@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouteMatch, Switch, Route } from 'react-router'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 
 import { SigninPage } from './signin'
 import { SignupPage } from './signup'

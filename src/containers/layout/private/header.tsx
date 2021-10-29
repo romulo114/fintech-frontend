@@ -1,7 +1,7 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 
-export const Header = () => {
+export const Header: React.FC = () => {
   return (
     <Box>
       This is a private header

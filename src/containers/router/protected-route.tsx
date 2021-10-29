@@ -1,5 +1,10 @@
 import React from 'react'
-import { RouteProps, Redirect, RouteComponentProps, Route } from 'react-router'
+import { 
+	RouteProps,
+	Redirect,
+	RouteComponentProps,
+	Route 
+} from 'react-router-dom'
 import { User } from 'types'
 
 interface ProtectedRouteProps extends RouteProps {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Redirect, Route } from 'react-router-dom'
 
-import NoSsr from '@material-ui/core/NoSsr'
+import { NoSsr } from '@mui/material'
 
 import { Home } from 'containers/pages/home'
 import { ProtectedRoute } from './protected-route'

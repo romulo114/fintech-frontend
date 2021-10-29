@@ -1,10 +1,9 @@
 import React from 'react'
-import { Box } from '@material-ui/core'
+import { AppBar, Box } from '@mui/material'
 
-export const Header = () => {
+export const Header: React.FC = () => {
   return (
-    <Box component='header'>
-      This is a shared header
+    <Box component='header' className='public-header'>
     </Box>
   )
 }

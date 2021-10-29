@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router'
-import { Box, CssBaseline } from '@material-ui/core'
+import { CssBaseline } from '@mui/material'
 
 import { PublicLayout } from 'containers/layout/public'
 
