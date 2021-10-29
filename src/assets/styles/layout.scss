@@ -23,6 +23,11 @@
   & header {
     @extend %shared-header;
     justify-content: space-between;
+
+    & .menu-item {
+      color: white;
+      text-decoration: none;
+    }
   }
 
   & main {

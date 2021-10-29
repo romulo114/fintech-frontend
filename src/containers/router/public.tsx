@@ -1,18 +1,24 @@
 import React from 'react'
-import { Switch, Route, useRouteMatch } from 'react-router'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import { CssBaseline } from '@mui/material'
 
 import { PublicLayout } from 'containers/layout/public'
+import { AuthPage } from 'containers/pages/auth'
+import { HomePage } from 'containers/pages/home'
 
-export const PublicPages: React.FC = (props) => {
+export const PublicPages: React.FC = () => {
 
-  const match = useRouteMatch()
+  const { path } = useRouteMatch()
+  console.log(path)
   return (
     <PublicLayout>
       <CssBaseline />
       <Switch>
-        <Route path={`${match.url}/`}>
-          This is a dashboard
+        <Route path={`${path}auth`}>
+          <AuthPage />
+        </Route>
+        <Route path={`${path}`}>
+          <HomePage />
         </Route>
       </Switch>
     </PublicLayout>
