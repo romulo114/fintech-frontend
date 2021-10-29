@@ -1,0 +1,24 @@
+%shared-layout {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+}
+
+%shared-header {
+  height: 4rem;
+  display: flex;
+}
+
+.public-layout {
+  @extend %shared-layout;
+  flex-direction: column;
+
+  & .header {
+    @extend %shared-header;
+    justify-content: space-between;
+  }
+}
+
+.private-layout {
+  @extend %shared-layout;
+}
