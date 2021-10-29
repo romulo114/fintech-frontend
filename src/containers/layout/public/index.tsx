@@ -7,7 +7,7 @@ export const PublicLayout: React.FC<PropsWithChildren<{}>> = ({children}) => {
   return (
     <Box className='public-layout'>
       <Header />
-      <Box component='main'>
+      <Box component='main' className='main'>
         {children}
       </Box>
       <Footer />

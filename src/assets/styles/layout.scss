@@ -9,16 +9,50 @@
   display: flex;
 }
 
+%shared-footer {
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .public-layout {
   @extend %shared-layout;
   flex-direction: column;
 
-  & .header {
+  & header {
     @extend %shared-header;
     justify-content: space-between;
+  }
+
+  & main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & footer {
+    @extend %shared-footer;
   }
 }
 
 .private-layout {
   @extend %shared-layout;
+
+  & header {
+    @extend %shared-header;
+    justify-content: space-between;
+  }
+
+  & main {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  & footer {
+    @extend %shared-footer;
+  }
 }
