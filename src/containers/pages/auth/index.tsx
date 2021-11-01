@@ -1,12 +1,13 @@
 import React from 'react'
 import { useRouteMatch, Switch, Route } from 'react-router-dom'
-import { Box } from '@mui/material'
 
 import { SigninPage } from './signin'
 import { SignupPage } from './signup'
 import { ForgotPasswordPage } from './forgot-pwd'
 import { ResetPasswordPage } from './reset-pwd'
 import { ConfirmEmailPage } from './confirm-mail'
+
+import './auth.scss'
 
 export const AuthPage: React.FC = () => {
 

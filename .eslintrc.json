@@ -30,7 +30,7 @@
         "@typescript-eslint/explicit-function-return-type": [
             "error", { "allowExpressions": true }
         ],
-        "max-len": ["warn", { "code": 80 }],
+        "max-len": ["warn", { "code": 100 }],
         "react/prop-types": "off",
         "import/extensions": [
             "error",

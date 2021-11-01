@@ -15,5 +15,8 @@ export const theme = createTheme({
       lg: 1200,
       xl: 1536,
     }
+  },
+  typography: {
+    fontSize: 16
   }
 })
