@@ -1,9 +1,9 @@
 import React from 'react'
-import { 
+import {
 	RouteProps,
 	Redirect,
 	RouteComponentProps,
-	Route 
+	Route
 } from 'react-router-dom'
 import { User } from 'types'
 
@@ -15,20 +15,24 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 	const { authUrl, children, component, path, ...others } = props
 	const user: User | null = null
 	if (!user) {
-		<Redirect to={{
-			pathname: authUrl,
-			state: { referrer: props.path }
-		}} />
+		return (
+			<Redirect
+				to={{
+					pathname: authUrl,
+					state: { referrer: props.path }
+				}}
+			/>
+		)
 	}
 
 	const Component = component as React.ComponentClass<RouteComponentProps>
 	if (Component) {
-    return <Route {...others} component={Component} />
+		return <Route {...others} component={Component} />
 	} else {
 		return (
-		<Route {...others}>
-			{children}
-		</Route>
+			<Route {...others}>
+				{children}
+			</Route>
 		)
 	}
 }

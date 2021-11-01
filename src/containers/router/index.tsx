@@ -1,9 +1,8 @@
-import React, { Dispatch, useReducer } from 'react'
+import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { NoSsr } from '@mui/material'
 
-import { initialState, AppStateContext, reducer } from 'contexts/app'
-import { ActionType } from 'contexts/context'
+import { WithApp, WithAuth } from 'contexts/wrappers'
 
 import { ProtectedRoute } from './protected-route'
 import { PrivatePages } from './private'
@@ -12,22 +11,21 @@ import { Title } from 'components/title'
 
 
 export const AppRouter: React.FC = () => {
-	const [state, dispatch] = useReducer(reducer, initialState.state)
 	return (
 		<NoSsr>
-			<AppStateContext.Provider 
-				value={{ state, dispatch: dispatch as Dispatch<ActionType> }}
-			>
-				<Title />
-				<Switch>
-					<ProtectedRoute path='/user'>
-						<PrivatePages />
-					</ProtectedRoute>
-					<Route path='/'>
-						<PublicPages />
-					</Route>
-				</Switch>
-			</AppStateContext.Provider>
+			<WithApp>
+				<WithAuth>
+					<Title />
+					<Switch>
+						<ProtectedRoute path='/user'>
+							<PrivatePages />
+						</ProtectedRoute>
+						<Route path='/'>
+							<PublicPages />
+						</Route>
+					</Switch>
+				</WithAuth>
+			</WithApp>
 		</NoSsr>
 	)
 }
