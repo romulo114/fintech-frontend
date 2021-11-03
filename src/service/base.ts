@@ -6,7 +6,7 @@ class HttpClient {
   private _refreshToken: string = ''
 
   static instance: HttpClient | null = null
-  public static getInstance() {
+  public static getInstance(): HttpClient {
     if (!HttpClient.instance) {
       HttpClient.instance = new HttpClient()
     }
@@ -32,39 +32,75 @@ class HttpClient {
     return this._refreshToken
   }
 
-  get = async (url: string, params: object = {}, headers: object = {}) => {
-    const { data } = await Axios.get(url, { params })
+  get = async (
+    url: string,
+    params: object = {},
+    headers: object = {}
+  ): Promise<any> => {
+    const { data } = await Axios.get(url, { params, headers })
     return data
   }
 
-  post = async (url: string, body: object, params: object = {}, headers: object = {}) => {
-    const { data } = await Axios.post(url, body, { params })
+  post = async (
+    url: string,
+    body: object,
+    params: object = {},
+    headers: object = {}
+  ): Promise<any> => {
+    const { data } = await Axios.post(url, body, { params, headers })
     return data
   }
 
-  put = async (url: string, body: object, params: object = {}, headers: object = {}) => {
-    const { data } = await Axios.put(url, body, { params })
+  put = async (
+    url: string,
+    body: object,
+    params: object = {},
+    headers: object = {}
+  ): Promise<any> => {
+    const { data } = await Axios.put(url, body, { params, headers })
     return data
   }
 
-  delete = async (url: string, params: object = {}, headers: object = {}) => {
-    const { data } = await Axios.delete(url, { params })
+  delete = async (
+    url: string,
+    params: object = {},
+    headers: object = {}
+  ): Promise<any> => {
+    const { data } = await Axios.delete(url, { params, headers })
     return data
   }
 
-  authGet = async (token: string, url: string, params: object = {}) => {
+  authGet = async (
+    token: string,
+    url: string,
+    params: object = {}
+  ): Promise<any> => {
     return await this.get(url, params, { Authorization: `Bearer ${token}` })
   }
 
-  authPost = async (token: string, url: string, body: object = {}, params: object = {}) => {
+  authPost = async (
+    token: string,
+    url: string,
+    body: object = {},
+    params: object = {}
+  ): Promise<any> => {
     return await this.post(url, body, params, { Authorization: `Bearer ${token}` })
   }
 
-  authPut = async (token: string, url: string, body: object = {}, params: object = {}) => {
+  authPut = async (
+    token: string,
+    url: string,
+    body: object = {},
+    params: object = {}
+  ): Promise<any> => {
     return await this.put(url, body, params, { Authorization: `Bearer ${token}` })
   }
 
-  authDelete = async (token: string, url: string, params: object = {}) => {
+  authDelete = async (
+    token: string,
+    url: string,
+    params: object = {}
+  ): Promise<any> => {
     return await this.delete(url, params, { Authorization: `Bearer ${token}` })
   }
 }

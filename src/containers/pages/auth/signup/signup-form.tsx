@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
@@ -8,6 +9,8 @@ import {
   passValidators,
   confirmValidators
 } from 'utils/validators'
+import { useAuthenticate } from 'hooks/auth'
+import { Message } from 'components/base'
 
 export const SignupForm: React.FC = () => {
 
@@ -16,14 +19,31 @@ export const SignupForm: React.FC = () => {
   const [password, setPassword] = useState<ValidatedText>({ value: '', error: '' })
   const [confirm, setConfirm] = useState<ValidatedText>({ value: '', error: '' })
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
 
-  const signup: () => Promise<void> = async () => {
+  const history = useHistory()
 
+  const { signup } = useAuthenticate()
+
+  const handleSignup: () => Promise<void> = async () => {
+    try {
+      setBusy(true)
+      setError('')
+      await signup(email.value, username.value, password.value)
+      history.replace('/user')
+    } catch (e: any) {
+      setError(e.response?.data?.message)
+    } finally {
+      setBusy(false)
+    }
   }
 
+  const enabled = !!username.value && !!email.value && !!password.value && !!confirm.value && 
+    !username.error && !email.error && !password.error && !confirm.error
   return (
     <form className='auth-form'>
       {busy && <LinearProgress />}
+      {error && <Message type='error'>{error}</Message>}
       <ValidatedInput
         fullWidth
         id='username'
@@ -69,7 +89,7 @@ export const SignupForm: React.FC = () => {
       />
 
       <Box component='div' className='actions'>
-        <Button onClick={signup} fullWidth variant='contained'>
+        <Button onClick={handleSignup} fullWidth variant='contained' disabled={!enabled}>
           Sign up
         </Button>
       </Box>

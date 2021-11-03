@@ -8,7 +8,7 @@ export const AuthApis = {
   },
 
   signup: async (email: string, username: string, password: string) => {
-    return await httpClient.post(`${AUTH_BASE}/signin`, { email, username, password })
+    return await httpClient.post(`${AUTH_BASE}/signup`, { email, username, password })
   },
 
   signout: async (token: string) => {

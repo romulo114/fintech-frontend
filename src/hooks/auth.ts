@@ -8,6 +8,7 @@ import {
 } from 'contexts/auth'
 import { ActionType } from 'contexts/context'
 import { AuthApis, UserApis } from 'service'
+import { User } from 'types/user'
 
 export const useSelector = (selectorFn: UserStateSelector): any => {
 	const value = useContext<UserStateStoreType>(UserContext);
@@ -19,11 +20,20 @@ export const useDispatch = (): Dispatch<ActionType> => {
 	return value.dispatch;
 }
 
-export const useAuthenticate = () => {
+interface AuthInterface {
+  user: User | null;
+  signin: (email: string, pass: string) => Promise<void>;
+  signup: (email: string, username: string, pass: string) => Promise<void>;
+  signout: (token: string) => Promise<void>;
+  confirm: (accessToken: string, confirmToken: string) => Promise<void>;
+  forgotPass: (email: string) => Promise<void>;
+  resetPass: (token: string, pass: string) => Promise<void>;
+}
+export const useAuthenticate = (): AuthInterface => {
   const user = useSelector((state: UserState) => state.user)
   const dispatch = useDispatch()
 
-  const signin = async (email: string, pass: string) => {
+  const signin = async (email: string, pass: string): Promise<void> => {
     const tokens = await AuthApis.signin(email, pass)
     const user = await UserApis.get(tokens.access_token)
     dispatch({
@@ -38,7 +48,7 @@ export const useAuthenticate = () => {
     })
   }
 
-  const signup = async (email: string, username: string, pass: string) => {
+  const signup = async (email: string, username: string, pass: string): Promise<void> => {
     const user = await AuthApis.signup(email, username, pass)
     const tokens = await AuthApis.signin(email, pass)
 
@@ -54,12 +64,12 @@ export const useAuthenticate = () => {
     })
   }
 
-  const signout = async (token: string) => {
+  const signout = async (token: string): Promise<void> => {
     await AuthApis.signout(token)
     dispatch({ type: AuthActions.clearUser })
   }
 
-  const confirm = async (accessToken: string, confirmToken: string) => {
+  const confirm = async (accessToken: string, confirmToken: string): Promise<void> => {
     await AuthApis.confirm(confirmToken)
     const user = await UserApis.get(accessToken)
 
@@ -69,11 +79,11 @@ export const useAuthenticate = () => {
     })
   }
 
-  const forgotPass = async (email: string) => {
+  const forgotPass = async (email: string): Promise<void> => {
     await AuthApis.forgotPassword(email)
   }
 
-  const resetPass = async (token: string, pass: string) => {
+  const resetPass = async (token: string, pass: string): Promise<void> => {
     await AuthApis.resetPassword(token, pass)
   }
 
