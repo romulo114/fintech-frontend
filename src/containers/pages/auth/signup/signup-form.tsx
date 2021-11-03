@@ -1,13 +1,12 @@
-import React, { useState, useCallback, ChangeEvent, ChangeEventHandler } from 'react'
-import { TextField, Box, Button, Link, LinearProgress } from '@mui/material'
+import React, { useState } from 'react'
+import { Box, Button, Link, LinearProgress } from '@mui/material'
+import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import {
-  validate,
-  isRequired,
-  validateMinLen,
-  isValidEmail,
-  isNumber,
-  isPasswordMatched
+  nameValidators,
+  emailValidators,
+  passValidators,
+  confirmValidators
 } from 'utils/validators'
 
 export const SignupForm: React.FC = () => {
@@ -22,92 +21,56 @@ export const SignupForm: React.FC = () => {
 
   }
 
-  const usernameChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const error = await validate(e.target.value, [
-        { fn: isRequired, error: 'Username is required' },
-        { fn: validateMinLen(3), error: 'Username must be at least 3 of length' }
-      ])
-      setUsername({ value: e.target.value, error })
-    }, []
-  )
-
-  const emailChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const error = await validate(e.target.value, [
-        { fn: isRequired, error: 'Email is required' },
-        { fn: isValidEmail, error: 'Invalid email address' }
-      ])
-      setEmail({ value: e.target.value, error })
-    }, []
-  )
-
-  const passwordChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const error = await validate(e.target.value, [
-        { fn: isRequired, error: 'Password is required' },
-        { fn: validateMinLen(6), error: 'Password must be at least 6 of length' }
-      ])
-      setPassword({ value: e.target.value, error })
-    }, []
-  )
-
-  const confirmChange: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const error = await validate(e.target.value, [
-        { fn: isPasswordMatched(password.value), error: 'Password mismatch' }
-      ])
-      setConfirm({ value: e.target.value, error })
-    }, [password.value]
-  )
-
   return (
     <form className='auth-form'>
       {busy && <LinearProgress />}
-      <TextField
+      <ValidatedInput
         fullWidth
-        id="username"
-        label="Username"
-        variant="standard"
-        value={username.value}
-        onChange={usernameChange}
-        helperText={username.error}
+        id='username'
+        label='Username'
+        variant='standard'
         className='input'
+        validators={nameValidators}
+        value={username}
+        setValue={setUsername}
       />
-      <TextField
+      <ValidatedInput
         fullWidth
-        id="email"
+        type='email'
+        id="signin-email"
         label="Email Address"
         variant="standard"
-        value={email.value}
-        onChange={emailChange}
-        helperText={email.error}
         className='input'
+        validators={emailValidators}
+        value={email}
+        setValue={setEmail}
       />
-      <TextField
+      <ValidatedInput
         fullWidth
-        id="password"
+        type='password'
+        id="signin-password"
         label="Password"
         variant="standard"
-        value={password.value}
-        onChange={passwordChange}
-        helperText={password.error}
         className='input'
+        validators={passValidators}
+        value={password}
+        setValue={setPassword}
       />
-      <TextField
+      <ValidatedInput
         fullWidth
-        id="confirm-password"
-        label="Confirm Password"
-        variant="standard"
-        value={confirm.value}
-        onChange={confirmChange}
-        helperText={confirm.error}
+        type='password'
+        id='confirm-password'
+        label='Confirm Password'
+        variant='standard'
         className='input'
+        validators={confirmValidators(password.value)}
+        value={confirm}
+        setValue={setConfirm}
       />
 
       <Box component='div' className='actions'>
         <Button onClick={signup} fullWidth variant='contained'>
-          Sign in
+          Sign up
         </Button>
       </Box>
       <Box component='div' className='links'>

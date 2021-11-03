@@ -9,7 +9,7 @@ export async function validate(value: string, validators: Validator[]): Promise<
   for (const validator of validators) {
     try {
       if (await validator.fn(value)) {
-        return ''
+        continue
       } else {
         return validator.error
       }
@@ -53,3 +53,19 @@ export function isPasswordMatched(confirm: string): ValidatorFn {
 export const isRequired: ValidatorFn = (value: string) => new Promise(resolve => {
   resolve(!!value)
 })
+
+export const emailValidators = [
+  { fn: isRequired, error: 'Email is required' },
+  { fn: isValidEmail, error: 'Invalid email address' }
+]
+export const passValidators = [
+  { fn: isRequired, error: 'Password is required' },
+  { fn: validateMinLen(6), error: 'Password must be at least 6 of length' }
+]
+export const nameValidators = [
+  { fn: isRequired, error: 'Username is required' },
+  { fn: validateMinLen(3), error: 'Username must be at least 3 of length' }
+]
+export const confirmValidators = (value: string): Validator[] => ([
+  { fn: isPasswordMatched(value), error: 'Password mismatch' }
+])

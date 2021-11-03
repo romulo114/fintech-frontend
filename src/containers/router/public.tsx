@@ -9,7 +9,6 @@ import { HomePage } from 'containers/pages/home'
 export const PublicPages: React.FC = () => {
 
   const { path } = useRouteMatch()
-  console.log(path)
   return (
     <PublicLayout>
       <CssBaseline />

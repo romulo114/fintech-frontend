@@ -1,4 +1,8 @@
-.auth-signin, .auth-signup {
+.simple-paper {
+  padding: 16px 16px 8px !important;
+}
+
+.auth-paper, .simple-paper {
   & .title {
     text-align: center;
     font-weight: 600;

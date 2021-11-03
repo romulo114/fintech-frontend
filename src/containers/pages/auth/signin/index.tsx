@@ -1,6 +1,7 @@
 import React from 'react'
-import { Paper, Avatar, Typography } from '@mui/material'
+import { Avatar } from '@mui/material'
 import { useTitle } from 'contexts/app'
+import { AuthPaper, AuthTitle } from 'components/auth'
 import { SigninForm } from './signin-form'
 
 export const SigninPage: React.FC = () => {
@@ -8,25 +9,12 @@ export const SigninPage: React.FC = () => {
   useTitle('Sign in')
 
   return (
-    <Paper
-      sx={{
-        padding: theme => theme.spacing(3),
-        width: theme => theme.spacing(60)
-      }}
-      className='auth-signin'
-    >
+    <AuthPaper>
       <Avatar src="/broken-image.jpg" className='avatar' />
-      <Typography
-        variant='h1'
-        sx={{ 
-          fontSize: theme => 1.5 * theme.typography.fontSize,
-          margin: theme => theme.spacing(2, 0)
-        }}
-        className='title'
-      >
-          Sign in with your fithm account
-      </Typography>
+      <AuthTitle>
+        Sign in with your fithm account
+      </AuthTitle>
       <SigninForm />
-    </Paper>
+    </AuthPaper>
   )
 }
