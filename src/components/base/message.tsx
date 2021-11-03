@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { Snackbar, Alert } from '@mui/material'
 
+export type MessageType = 'error' | 'warning' | 'info' | 'success'
 interface MessageProps {
-  type: 'error' | 'warning' | 'info' | 'success';
+  type: MessageType;
   duration?: number;
 }
 export const Message: React.FC<MessageProps> = (props) => {

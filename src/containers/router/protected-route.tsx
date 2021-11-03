@@ -5,21 +5,22 @@ import {
 	RouteComponentProps,
 	Route
 } from 'react-router-dom'
-import { User } from 'types'
+import { useAuthenticate } from 'hooks'
 
 interface ProtectedRouteProps extends RouteProps {
 	authUrl?: string
 }
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 
-	const { authUrl, children, component, path, ...others } = props
-	const user: User | null = null
+	const { authUrl, children, component, location, ...others } = props
+	const { user } = useAuthenticate()
+
 	if (!user) {
 		return (
 			<Redirect
 				to={{
 					pathname: authUrl,
-					state: { referrer: props.path }
+					state: { referrer: location?.pathname }
 				}}
 			/>
 		)

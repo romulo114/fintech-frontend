@@ -1,5 +1,5 @@
 import { useContext, Dispatch } from 'react'
-import { 
+import {
   AuthActions,
   UserContext,
   UserStateSelector,
@@ -11,13 +11,13 @@ import { AuthApis, UserApis } from 'service'
 import { User } from 'types/user'
 
 export const useSelector = (selectorFn: UserStateSelector): any => {
-	const value = useContext<UserStateStoreType>(UserContext);
-	return selectorFn(value.state);
+  const value = useContext<UserStateStoreType>(UserContext);
+  return selectorFn(value.state);
 }
 
 export const useDispatch = (): Dispatch<ActionType> => {
-	const value = useContext<UserStateStoreType>(UserContext);
-	return value.dispatch;
+  const value = useContext<UserStateStoreType>(UserContext);
+  return value.dispatch;
 }
 
 interface AuthInterface {
@@ -34,31 +34,30 @@ export const useAuthenticate = (): AuthInterface => {
   const dispatch = useDispatch()
 
   const signin = async (email: string, pass: string): Promise<void> => {
-    const tokens = await AuthApis.signin(email, pass)
-    const user = await UserApis.get(tokens.access_token)
+    const response = await AuthApis.signin(email, pass)
     dispatch({
       type: AuthActions.setUser,
       payload: {
-        user,
+        user: response.user,
         token: {
-          accessToken: tokens.access_token,
-          refreshToken: tokens.refresh_token
+          accessToken: response.tokens.access_token,
+          refreshToken: response.tokens.refresh_token
         }
       }
     })
   }
 
   const signup = async (email: string, username: string, pass: string): Promise<void> => {
-    const user = await AuthApis.signup(email, username, pass)
-    const tokens = await AuthApis.signin(email, pass)
+    await AuthApis.signup(email, username, pass)
+    const response = await AuthApis.signin(email, pass)
 
     dispatch({
       type: AuthActions.setUser,
       payload: {
-        user,
+        user: response.user,
         token: {
-          accessToken: tokens.access_token,
-          refreshToken: tokens.refresh_token
+          accessToken: response.tokens.access_token,
+          refreshToken: response.tokens.refresh_token
         }
       }
     })
@@ -87,7 +86,7 @@ export const useAuthenticate = (): AuthInterface => {
     await AuthApis.resetPassword(token, pass)
   }
 
-  return { 
+  return {
     user, signin, signup, signout, confirm,
     forgotPass, resetPass
   }

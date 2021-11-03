@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
@@ -10,7 +10,7 @@ import {
   confirmValidators
 } from 'utils/validators'
 import { useAuthenticate } from 'hooks/auth'
-import { Message } from 'components/base'
+import { Message, MessageType } from 'components/base'
 
 export const SignupForm: React.FC = () => {
 
@@ -19,23 +19,29 @@ export const SignupForm: React.FC = () => {
   const [password, setPassword] = useState<ValidatedText>({ value: '', error: '' })
   const [confirm, setConfirm] = useState<ValidatedText>({ value: '', error: '' })
   const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
-
-  const history = useHistory()
+  const [error, setError] = useState<{type?: MessageType, message?: string}>({})
+  const [redir, setRedir] = useState('')
 
   const { signup } = useAuthenticate()
 
   const handleSignup: () => Promise<void> = async () => {
     try {
       setBusy(true)
-      setError('')
+      setError({})
+
       await signup(email.value, username.value, password.value)
-      history.replace('/user')
+
+      setError({ type: 'success', message: 'Account created. Redirecting you to your dashboard'})
+      setTimeout(() => setRedir('/user/dashboard'), 3000)
     } catch (e: any) {
-      setError(e.response?.data?.message)
+      setError({type: 'error', message: e.response?.data?.message})
     } finally {
       setBusy(false)
     }
+  }
+
+  if (redir) {
+    return <Redirect to={redir} />
   }
 
   const enabled = !!username.value && !!email.value && !!password.value && !!confirm.value && 
@@ -43,7 +49,7 @@ export const SignupForm: React.FC = () => {
   return (
     <form className='auth-form'>
       {busy && <LinearProgress />}
-      {error && <Message type='error'>{error}</Message>}
+      {error.type && <Message type={error.type}>{error.message}</Message>}
       <ValidatedInput
         fullWidth
         id='username'

@@ -14,6 +14,9 @@ export const PrivatePages: React.FC = () => {
         <Route path={`${match.url}/dashboard`}>
           This is a dashboard
         </Route>
+        <Route path={`${match.url}/profile`}>
+          This is a profile
+        </Route>
       </Switch>
     </PrivateLayout>
   )
