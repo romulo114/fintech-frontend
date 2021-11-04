@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { AppBar, Box, Toolbar } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles'
+import { UserMenu } from './user-menu'
 
 const LeftLinkWrapper = styled('div')(({theme}) => ({
   marginRight: theme.spacing(2),
@@ -31,9 +32,7 @@ export const Header: React.FC = () => {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          <Link className='menu-item' to='/auth/signin'>
-            Sign in
-          </Link>
+          <UserMenu />
         </Toolbar>
       </AppBar>
     </Box>

@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react'
+import React from 'react'
 import { Paper } from '@mui/material'
 
 type AuthPaperProps = {

@@ -3,7 +3,8 @@ import {
 	RouteProps,
 	Redirect,
 	RouteComponentProps,
-	Route
+	Route,
+	useLocation
 } from 'react-router-dom'
 import { useAuthenticate } from 'hooks'
 
@@ -14,6 +15,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 
 	const { authUrl, children, component, location, ...others } = props
 	const { user } = useAuthenticate()
+	const { pathname } = useLocation()
 
 	if (!user) {
 		return (
@@ -23,6 +25,13 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 					state: { referrer: location?.pathname }
 				}}
 			/>
+		)
+	}
+
+	console.log(user, pathname)
+	if (!user.active && pathname !== '/user/activate') {
+		return (
+			<Redirect to='/user/activate' />
 		)
 	}
 

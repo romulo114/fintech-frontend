@@ -16,8 +16,23 @@ export interface UserState {
 }
 
 export type UserStateStoreType = StoreType<UserState>
+
+export function saveState(state: UserState): void {
+  localStorage.setItem('auth', JSON.stringify(state))
+}
+
+function loadState(): UserState | null {
+  const state = localStorage.getItem('auth')
+  if (!state) {
+    return null
+  }
+
+  return JSON.parse(state)
+}
+
+const savedState = loadState()
 export const initialState: UserStateStoreType = {
-  state: {
+  state: savedState ?? {
     user: null,
     token: null
   },

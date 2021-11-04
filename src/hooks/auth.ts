@@ -22,15 +22,17 @@ export const useDispatch = (): Dispatch<ActionType> => {
 
 interface AuthInterface {
   user: User | null;
+  tokens: { accessToken: string, refreshToken: string } | null;
   signin: (email: string, pass: string) => Promise<void>;
   signup: (email: string, username: string, pass: string) => Promise<void>;
-  signout: (token: string) => Promise<void>;
+  signout: (token?: string) => Promise<void>;
   confirm: (accessToken: string, confirmToken: string) => Promise<void>;
   forgotPass: (email: string) => Promise<void>;
   resetPass: (token: string, pass: string) => Promise<void>;
 }
 export const useAuthenticate = (): AuthInterface => {
   const user = useSelector((state: UserState) => state.user)
+  const tokens = useSelector((state: UserState) => state.token)
   const dispatch = useDispatch()
 
   const signin = async (email: string, pass: string): Promise<void> => {
@@ -38,7 +40,16 @@ export const useAuthenticate = (): AuthInterface => {
     dispatch({
       type: AuthActions.setUser,
       payload: {
-        user: response.user,
+        user: {
+          id: response.user.id,
+          username: response.user.username,
+          email: response.user.email,
+          active: response.user.active,
+          firstName: response.user.first_name,
+          lastName: response.user.last_name,
+          company: response.user.company,
+          phoneNumber: response.user.phone_number,
+        },
         token: {
           accessToken: response.tokens.access_token,
           refreshToken: response.tokens.refresh_token
@@ -54,7 +65,16 @@ export const useAuthenticate = (): AuthInterface => {
     dispatch({
       type: AuthActions.setUser,
       payload: {
-        user: response.user,
+        user: {
+          id: response.user.id,
+          username: response.user.username,
+          email: response.user.email,
+          active: response.user.active,
+          firstName: response.user.first_name,
+          lastName: response.user.last_name,
+          company: response.user.company,
+          phoneNumber: response.user.phone_number,
+        },
         token: {
           accessToken: response.tokens.access_token,
           refreshToken: response.tokens.refresh_token
@@ -63,8 +83,8 @@ export const useAuthenticate = (): AuthInterface => {
     })
   }
 
-  const signout = async (token: string): Promise<void> => {
-    await AuthApis.signout(token)
+  const signout = async (token?: string): Promise<void> => {
+    await AuthApis.signout(token ?? tokens.accessToken)
     dispatch({ type: AuthActions.clearUser })
   }
 
@@ -87,7 +107,7 @@ export const useAuthenticate = (): AuthInterface => {
   }
 
   return {
-    user, signin, signup, signout, confirm,
+    user, tokens, signin, signup, signout, confirm,
     forgotPass, resetPass
   }
 }

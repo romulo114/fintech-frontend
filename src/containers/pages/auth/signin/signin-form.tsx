@@ -27,7 +27,7 @@ export const SigninForm: React.FC = () => {
       await signin(email.value, password.value)
 
       setError({ type: 'success', message: 'Redirecting ...' })
-      setTimeout(() => setRedir(location.state.referrer ?? '/user/dashboard'), 1000)
+      setTimeout(() => setRedir(location.state?.referrer ?? '/user/dashboard'), 1000)
     } catch (e: any) {
       setError({ type: 'error', message: e.response?.data?.message })
     } finally {

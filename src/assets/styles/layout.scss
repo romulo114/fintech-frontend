@@ -2,6 +2,7 @@
   height: 100vh;
   width: 100%;
   display: flex;
+  flex-direction: column;
 }
 
 %shared-header {
@@ -16,9 +17,8 @@
   align-items: center;
 }
 
-.public-layout {
+.public-layout, .private-layout {
   @extend %shared-layout;
-  flex-direction: column;
 
   & header {
     @extend %shared-header;
@@ -28,26 +28,6 @@
       color: white;
       text-decoration: none;
     }
-  }
-
-  & main {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  & footer {
-    @extend %shared-footer;
-  }
-}
-
-.private-layout {
-  @extend %shared-layout;
-
-  & header {
-    @extend %shared-header;
-    justify-content: space-between;
   }
 
   & main {
