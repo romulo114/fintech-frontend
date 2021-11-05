@@ -1,19 +1,31 @@
 import React from 'react'
-import { Switch, Redirect, Route } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
+import { NoSsr } from '@mui/material'
 
-import NoSsr from '@material-ui/core/NoSsr'
+import { WithApp, WithAuth } from 'contexts/wrappers'
 
-import { Home } from 'containers/pages/home'
+import { ProtectedRoute } from './protected-route'
+import { PrivatePages } from './private'
+import { PublicPages } from './public'
+import { Title } from 'components/title'
+
 
 export const AppRouter: React.FC = () => {
 	return (
 		<NoSsr>
-			<Switch>
-				<Route exact path='/'>
-					<Home />
-				</Route>
-				<Redirect to={'/'} />
-			</Switch>
+			<WithApp>
+				<WithAuth>
+					<Title />
+					<Switch>
+						<ProtectedRoute path='/user'>
+							<PrivatePages />
+						</ProtectedRoute>
+						<Route path='/'>
+							<PublicPages />
+						</Route>
+					</Switch>
+				</WithAuth>
+			</WithApp>
 		</NoSsr>
 	)
 }

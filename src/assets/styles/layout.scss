@@ -1,0 +1,54 @@
+%shared-layout {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+%shared-header {
+  height: 4rem;
+  display: flex;
+}
+
+%shared-footer {
+  height: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.public-layout, .private-layout {
+  @extend %shared-layout;
+
+  & header {
+    @extend %shared-header;
+    justify-content: space-between;
+
+    & .menu-item {
+      color: white;
+      text-decoration: none;
+    }
+  }
+
+  & main {
+    flex-grow: 1;
+  }
+
+  & footer {
+    @extend %shared-footer;
+  }
+}
+
+.public-layout {
+  & main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.private-layout {
+  & main {
+    display: block;
+  }
+}

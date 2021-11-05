@@ -1,13 +1,15 @@
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { AppRouter } from 'containers/router';
+import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from '@mui/material/styles'
+import { AppRouter } from 'containers/router'
+import { theme } from 'config/theme.config'
 
-import './app.scss';
+import './app.scss'
 
 export const App: React.FC = () => (
-  <main className="app">
+  <ThemeProvider theme={theme}>
     <BrowserRouter>
       <AppRouter />
     </BrowserRouter>
-  </main>
+  </ThemeProvider>
 );
