@@ -1,0 +1,21 @@
+.activate-paper {
+
+  margin: auto;
+  margin-top: 80px;
+  max-width: 640px;
+
+  & .title {
+    font-weight: 500;
+  }
+
+  & .actions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    & .desc {
+      margin-right: 16px;
+    }
+  }
+}
