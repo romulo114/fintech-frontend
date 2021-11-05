@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { MouseEvent, MouseEventHandler, useState } from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
@@ -14,12 +14,14 @@ export const SigninForm: React.FC = () => {
   const [password, setPassword] = useState<ValidatedText>({ value: '', error: '' })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [redir, setRedir] = useState('')
-
-  const { signin } = useAuthenticate()
+  
+  const { user, signin } = useAuthenticate()
+  const [redir, setRedir] = useState(() => user ? '/user/dashboard' : '')
   const location = useLocation<{ referrer?: string }>()
 
-  const handleSignin: () => Promise<void> = async () => {
+  const handleSignin: MouseEventHandler = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
     try {
       setBusy(true)
       setError({})
@@ -67,7 +69,7 @@ export const SigninForm: React.FC = () => {
       />
 
       <Box component='div' className='actions'>
-        <Button onClick={handleSignin} fullWidth variant='contained'>
+        <Button onClick={handleSignin} fullWidth variant='contained' type='submit'>
           Sign in
         </Button>
       </Box>

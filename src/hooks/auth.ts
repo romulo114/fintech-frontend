@@ -1,4 +1,4 @@
-import { useContext, Dispatch } from 'react'
+import { useContext, Dispatch, useCallback } from 'react'
 import {
   AuthActions,
   UserContext,
@@ -27,6 +27,7 @@ interface AuthInterface {
   signup: (email: string, username: string, pass: string) => Promise<void>;
   signout: (token?: string) => Promise<void>;
   confirm: (accessToken: string, confirmToken: string) => Promise<void>;
+  sendConfirm: (accessToken: string) => Promise<void>;
   forgotPass: (email: string) => Promise<void>;
   resetPass: (token: string, pass: string) => Promise<void>;
 }
@@ -35,7 +36,7 @@ export const useAuthenticate = (): AuthInterface => {
   const tokens = useSelector((state: UserState) => state.token)
   const dispatch = useDispatch()
 
-  const signin = async (email: string, pass: string): Promise<void> => {
+  const signin = useCallback(async (email: string, pass: string): Promise<void> => {
     const response = await AuthApis.signin(email, pass)
     dispatch({
       type: AuthActions.setUser,
@@ -56,39 +57,45 @@ export const useAuthenticate = (): AuthInterface => {
         }
       }
     })
-  }
+  }, [dispatch])
 
-  const signup = async (email: string, username: string, pass: string): Promise<void> => {
-    await AuthApis.signup(email, username, pass)
-    const response = await AuthApis.signin(email, pass)
+  const signup = useCallback(
+    async (email: string, username: string, pass: string): Promise<void> => {
+      await AuthApis.signup(email, username, pass)
+      const response = await AuthApis.signin(email, pass)
 
-    dispatch({
-      type: AuthActions.setUser,
-      payload: {
-        user: {
-          id: response.user.id,
-          username: response.user.username,
-          email: response.user.email,
-          active: response.user.active,
-          firstName: response.user.first_name,
-          lastName: response.user.last_name,
-          company: response.user.company,
-          phoneNumber: response.user.phone_number,
-        },
-        token: {
-          accessToken: response.tokens.access_token,
-          refreshToken: response.tokens.refresh_token
+      dispatch({
+        type: AuthActions.setUser,
+        payload: {
+          user: {
+            id: response.user.id,
+            username: response.user.username,
+            email: response.user.email,
+            active: response.user.active,
+            firstName: response.user.first_name,
+            lastName: response.user.last_name,
+            company: response.user.company,
+            phoneNumber: response.user.phone_number,
+          },
+          token: {
+            accessToken: response.tokens.access_token,
+            refreshToken: response.tokens.refresh_token
+          }
         }
-      }
-    })
-  }
+      })
+    }, [dispatch])
 
-  const signout = async (token?: string): Promise<void> => {
-    await AuthApis.signout(token ?? tokens.accessToken)
+  const signout = useCallback(async (token?: string): Promise<void> => {
+    try {
+      await AuthApis.signout(token ?? tokens?.accessToken)
+    } catch (e: any) {
+      console.log(e.response?.data?.message)
+    }
+
     dispatch({ type: AuthActions.clearUser })
-  }
+  }, [dispatch, tokens?.accessToken])
 
-  const confirm = async (accessToken: string, confirmToken: string): Promise<void> => {
+  const confirm = useCallback(async (accessToken: string, confirmToken: string): Promise<void> => {
     await AuthApis.confirm(confirmToken)
     const user = await UserApis.get(accessToken)
 
@@ -96,18 +103,22 @@ export const useAuthenticate = (): AuthInterface => {
       type: AuthActions.setUser,
       payload: { user }
     })
-  }
+  }, [dispatch])
 
-  const forgotPass = async (email: string): Promise<void> => {
+  const sendConfirm = useCallback(async (accessToken: string): Promise<void> => {
+    await AuthApis.sendConfirm(accessToken)
+  }, [])
+
+  const forgotPass = useCallback(async (email: string): Promise<void> => {
     await AuthApis.forgotPassword(email)
-  }
+  }, [])
 
-  const resetPass = async (token: string, pass: string): Promise<void> => {
+  const resetPass = useCallback(async (token: string, pass: string): Promise<void> => {
     await AuthApis.resetPassword(token, pass)
-  }
+  }, [])
 
   return {
     user, tokens, signin, signup, signout, confirm,
-    forgotPass, resetPass
+    sendConfirm, forgotPass, resetPass
   }
 }

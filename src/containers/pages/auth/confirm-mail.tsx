@@ -1,40 +1,84 @@
-import React, { useState } from 'react'
-import { Box, Link, Button } from '@mui/material'
+import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
+import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper, AuthTitle } from 'components/auth'
-import { ValidatedInput } from 'components/form'
+import { Message, MessageType } from 'components/base'
 import { ValidatedText } from 'types/validate'
-import { emailValidators } from 'utils/validators'
+import { useQuery } from 'hooks/use-query'
+import { useAuthenticate } from 'hooks/auth'
 
 export const ConfirmEmailPage: React.FC = () => {
 
-  const [email, setEmail] = useState<ValidatedText>({ value: '', error: '' })
-  const sendCode = async (): Promise<void> => {
+  const confirmToken = useQuery().get('confirm_token')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
+  
+  const { user, confirm, tokens, sendConfirm } = useAuthenticate()
+  const [redir, setRedir] = useState(() => user?.active ? '/user/dashboard' : '')
+  
+  useEffect(() => {
+    if (!tokens?.accessToken || !confirmToken) {
+      return
+    }
 
+    const confirmFn = async (): Promise<void> => {
+      try {
+        setBusy(true)
+        setError({})
+
+        await confirm(tokens.accessToken, confirmToken)
+
+        setError({ type: 'success', message: 'Email confirmed. Redirecting ...' })
+        setTimeout(() => setRedir('/user/dashboard'), 3000)
+      } catch (e: any) {
+        setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error'})
+      } finally {
+        setBusy(false)
+      }
+    }
+
+    confirmFn()
+  }, [confirmToken, tokens?.accessToken, confirm])
+
+  const onResend = async (): Promise<void> => {
+    if (!tokens?.accessToken) {
+      return
+    }
+
+    try {
+      setBusy(true)
+      setError({})
+
+      await sendConfirm(tokens.accessToken)
+
+      setError({ type: 'success', message: 'Email was sent.' })
+    } catch (e: any) {
+      setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error'})
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (redir) {
+    return <Redirect to={redir} />
   }
 
   return (
     <AuthPaper className='simple-paper'>
       <AuthTitle>
-        Reset your password
+        Confirm your email
       </AuthTitle>
+      {busy && <LinearProgress />}
+      {error.type && (
+        <Message type={error.type}>{error.message}</Message>
+      )}
       <form className='auth-form'>
-        <ValidatedInput
-          fullWidth
-          type='email'
-          id="signin-email"
-          label="Email Address"
-          variant="standard"
-          className='input'
-          validators={emailValidators}
-          value={email}
-          setValue={setEmail}
-        />
         <Box component='div' className='links'>
-          <Link href='/auth/signin' variant='button'>
-            Sign in
+          <Link href='/' variant='button'>
+            Home
           </Link>
-          <Button variant='contained' onClick={sendCode}>
-            Send Code
+          <Button variant='contained' onClick={onResend}>
+            ReSend
           </Button>
         </Box>
       </form>

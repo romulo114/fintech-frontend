@@ -32,12 +32,23 @@
 
   & main {
     flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   & footer {
     @extend %shared-footer;
+  }
+}
+
+.public-layout {
+  & main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.private-layout {
+  & main {
+    display: block;
   }
 }

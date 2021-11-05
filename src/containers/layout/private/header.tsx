@@ -6,7 +6,7 @@ import { UserMenu } from '../shared/user-menu'
 export const Header: React.FC = () => {
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box component='header' className='header'>
       <AppBar position="static">
         <Toolbar>
           <MenuItem>

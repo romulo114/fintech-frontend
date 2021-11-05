@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 
 export const Footer: React.FC = () => {
   return (
-    <Box>
+    <Box component='footer'>
       This is a private footer
     </Box>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, MouseEventHandler, MouseEvent } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
@@ -24,7 +24,9 @@ export const SignupForm: React.FC = () => {
 
   const { signup } = useAuthenticate()
 
-  const handleSignup: () => Promise<void> = async () => {
+  const handleSignup: MouseEventHandler = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+  
     try {
       setBusy(true)
       setError({})

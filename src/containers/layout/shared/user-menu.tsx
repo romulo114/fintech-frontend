@@ -22,9 +22,7 @@ export const UserMenu: React.FC = () => {
   }
 
   const menuOpen: MouseEventHandler<HTMLDivElement> = (e: MouseEvent<HTMLDivElement>) => {
-    if (user?.active) {
-      setAnchorEl(e.currentTarget);
-    }
+    setAnchorEl(e.currentTarget);
   }
 
   const menuClose = (): void => {
@@ -82,12 +80,16 @@ export const UserMenu: React.FC = () => {
         open={!!anchorEl}
         onClose={menuClose}
       >
-        <MenuItem onClick={menuClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={menuClose}>
-          <Avatar /> My account
-        </MenuItem>
+        {user?.active && (
+          <>
+            <MenuItem onClick={menuClose}>
+              <Avatar /> Profile
+            </MenuItem>
+            <MenuItem onClick={menuClose}>
+              <Avatar /> My account
+            </MenuItem>
+          </>
+        )}
         <MenuItem onClick={handleSignout}>
           <ListItemIcon>
             <Logout fontSize="small" />
