@@ -2,6 +2,7 @@ import React, { MouseEvent, MouseEventHandler, useState } from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
+import { DASHBOARD_URL } from 'types/user'
 import { ValidatedText } from 'types/validate'
 import { emailValidators, passValidators } from 'utils/validators'
 import { useAuthenticate } from 'hooks/auth'
@@ -16,7 +17,7 @@ export const SigninForm: React.FC = () => {
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   
   const { user, signin } = useAuthenticate()
-  const [redir, setRedir] = useState(() => user ? '/user/dashboard' : '')
+  const [redir, setRedir] = useState(() => user ? DASHBOARD_URL : '')
   const location = useLocation<{ referrer?: string }>()
 
   const handleSignin: MouseEventHandler = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -29,7 +30,7 @@ export const SigninForm: React.FC = () => {
       await signin(email.value, password.value)
 
       setError({ type: 'success', message: 'Redirecting ...' })
-      setTimeout(() => setRedir(location.state?.referrer ?? '/user/dashboard'), 1000)
+      setTimeout(() => setRedir(location.state?.referrer ?? DASHBOARD_URL), 1000)
     } catch (e: any) {
       setError({ type: 'error', message: e.response?.data?.message })
     } finally {

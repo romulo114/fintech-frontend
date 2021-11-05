@@ -2,6 +2,7 @@ import React, { useState, MouseEventHandler, MouseEvent } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
+import { DASHBOARD_URL } from 'types/user'
 import { ValidatedText } from 'types/validate'
 import {
   nameValidators,
@@ -34,7 +35,7 @@ export const SignupForm: React.FC = () => {
       await signup(email.value, username.value, password.value)
 
       setError({ type: 'success', message: 'Account created. Redirecting you to your dashboard'})
-      setTimeout(() => setRedir('/user/dashboard'), 3000)
+      setTimeout(() => setRedir(DASHBOARD_URL), 3000)
     } catch (e: any) {
       setError({type: 'error', message: e.response?.data?.message})
     } finally {

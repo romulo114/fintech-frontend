@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper, AuthTitle } from 'components/auth'
 import { Message, MessageType } from 'components/base'
-import { ValidatedText } from 'types/validate'
+import { DASHBOARD_URL } from 'types/user'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
 
@@ -14,7 +14,7 @@ export const ConfirmEmailPage: React.FC = () => {
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   
   const { user, confirm, tokens, sendConfirm } = useAuthenticate()
-  const [redir, setRedir] = useState(() => user?.active ? '/user/dashboard' : '')
+  const [redir, setRedir] = useState(() => user?.active ? DASHBOARD_URL : '')
   
   useEffect(() => {
     if (!tokens?.accessToken || !confirmToken) {
@@ -29,7 +29,7 @@ export const ConfirmEmailPage: React.FC = () => {
         await confirm(tokens.accessToken, confirmToken)
 
         setError({ type: 'success', message: 'Email confirmed. Redirecting ...' })
-        setTimeout(() => setRedir('/user/dashboard'), 3000)
+        setTimeout(() => setRedir(DASHBOARD_URL), 3000)
       } catch (e: any) {
         setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error'})
       } finally {
@@ -68,11 +68,11 @@ export const ConfirmEmailPage: React.FC = () => {
       <AuthTitle>
         Confirm your email
       </AuthTitle>
-      {busy && <LinearProgress />}
-      {error.type && (
-        <Message type={error.type}>{error.message}</Message>
-      )}
       <form className='auth-form'>
+        {busy && <LinearProgress />}
+        {error.type && (
+          <Message type={error.type}>{error.message}</Message>
+        )}
         <Box component='div' className='links'>
           <Link href='/' variant='button'>
             Home

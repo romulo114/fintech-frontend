@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
 import { Button, Paper, LinearProgress } from '@mui/material'
 import { Message, MessageType } from 'components/base'
+import { DASHBOARD_URL } from 'types/user'
 import { useAuthenticate } from 'hooks/auth'
 
 export const ActivateUser: React.FC = () => {
@@ -31,7 +32,7 @@ export const ActivateUser: React.FC = () => {
   }
 
   if (user?.active) {
-    return <Redirect to={location.state?.referrer ?? '/user/dashboard'} />
+    return <Redirect to={location.state?.referrer ?? DASHBOARD_URL} />
   }
 
   return (
