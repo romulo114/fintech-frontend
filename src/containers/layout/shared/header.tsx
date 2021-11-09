@@ -4,31 +4,23 @@ import { AppBar, Box, Toolbar } from '@mui/material'
 import { styled, alpha } from '@mui/material/styles'
 import { UserMenu } from './user-menu'
 
-const LeftLinkWrapper = styled('div')(({theme}) => ({
-  marginRight: theme.spacing(2),
-  '&:hover': alpha(theme.palette.common.white, 0.25)
-}))
-
 export const Header: React.FC = () => {
   return (
     <Box component='header' className='header'>
       <AppBar position='static' color='primary'>
         <Toolbar sx={{ fontSize: '1.25rem' }}>
-          <LeftLinkWrapper>
-            <Link className='menu-item' to='/'>
-              Fithm LLC
-            </Link>
-          </LeftLinkWrapper>
-          <LeftLinkWrapper>
-            <Link className='menu-item' to='/#doc'>
-              Documentation
-            </Link>
-          </LeftLinkWrapper>
-          <LeftLinkWrapper>
-            <Link className='menu-item' to='/#about'>
-              About US
-            </Link>
-          </LeftLinkWrapper>
+          <Link className='menu-item' to='/'>
+            Fithm
+          </Link>
+          <Link className='menu-item' to='/blog'>
+            Blog
+          </Link>
+          <Link className='menu-item' to='/tutorial'>
+            Tutorials
+          </Link>
+          <Link className='menu-item' to='/support'>
+            Support
+          </Link>
 
           <Box sx={{ flexGrow: 1 }} />
 

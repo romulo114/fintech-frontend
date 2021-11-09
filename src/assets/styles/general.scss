@@ -1,0 +1,31 @@
+.m-auto {
+  margin: auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.relative {
+  position: relative;
+}
+
+.absolute-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.fw-600 {
+  font-weight: 600 !important;
+}
+
+.flex {
+  display: flex !important;
+}
+
+.flex-center {
+  justify-content: center !important;
+  align-items: center !important;
+}
