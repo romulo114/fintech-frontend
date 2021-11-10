@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const BlogPage: React.FC = () => {
+export const Blogs: React.FC = () => {
   return (
     <div>
-      blog page
+      Blogs
     </div>
   )
 }

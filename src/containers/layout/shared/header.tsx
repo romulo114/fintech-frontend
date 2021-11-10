@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
           <Link className='menu-item' to='/'>
             Fithm
           </Link>
-          <Link className='menu-item' to='/blog'>
+          <Link className='menu-item' to='/blogs'>
             Blog
           </Link>
           <Link className='menu-item' to='/tutorial'>

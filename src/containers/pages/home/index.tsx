@@ -3,7 +3,7 @@ import { useRouteMatch, Switch, Route } from 'react-router-dom'
 import { Box } from '@mui/material'
 
 import { HomePage as Home } from './home'
-import { BlogPage } from './blog'
+import { BlogsPage } from './blog'
 import { SupportPage } from './support'
 import { TutorialPage } from './tutorial'
 
@@ -15,8 +15,8 @@ export const HomePage: React.FC = () => {
   return (
 		<Box component='div' className='home'>
 			<Switch>
-				<Route path={`${path}blog`}>
-					<BlogPage />
+				<Route path={`${path}blogs`}>
+					<BlogsPage />
 				</Route>
 				<Route path={`${path}support`}>
 					<SupportPage />
