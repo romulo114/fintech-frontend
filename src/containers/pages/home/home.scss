@@ -67,3 +67,24 @@
     }
   }
 }
+
+.tut-paper {
+
+  background-color: rgba(74, 145, 226, 0.1);
+  @include my(16);
+
+  & .title {
+    font-weight: 600;
+    @include my(16);
+  }
+
+  & h5 {
+    font-size: 1.125rem;
+    @include my(16);
+  }
+
+  & p {
+    font-size: 0.875rem;
+    @include my(16);
+  }
+}

@@ -1,4 +1,4 @@
-import { IntroCardProps } from 'components/home/intro-card'
+import { IntroCardProps, VideoHelpProps } from 'components/home'
 import Shapes from 'assets/images/shapes.svg'
 import Worldwide from 'assets/images/worldwide.svg'
 import Target from 'assets/images/target.svg'
@@ -43,5 +43,51 @@ export const concept: IntroCardProps[] = [
     title: 'Trade Engine',
     description: 'We\'ve automated the trade creation process. \
                   So you get the best and exact trades for your accounts.'
+  }
+]
+
+export const tutIntro: VideoHelpProps[] = [
+  {
+    url: 'https://player.vimeo.com/video/331091116',
+    title: 'Fithm Introduction to Tutorials',
+    description: 'Introduces using Fithm tutorials and their location in Fithm.'
+  },
+  {
+    url: 'https://player.vimeo.com/video/331088511',
+    title: 'Getting Started',
+    description: 'Covers an example of getting started in Fithm.'
+  }
+]
+
+export const tutDepth: VideoHelpProps[] = [
+  {
+    url: 'https://player.vimeo.com/video/331995365',
+    title: 'Fithm Navigation',
+    description: 'Covers how to navigate Fithm.'
+  },
+  {
+    url: 'https://player.vimeo.com/video/331998887',
+    title: 'Working with accounts in Fithm',
+    description: 'Covers how to work with accounts in Fithm.'
+  },
+  {
+    url: 'https://player.vimeo.com/video/332083918',
+    title: 'Working with portfolios in Fithm',
+    description: 'Covers how to work with portfolios in Fithm.'
+  },
+  {
+    url: 'https://player.vimeo.com/video/331995379',
+    title: 'Working with Strategies in Fithm',
+    description: 'Covers how to work with strategies in Fithm.'
+  },
+  {
+    url: 'https://player.vimeo.com/video/331995397',
+    title: 'Working with Trades in Fithm',
+    description: 'Covers how to work with trades in Fithm.'
+  },
+  {
+    url: 'https://player.vimeo.com/video/332092784',
+    title: 'Manually Updating Trades in Fithm',
+    description: 'Covers how to manually update trades in Fithm.'
   }
 ]
