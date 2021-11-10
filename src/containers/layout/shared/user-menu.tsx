@@ -29,6 +29,10 @@ export const UserMenu: React.FC = () => {
     setAnchorEl(null);
   }
 
+  const goProfile = (): void => {
+    history.push('/user/profile')
+  }
+
   if (!user) {
     return (
       <Link className='menu-item' href='/auth/signin'>
@@ -82,10 +86,10 @@ export const UserMenu: React.FC = () => {
       >
         {user?.active && (
           <>
-            <MenuItem onClick={menuClose}>
+            <MenuItem onClick={goProfile}>
               <Avatar /> Profile
             </MenuItem>
-            <MenuItem onClick={menuClose}>
+            <MenuItem onClick={goProfile}>
               <Avatar /> My account
             </MenuItem>
           </>

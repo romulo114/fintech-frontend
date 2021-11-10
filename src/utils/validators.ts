@@ -54,6 +54,9 @@ export const isRequired: ValidatorFn = (value: string) => new Promise(resolve =>
   resolve(!!value)
 })
 
+export const requireValidators = [
+  { fn: isRequired, error: 'This field is required' }
+]
 export const emailValidators = [
   { fn: isRequired, error: 'Email is required' },
   { fn: isValidEmail, error: 'Invalid email address' }
