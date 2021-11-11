@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { AppBar, Box, Toolbar } from '@mui/material'
-import { styled, alpha } from '@mui/material/styles'
 import { UserMenu } from './user-menu'
 
 export const Header: React.FC = () => {

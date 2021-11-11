@@ -35,7 +35,7 @@
     @extend %shared-footer;
     font-size: 1rem;
     font-weight: 600;
-    color: #888
+    color: #888;
   }
 }
 
@@ -50,5 +50,12 @@
 .private-layout {
   & main {
     display: block;
+  }
+}
+
+.drawer-toolbar {
+  & .menu-item {
+    font-size: 1.5rem !important;
+    text-decoration: none !important;
   }
 }

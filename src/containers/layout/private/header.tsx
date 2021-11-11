@@ -1,23 +1,166 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { AppBar, Box, Toolbar, MenuItem } from '@mui/material'
+import {
+  AppBar, Box, Toolbar, IconButton, CssBaseline,
+  Drawer, Divider, List, ListItem, ListItemIcon,
+  ListItemText
+} from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
+import ABoxIcon from '@mui/icons-material/AccountBox'
+import DescIcon from '@mui/icons-material/Description'
+import MenuIcon from '@mui/icons-material/Menu'
+import DashIcon from '@mui/icons-material/Dashboard'
+import AccountIcon from '@mui/icons-material/SupervisorAccount'
+import SwapIcon from '@mui/icons-material/SwapHoriz'
+import BusinessIcon from '@mui/icons-material/Business'
+import BadgeIcon from '@mui/icons-material/Badge'
 import { UserMenu } from '../shared/user-menu'
+
+export const DRAWER_WIDTH = 240
 
 export const Header: React.FC = () => {
 
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const toggleDrawer = useCallback(() => {
+    setMobileOpen(flag => !flag)
+  }, [])
+
+  const drawer = (
+    <div>
+      <Toolbar className='flex-center drawer-toolbar'>
+        <Link className='menu-item' to='/'>
+          Fithm
+        </Link>
+      </Toolbar>
+      <Divider />
+      <List>
+        <ListItem button>
+          <ListItemIcon>
+            <DashIcon />
+          </ListItemIcon>
+          <ListItemText primary='Dashboard' />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <AccountIcon />
+          </ListItemIcon>
+          <ListItemText primary='Accounts' />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <SwapIcon />
+          </ListItemIcon>
+          <ListItemText primary='Trades' />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <BusinessIcon />
+          </ListItemIcon>
+          <ListItemText primary='Strategies' />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <BadgeIcon />
+          </ListItemIcon>
+          <ListItemText primary='Portfolios' />
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        <ListItem button>
+          <ListItemIcon>
+            <ABoxIcon />
+          </ListItemIcon>
+          <ListItemText primary='Profile' />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <DescIcon />
+          </ListItemIcon>
+          <ListItemText primary='Documentation' />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <InfoIcon />
+          </ListItemIcon>
+          <ListItemText primary='About' />
+        </ListItem>
+      </List>
+    </div>
+  )
+
   return (
-    <Box component='header' className='header'>
-      <AppBar position="static">
+    <>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { md: `calc(100% - ${DRAWER_WIDTH}px)` },
+          ml: { md: `${DRAWER_WIDTH}px` },
+        }}
+      >
         <Toolbar>
-          <MenuItem>
-            <Link className='menu-item' to='/'>
-              Fithm LLC
-            </Link>
-          </MenuItem>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={toggleDrawer}
+            sx={{ display: { md: 'none' } }}
+          >
+            <MenuIcon color='primary' />
+          </IconButton>
+          <Link className='menu-item' to='/blogs'>
+            Blog
+          </Link>
+          <Link className='menu-item' to='/tutorial'>
+            Tutorials
+          </Link>
+          <Link className='menu-item' to='/support'>
+            Support
+          </Link>
+
           <Box sx={{ flexGrow: 1 }} />
+
           <UserMenu />
         </Toolbar>
       </AppBar>
-    </Box>
+
+      <Box
+        component="nav"
+        sx={{ width: { md: DRAWER_WIDTH }, flexShrink: { md: 0 } }}
+        aria-label="business folders"
+      >
+        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+        <Drawer
+          container={window.document.body}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={toggleDrawer}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', md: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: DRAWER_WIDTH,
+              height: `calc(100% - 64px)`
+            }
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+    </>
   )
 }

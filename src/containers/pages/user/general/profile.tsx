@@ -10,14 +10,20 @@ import {
 import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { Message, MessageType } from 'components/base'
+import { useAuthenticate, useDispatch } from 'hooks/auth'
+import { AuthActions } from 'contexts/auth'
+import { UserApis, UpdatePayload } from 'service/user'
 
 export const Profile: React.FC = () => {
 
-  const [fname, setFname] = useState<ValidatedText>({ value: '', error: '' })
-  const [lname, setLname] = useState<ValidatedText>({ value: '', error: '' })
-  const [email, setEmail] = useState<ValidatedText>({ value: '', error: '' })
-  const [phone, setPhone] = useState<ValidatedText>({ value: '', error: '' })
-  const [company, setCompany] = useState<ValidatedText>({ value: '', error: '' })
+  const { user, tokens } = useAuthenticate()
+  const dispatch = useDispatch()
+
+  const [fname, setFname] = useState<ValidatedText>({ value: user?.firstName ?? '', error: '' })
+  const [lname, setLname] = useState<ValidatedText>({ value: user?.lastName ?? '', error: '' })
+  const [email, setEmail] = useState<ValidatedText>({ value: user?.email ?? '', error: '' })
+  const [phone, setPhone] = useState<ValidatedText>({ value: user?.phoneNumber ?? '', error: '' })
+  const [company, setCompany] = useState<ValidatedText>({ value: user?.company ?? '', error: '' })
 
   const [pass, setPass] = useState(false)
   const [oldpwd, setOldpwd] = useState<ValidatedText>({ value: '', error: '' })
@@ -34,12 +40,38 @@ export const Profile: React.FC = () => {
 
   const saveProfile: MouseEventHandler = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-
     try {
       setBusy(true)
       setError({})
 
+      const payload: UpdatePayload = {
+        email: email.value,
+        first_name: fname.value,
+        last_name: lname.value,
+        company: company.value,
+        phone_number: phone.value
+      }
+      if (pass) {
+        payload.old_password = oldpwd.value
+        payload.new_password = newpwd.value
+      }
 
+      const response = await UserApis.update(tokens?.accessToken ?? '', payload)
+      dispatch({
+        type: AuthActions.setUser,
+        payload: {
+          user: {
+            id: response.id,
+            username: response.username,
+            email: response.email,
+            active: response.active,
+            firstName: response.first_name,
+            lastName: response.last_name,
+            company: response.company,
+            phoneNumber: response.phone_number,
+          }
+        }
+      })
       setError({ type: 'success', message: 'Profile saved' })
     } catch (e: any) {
       setError({ type: 'error', message: e.response?.data?.message })
@@ -48,6 +80,12 @@ export const Profile: React.FC = () => {
     }
   }
 
+  let enabled = !!fname.value && !!lname.value && !!email.value &&
+                  !fname.error && !lname.error && !email.error
+  if (pass) {
+    enabled = enabled && !!oldpwd.value && !!newpwd.value && !!confirm.value &&
+              !oldpwd.error && !newpwd.error && !confirm.error
+  }
   return (
     <Container maxWidth='md' className='profile-container'>
       <Paper sx={{ padding: theme => theme.spacing(4), width: '100%' }}>
@@ -77,6 +115,7 @@ export const Profile: React.FC = () => {
                 validators={requireValidators}
                 value={fname}
                 setValue={setFname}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -89,6 +128,7 @@ export const Profile: React.FC = () => {
                 validators={requireValidators}
                 value={lname}
                 setValue={setLname}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -101,6 +141,7 @@ export const Profile: React.FC = () => {
                 validators={emailValidators}
                 value={email}
                 setValue={setEmail}
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -110,7 +151,7 @@ export const Profile: React.FC = () => {
                 label='Phone Number'
                 variant='standard'
                 className='input'
-                validators={requireValidators}
+                validators={[]}
                 value={phone}
                 setValue={setPhone}
               />
@@ -122,7 +163,7 @@ export const Profile: React.FC = () => {
                 label='Your Company'
                 variant='standard'
                 className='input'
-                validators={requireValidators}
+                validators={[]}
                 value={company}
                 setValue={setCompany}
               />
@@ -142,6 +183,7 @@ export const Profile: React.FC = () => {
                 <ValidatedInput
                   fullWidth
                   id='old-pwd'
+                  type='password'
                   label='Old Password'
                   variant='standard'
                   className='input'
@@ -154,6 +196,7 @@ export const Profile: React.FC = () => {
                 <ValidatedInput
                   fullWidth
                   id='new-pwd'
+                  type='password'
                   label='New Password'
                   variant='standard'
                   className='input'
@@ -166,6 +209,7 @@ export const Profile: React.FC = () => {
                 <ValidatedInput
                   fullWidth
                   id='confirm'
+                  type='password'
                   label='Confirm'
                   variant='standard'
                   className='input'
@@ -177,7 +221,12 @@ export const Profile: React.FC = () => {
             </Grid>
           )}
           <Box className='actions'>
-            <Button size='large' onClick={saveProfile} variant='contained'>
+            <Button
+              size='large'
+              onClick={saveProfile}
+              variant='contained'
+              disabled={!enabled}
+            >
               Save Changes
             </Button>
           </Box>

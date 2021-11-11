@@ -1,12 +1,14 @@
 import React, { MouseEvent, MouseEventHandler, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
-  Menu, MenuItem,
+  Menu, List, ListItem, ListItemText,
   ListItemIcon, Avatar, Link
 } from '@mui/material'
+import DashIcon from '@mui/icons-material/Dashboard'
+import ABoxIcon from '@mui/icons-material/AccountBox'
+import ExitIcon from '@mui/icons-material/ExitToApp';
 import { useAuthenticate } from 'hooks/auth'
 import { nameToAbbr } from 'utils/strings'
-import Logout from '@mui/icons-material/Logout'
 
 
 export const UserMenu: React.FC = () => {
@@ -30,7 +32,13 @@ export const UserMenu: React.FC = () => {
   }
 
   const goProfile = (): void => {
+    setAnchorEl(null);
     history.push('/user/profile')
+  }
+
+  const goDashboard = (): void => {
+    setAnchorEl(null);
+    history.push('/user/business/dashboard')
   }
 
   if (!user) {
@@ -84,22 +92,30 @@ export const UserMenu: React.FC = () => {
         open={!!anchorEl}
         onClose={menuClose}
       >
-        {user?.active && (
-          <>
-            <MenuItem onClick={goProfile}>
-              <Avatar /> Profile
-            </MenuItem>
-            <MenuItem onClick={goProfile}>
-              <Avatar /> My account
-            </MenuItem>
-          </>
-        )}
-        <MenuItem onClick={handleSignout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Sign out
-        </MenuItem>
+        <List>
+          {user?.active && (
+            <>
+              <ListItem button onClick={goProfile}>
+                <ListItemIcon>
+                  <ABoxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Profile' />
+              </ListItem>
+              <ListItem button onClick={goDashboard}>
+                <ListItemIcon>
+                  <DashIcon />
+                </ListItemIcon>
+                <ListItemText primary='Dashboard' />
+              </ListItem>
+            </>
+          )}
+          <ListItem button onClick={handleSignout}>
+            <ListItemIcon>
+              <ExitIcon />
+            </ListItemIcon>
+            <ListItemText primary='Sign out' />
+          </ListItem>
+        </List>
       </Menu>
     </>
   )
