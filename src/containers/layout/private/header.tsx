@@ -6,7 +6,6 @@ import {
   ListItemText
 } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
-import ABoxIcon from '@mui/icons-material/AccountBox'
 import DescIcon from '@mui/icons-material/Description'
 import MenuIcon from '@mui/icons-material/Menu'
 import DashIcon from '@mui/icons-material/Dashboard'
@@ -26,8 +25,6 @@ export const Header: React.FC = () => {
   const toggleDrawer = useCallback(() => {
     setMobileOpen(flag => !flag)
   }, [])
-
-
 
   const drawer = (
     <div>
@@ -71,12 +68,6 @@ export const Header: React.FC = () => {
       </List>
       <Divider />
       <List>
-        <ListItem button onClick={() => history.push('/user/profile')}>
-          <ListItemIcon>
-            <ABoxIcon />
-          </ListItemIcon>
-          <ListItemText primary='Profile' />
-        </ListItem>
         <ListItem button onClick={() => history.push(`${BASE_URL}/documentation`)}>
           <ListItemIcon>
             <DescIcon />
