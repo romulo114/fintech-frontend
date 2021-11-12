@@ -52,10 +52,14 @@ export const UserMenu: React.FC = () => {
   return (
     <>
       <Avatar
-        sx={{ bgcolor: theme => theme.palette.primary.dark }}
+        sx={{ bgcolor: theme => theme.palette.primary.dark, fontSize: theme => theme.spacing(2.5) }}
         onClick={menuOpen}
       >
-        {nameToAbbr(user?.username)}
+        {
+          (!!user?.firstName && !!user?.lastName) ?
+            `${nameToAbbr(user?.firstName)}${nameToAbbr(user?.lastName)}`
+            : nameToAbbr(user?.username)
+        }
       </Avatar>
       <Menu
         anchorEl={anchorEl}

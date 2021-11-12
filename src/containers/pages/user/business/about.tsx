@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const Dashboard: React.FC = () => {
+export const About: React.FC = () => {
   return (
     <div>
-      dashboard
+      about
     </div>
   )
 }

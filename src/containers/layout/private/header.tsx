@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import {
   AppBar, Box, Toolbar, IconButton, CssBaseline,
   Drawer, Divider, List, ListItem, ListItemIcon,
@@ -17,13 +17,17 @@ import BadgeIcon from '@mui/icons-material/Badge'
 import { UserMenu } from '../shared/user-menu'
 
 export const DRAWER_WIDTH = 240
+const BASE_URL = '/user/business'
 
 export const Header: React.FC = () => {
 
+  const history = useHistory()
   const [mobileOpen, setMobileOpen] = useState(false)
   const toggleDrawer = useCallback(() => {
     setMobileOpen(flag => !flag)
   }, [])
+
+
 
   const drawer = (
     <div>
@@ -34,31 +38,31 @@ export const Header: React.FC = () => {
       </Toolbar>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/dashboard`)}>
           <ListItemIcon>
             <DashIcon />
           </ListItemIcon>
           <ListItemText primary='Dashboard' />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/accounts`)}>
           <ListItemIcon>
             <AccountIcon />
           </ListItemIcon>
           <ListItemText primary='Accounts' />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/trades`)}>
           <ListItemIcon>
             <SwapIcon />
           </ListItemIcon>
           <ListItemText primary='Trades' />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/strategies`)}>
           <ListItemIcon>
             <BusinessIcon />
           </ListItemIcon>
           <ListItemText primary='Strategies' />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/portfolios`)}>
           <ListItemIcon>
             <BadgeIcon />
           </ListItemIcon>
@@ -67,19 +71,19 @@ export const Header: React.FC = () => {
       </List>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItem button onClick={() => history.push('/user/profile')}>
           <ListItemIcon>
             <ABoxIcon />
           </ListItemIcon>
           <ListItemText primary='Profile' />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/documentation`)}>
           <ListItemIcon>
             <DescIcon />
           </ListItemIcon>
           <ListItemText primary='Documentation' />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => history.push(`${BASE_URL}/about`)}>
           <ListItemIcon>
             <InfoIcon />
           </ListItemIcon>
