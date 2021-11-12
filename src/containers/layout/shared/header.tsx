@@ -17,8 +17,8 @@ export const Header: React.FC = () => {
           <Link className='menu-item' to='/tutorial'>
             Tutorials
           </Link>
-          <Link className='menu-item' to='/support'>
-            Support
+          <Link className='menu-item' to='/about'>
+            About
           </Link>
 
           <Box sx={{ flexGrow: 1 }} />
