@@ -8,7 +8,6 @@ import { Trades } from './trades'
 import { Strategies } from './strategies'
 import { Portfolios } from './portfolios'
 import { Documentation } from './documentation'
-import { About } from './about'
 
 export const BusinessPages: React.FC = () => {
 
@@ -34,9 +33,6 @@ export const BusinessPages: React.FC = () => {
         </Route>
         <Route path={`${path}/documentation`}>
           <Documentation />
-        </Route>
-        <Route path={`${path}/about`}>
-          <About />
         </Route>
       </Switch>
     </PrivateLayout>
