@@ -6,7 +6,7 @@ export const Title: React.FC = () => {
   const title = useSelector(state => state.title)
   return (
     <Helmet>
-      <title>{title}</title>
+      <title>{`Fithm - ${title}`}</title>
     </Helmet>
   )
 }

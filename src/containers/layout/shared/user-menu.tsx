@@ -1,12 +1,14 @@
 import React, { MouseEvent, MouseEventHandler, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
-  Menu, MenuItem,
+  Menu, List, ListItem, ListItemText,
   ListItemIcon, Avatar, Link
 } from '@mui/material'
+import DashIcon from '@mui/icons-material/Dashboard'
+import ABoxIcon from '@mui/icons-material/AccountBox'
+import ExitIcon from '@mui/icons-material/ExitToApp';
 import { useAuthenticate } from 'hooks/auth'
 import { nameToAbbr } from 'utils/strings'
-import Logout from '@mui/icons-material/Logout'
 
 
 export const UserMenu: React.FC = () => {
@@ -29,6 +31,16 @@ export const UserMenu: React.FC = () => {
     setAnchorEl(null);
   }
 
+  const goProfile = (): void => {
+    setAnchorEl(null);
+    history.push('/user/profile')
+  }
+
+  const goDashboard = (): void => {
+    setAnchorEl(null);
+    history.push('/user/business/dashboard')
+  }
+
   if (!user) {
     return (
       <Link className='menu-item' href='/auth/signin'>
@@ -40,10 +52,14 @@ export const UserMenu: React.FC = () => {
   return (
     <>
       <Avatar
-        sx={{ bgcolor: theme => theme.palette.primary.dark }}
+        sx={{ bgcolor: theme => theme.palette.primary.dark, fontSize: theme => theme.spacing(2.5) }}
         onClick={menuOpen}
       >
-        {nameToAbbr(user?.username)}
+        {
+          (!!user?.firstName && !!user?.lastName) ?
+            `${nameToAbbr(user?.firstName)}${nameToAbbr(user?.lastName)}`
+            : nameToAbbr(user?.username)
+        }
       </Avatar>
       <Menu
         anchorEl={anchorEl}
@@ -80,22 +96,30 @@ export const UserMenu: React.FC = () => {
         open={!!anchorEl}
         onClose={menuClose}
       >
-        {user?.active && (
-          <>
-            <MenuItem onClick={menuClose}>
-              <Avatar /> Profile
-            </MenuItem>
-            <MenuItem onClick={menuClose}>
-              <Avatar /> My account
-            </MenuItem>
-          </>
-        )}
-        <MenuItem onClick={handleSignout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          Sign out
-        </MenuItem>
+        <List>
+          {user?.active && (
+            <>
+              <ListItem button onClick={goProfile}>
+                <ListItemIcon>
+                  <ABoxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Profile' />
+              </ListItem>
+              <ListItem button onClick={goDashboard}>
+                <ListItemIcon>
+                  <DashIcon />
+                </ListItemIcon>
+                <ListItemText primary='Dashboard' />
+              </ListItem>
+            </>
+          )}
+          <ListItem button onClick={handleSignout}>
+            <ListItemIcon>
+              <ExitIcon />
+            </ListItemIcon>
+            <ListItemText primary='Sign out' />
+          </ListItem>
+        </List>
       </Menu>
     </>
   )

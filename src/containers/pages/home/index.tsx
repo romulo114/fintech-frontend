@@ -1,9 +1,37 @@
 import React from 'react'
+import { useRouteMatch, Switch, Route } from 'react-router-dom'
+import { Box } from '@mui/material'
+
+import { HomePage as Home } from './home'
+import { BlogsPage } from './blog'
+import { SupportPage } from './support'
+import { TutorialPage } from './tutorial'
+import { DemoPage } from './demo'
+
+import './home.scss'
 
 export const HomePage: React.FC = () => {
-	return (
-		<div>
-			Home Page
-		</div>
-	)
+	const { path } = useRouteMatch()
+
+  return (
+		<Box component='div' className='home'>
+			<Switch>
+				<Route path={`${path}blogs`}>
+					<BlogsPage />
+				</Route>
+				<Route path={`${path}about`}>
+					<SupportPage />
+				</Route>
+				<Route path={`${path}tutorial`}>
+					<TutorialPage />
+				</Route>
+				<Route path={`${path}demo`}>
+					<DemoPage />
+				</Route>
+				<Route exact path={`${path}`}>
+					<Home />
+				</Route>
+			</Switch>
+		</Box>
+  )
 }

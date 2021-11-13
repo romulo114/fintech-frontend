@@ -9,4 +9,4 @@ export interface User {
   phoneNumber?: string;
 }
 
-export const DASHBOARD_URL = '/user/dashboard'
+export const DASHBOARD_URL = '/user/business/dashboard'

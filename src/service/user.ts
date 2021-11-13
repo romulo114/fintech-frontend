@@ -2,6 +2,15 @@ import { httpClient, BASE_URL } from './base'
 
 const USER_BASE = `${BASE_URL}/users`
 
+export type UpdatePayload = {
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  company?: string;
+  phone_number?: string;
+  old_password?: string;
+  new_password?: string;
+}
 export const UserApis = {
   get: async (token: string) => {
     return httpClient.authGet(token, `${USER_BASE}`)
@@ -9,17 +18,9 @@ export const UserApis = {
 
   update: async (
     token: string,
-    fName?: string,
-    lName?: string,
-    company?: string,
-    phone?: string
+    payload: UpdatePayload
   ): Promise<any> => {
-    const body: any = {}
-    if (fName) body.first_name = fName
-    if (lName) body.last_name = lName
-    if (company) body.compay = company
-    if (phone) body.phone = phone
   
-    return httpClient.authPut(token, `${USER_BASE}`, body)
+    return httpClient.authPut(token, `${USER_BASE}`, payload)
   }
 }

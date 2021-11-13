@@ -11,10 +11,11 @@ import { useAuthenticate } from 'hooks'
 interface ProtectedRouteProps extends RouteProps {
 	authUrl?: string;
 	activateUrl?: string;
+	profileUrl?: string;
 }
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 
-	const { authUrl, activateUrl, children, component, location, ...others } = props
+	const { authUrl, activateUrl, profileUrl, children, component, ...others } = props
 	const { user } = useAuthenticate()
 	const { pathname } = useLocation()
 
@@ -23,7 +24,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 			<Redirect
 				to={{
 					pathname: authUrl,
-					state: { referrer: location?.pathname }
+					state: { referrer: pathname }
 				}}
 			/>
 		)
@@ -34,7 +35,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 			<Redirect
 				to={{
 					pathname: activateUrl,
-					state: { referrer: location?.pathname }
+					state: { referrer: pathname }
+				}}
+			/>
+		)
+	}
+
+	if (!user.firstName && pathname !== profileUrl) {
+		return (
+			<Redirect
+				to={{
+					pathname: profileUrl,
+					state: { referrer: pathname }
 				}}
 			/>
 		)
@@ -54,5 +66,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 
 ProtectedRoute.defaultProps = {
 	authUrl: '/auth/signin',
-	activateUrl: '/user/activate'
+	activateUrl: '/user/activate',
+	profileUrl: '/user/profile'
 }
