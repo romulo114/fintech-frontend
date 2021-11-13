@@ -74,12 +74,6 @@ export const Header: React.FC = () => {
           </ListItemIcon>
           <ListItemText primary='Documentation' />
         </ListItem>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/about`)}>
-          <ListItemIcon>
-            <InfoIcon />
-          </ListItemIcon>
-          <ListItemText primary='About' />
-        </ListItem>
       </List>
     </div>
   )
