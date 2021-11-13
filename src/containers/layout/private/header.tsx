@@ -26,6 +26,11 @@ export const Header: React.FC = () => {
     setMobileOpen(flag => !flag)
   }, [])
 
+  const handleLink = (link: string) => () => {
+    setMobileOpen(false)
+    history.push(link)
+  }
+
   const drawer = (
     <div>
       <Toolbar className='flex-center drawer-toolbar'>
@@ -35,31 +40,31 @@ export const Header: React.FC = () => {
       </Toolbar>
       <Divider />
       <List>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/dashboard`)}>
+        <ListItem button onClick={handleLink(`${BASE_URL}/dashboard`)}>
           <ListItemIcon>
             <DashIcon />
           </ListItemIcon>
           <ListItemText primary='Dashboard' />
         </ListItem>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/accounts`)}>
+        <ListItem button onClick={handleLink(`${BASE_URL}/accounts`)}>
           <ListItemIcon>
             <AccountIcon />
           </ListItemIcon>
           <ListItemText primary='Accounts' />
         </ListItem>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/trades`)}>
+        <ListItem button onClick={handleLink(`${BASE_URL}/trades`)}>
           <ListItemIcon>
             <SwapIcon />
           </ListItemIcon>
           <ListItemText primary='Trades' />
         </ListItem>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/strategies`)}>
+        <ListItem button onClick={handleLink(`${BASE_URL}/strategies`)}>
           <ListItemIcon>
             <BusinessIcon />
           </ListItemIcon>
           <ListItemText primary='Strategies' />
         </ListItem>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/portfolios`)}>
+        <ListItem button onClick={handleLink(`${BASE_URL}/portfolios`)}>
           <ListItemIcon>
             <BadgeIcon />
           </ListItemIcon>
@@ -68,7 +73,7 @@ export const Header: React.FC = () => {
       </List>
       <Divider />
       <List>
-        <ListItem button onClick={() => history.push(`${BASE_URL}/documentation`)}>
+        <ListItem button onClick={handleLink(`${BASE_URL}/documentation`)}>
           <ListItemIcon>
             <DescIcon />
           </ListItemIcon>
