@@ -1,7 +1,11 @@
 import React from 'react'
 import { Container } from '@mui/material'
+import { useTitle } from 'contexts/app'
 
 export const SupportPage: React.FC = () => {
+
+  useTitle('About')
+
   return (
     <Container maxWidth='lg'>
       <h1>

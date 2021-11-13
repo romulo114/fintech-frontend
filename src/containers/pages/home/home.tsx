@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid, Box, Container } from '@mui/material'
+import { useTitle } from 'contexts/app'
 import { IntroCard, IntroCardProps } from 'components/home/intro-card'
 import { introData, concept } from './data'
 
 export const HomePage: React.FC = () => {
 
   const [intros, setIntros] = useState<IntroCardProps[]>([])
+  useTitle('Home')
+
   useEffect(() => {
     setIntros(introData)
   }, [])

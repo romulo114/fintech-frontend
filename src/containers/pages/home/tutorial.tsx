@@ -2,8 +2,12 @@ import React from 'react'
 import { Container } from '@mui/material'
 import { TutPaper, VideoHelp } from 'components/home'
 import { tutIntro, tutDepth } from './data'
+import { useTitle } from 'contexts/app'
 
 export const TutorialPage: React.FC = () => {
+
+  useTitle('Tutorials')
+
   return (
     <Container maxWidth='lg'>
       <h1>
