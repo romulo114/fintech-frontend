@@ -43,3 +43,30 @@
     }
   }
 }
+
+main .contents {
+  padding: 24px;
+  min-height: 100%;
+
+  & .title {
+    @include my(8);
+  }
+
+  & .accounts-list {
+    @include my(16);
+  }
+
+  & .account-form {
+    @include my(8);
+
+    .input {
+      @include my(8);
+    }
+
+    .actions {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: row-reverse;
+    }
+  }
+}
