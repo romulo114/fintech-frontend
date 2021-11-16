@@ -1,5 +1,11 @@
 import Axios from 'axios'
 
+async function processError(error: any): Promise<void> {
+  const response = error.response
+  const msg = JSON.parse(response.data?.message)
+  throw new Error(`${response.status} ${msg.message ?? response.statusText}`)
+}
+
 class HttpClient {
 
   private _accessToken: string = ''
@@ -11,6 +17,7 @@ class HttpClient {
       HttpClient.instance = new HttpClient()
     }
 
+    Axios.interceptors.response.use(undefined, processError)
     return HttpClient.instance
   }
 

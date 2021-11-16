@@ -26,6 +26,19 @@ export const AccountApis = {
     })
   },
 
+  get: async (token: string, id: number): Promise<AccountInfo> => {
+    const data = await httpClient.authGet(token, `${ACCOUNTS_BASE}/${id}`)
+    const account: AccountInfo = {
+      id: data.id,
+      accountNo: data.account_number,
+      brokerName: data.broker_name,
+      portfolioId: data.portfolio_id,
+      userId: data.user_id
+    }
+
+    return account
+  },
+
   update: async (token: string, id: number, payload: AccountPayload): Promise<AccountInfo> => {
     const updatePayload: any = {}
     payload.accountNo && (updatePayload.account_number = payload.accountNo)

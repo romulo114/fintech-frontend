@@ -69,7 +69,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
   return (
     <form className='account-form'>
       <Typography component='h6' variant='h6' textAlign="center">
-        Create your Account
+        {account ? 'Update your Account' : 'Create your Account'}
       </Typography>
 
       {busy && <LinearProgress />}

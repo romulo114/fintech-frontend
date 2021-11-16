@@ -60,8 +60,8 @@ export const AccountsPage: React.FC = () => {
   }, [tokens?.accessToken])
 
   const handleEdit = useCallback((id: number) => {
-
-  }, [])
+    history.push(`/user/business/accounts/${id}/edit`)
+  }, [history])
 
   return (
     <>
