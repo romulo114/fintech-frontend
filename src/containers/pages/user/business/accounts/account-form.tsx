@@ -7,21 +7,30 @@ import { requireValidators } from 'utils/validators'
 import { AccountApis } from 'service/accounts'
 import { useAuthenticate } from 'hooks'
 import { Message, MessageType } from 'components/base'
+import { AccountInfo } from 'types'
 
 export type AccountData = {
   accountNo: string;
   brokerName: string;
 }
 
-export const AccountForm: React.FC = () => {
+type AccountFormProps = {
+  account?: AccountInfo;
+}
+export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
 
-  const [accountNo, setAccountNo] = useState<ValidatedText>({ value: '', error: '' })
-  const [brokerName, setBrokerName] = useState<ValidatedText>({ value: '', error: '' })
+  const [accountNo, setAccountNo] = useState<ValidatedText>(
+    { value: account?.accountNo ?? '', error: '' }
+  )
+  const [brokerName, setBrokerName] = useState<ValidatedText>(
+    { value: account?.brokerName ?? '', error: '' }
+  )
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
 
   const { tokens } = useAuthenticate()
   const history = useHistory()
+
 
   const onSubmit: React.MouseEventHandler = async (e): Promise<void> => {
     e.preventDefault()
@@ -30,11 +39,21 @@ export const AccountForm: React.FC = () => {
       setError({})
       setBusy(true)
 
-      await AccountApis.create(tokens?.accessToken ?? '', {
-        accountNo: accountNo.value,
-        brokerName: brokerName.value
-      })
-      setError({ type: 'success', message: 'Account created' })
+      if (account) {
+        await AccountApis.update(tokens?.accessToken ?? '', account.id, {
+          accountNo: accountNo.value,
+          brokerName: brokerName.value
+        })
+        setError({ type: 'success', message: 'Account updated' })
+       
+      } else {
+        await AccountApis.create(tokens?.accessToken ?? '', {
+          accountNo: accountNo.value,
+          brokerName: brokerName.value
+        })
+        setError({ type: 'success', message: 'Account created' })
+      }
+
       setTimeout(() => {
         history.push('/user/business/accounts')
       }, 2000)
@@ -52,8 +71,10 @@ export const AccountForm: React.FC = () => {
       <Typography component='h6' variant='h6' textAlign="center">
         Create your Account
       </Typography>
+
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
+
       <section className='input-group'>
         <ValidatedInput
           fullWidth
@@ -79,7 +100,7 @@ export const AccountForm: React.FC = () => {
 
       <section className='actions'>
         <Button type='submit' variant='contained' onClick={onSubmit} disabled={disabled}>
-          Create
+          {account ? 'Update' : 'Create'}
         </Button>
       </section>
     </form>

@@ -3,4 +3,5 @@ export interface AccountInfo {
   accountNo: string;
   brokerName: string;
   portfolioId: number;
+  userId: number;
 }

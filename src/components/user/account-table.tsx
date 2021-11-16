@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TablePagination, TableRow, Paper,
@@ -17,7 +18,8 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
 
   const { accounts, onDelete, onEdit } = props
   const [pageSize, setPageSize] = useState(10)
-  const [page, setPage] = useState(-1)
+  const [page, setPage] = useState(0)
+  const history = useHistory()
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -28,10 +30,25 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
     setPage(0);
   }, [])
 
+  const handleEdit = (e: React.MouseEvent, id: number): void => {
+    e.stopPropagation()
+    onEdit(id)
+  }
+
+  const handleDelete = (e: React.MouseEvent, id: number): void => {
+    e.stopPropagation()
+    onDelete(id)
+  }
+
+  const onSelect = (e: React.MouseEvent, id: number): void => {
+    e.preventDefault()
+    history.push(`/user/business/accounts/${id}`)
+  }
+
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Paper sx={{ width: '100%' }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell key='id' style={{ minWidth: 120 }}>ID</TableCell>
@@ -42,15 +59,20 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
           </TableHead>
           <TableBody>
             {accounts.map(acc => (
-              <TableRow hover key={acc.id}>
+              <TableRow
+                hover
+                key={acc.id}
+                sx={{ cursor: 'pointer' }}
+                onClick={e => onSelect(e, acc.id)}
+              >
                 <TableCell>{acc.id}</TableCell>
                 <TableCell>{acc.brokerName}</TableCell>
                 <TableCell>{acc.portfolioId}</TableCell>
-                <TableCell>
-                  <Fab color='primary' onClick={() => onEdit(acc.id)} aria-label='edit'>
-                    <EditIcon />
+                <TableCell sx={{ p: 1 }}>
+                  <Fab color='primary' size='small' onClick={(e) => handleEdit(e, acc.id)}>
+                    <EditIcon fontSize='small' />
                   </Fab>
-                  <Fab color='primary' onClick={() => onDelete(acc.id)} aria-label='delete'>
+                  <Fab size='small' sx={{ ml: 2 }} onClick={(e) => handleDelete(e, acc.id)}>
                     <DeleteIcon />
                   </Fab>
                 </TableCell>
@@ -59,17 +81,15 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {page >= 0 && (
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 20, 50]}
-          component="div"
-          count={accounts.length}
-          page={page}
-          onPageChange={changePage}
-          rowsPerPage={pageSize}
-          onRowsPerPageChange={changePageSize}
-        />
-      )}
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 20, 50]}
+        component="div"
+        count={accounts.length}
+        page={page}
+        onPageChange={changePage}
+        rowsPerPage={pageSize}
+        onRowsPerPageChange={changePageSize}
+      />
     </Paper>
   )
 }
