@@ -1,7 +1,8 @@
+import { ModelInfo } from "./model"
+
 export interface PortfolioInfo {
   id: number;
   name: string;
-  userId: number;
-  modelId?: number;
+  model?: ModelInfo;
   accounts: number[];
 }

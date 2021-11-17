@@ -3,9 +3,14 @@ import { PortfolioInfo } from 'types/portfolio'
 
 const PORTFOLIOS_BASE = `${BASE_URL}/portfolios`
 
-type AccountPayload = {
-  accountNo?: string;
-  brokerName?: string;
+export type PortfolioPayload = {
+  name: string;
+}
+export type UpdateAccountsPayload = {
+  accounts: number[];
+}
+export type UpdateModelPayload = {
+  model_id: number;
 }
 export const PortfolioApis = {
   getAll: async (token: string): Promise<PortfolioInfo[]> => {
@@ -14,35 +19,42 @@ export const PortfolioApis = {
       id: item.id,
       name: item.name,
       accounts: item.accounts,
-      userId: item.user_id
+      model: item.model
     }))
   },
 
-  create: async (token: string, payload: AccountPayload): Promise<PortfolioInfo[]> => {
-    return await httpClient.authPost(token, `${PORTFOLIOS_BASE}`, {
-      account_number: payload.accountNo,
-      broker_name: payload.brokerName
-    })
+  create: async (token: string, payload: PortfolioPayload): Promise<PortfolioInfo[]> => {
+    return await httpClient.authPost(token, `${PORTFOLIOS_BASE}`, payload)
   },
 
   get: async (token: string, id: number): Promise<PortfolioInfo> => {
     const data = await httpClient.authGet(token, `${PORTFOLIOS_BASE}/${id}`)
-    const account: PortfolioInfo = {
+    const portfolio: PortfolioInfo = {
       id: data.id,
       name: data.name,
       accounts: data.accounts,
-      userId: data.user_id
+      model: data.model
     }
 
-    return account
+    return portfolio
   },
 
-  update: async (token: string, id: number, payload: AccountPayload): Promise<PortfolioInfo> => {
-    const updatePayload: any = {}
-    payload.accountNo && (updatePayload.account_number = payload.accountNo)
-    payload.brokerName && (updatePayload.broker_name = payload.brokerName)
+  update: async (
+    token: string, id: number, payload: PortfolioPayload
+  ): Promise<PortfolioInfo> => {
+    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}`, payload)
+  },
 
-    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}`, updatePayload)
+  updateAccounts: async (
+    token: string, id: number, payload: UpdateAccountsPayload
+  ): Promise<PortfolioInfo> => {
+    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}/accounts`, payload)
+  },
+
+  updateModel: async (
+    token: string, id: number, payload: UpdateModelPayload
+  ): Promise<PortfolioInfo> => {
+    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}/model`, payload)
   },
 
   delete: async (token: string, id: number): Promise<void> => {

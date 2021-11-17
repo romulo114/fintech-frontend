@@ -37,7 +37,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
           <TableHead>
             <TableRow>
               <TableCell key='id' style={{ minWidth: 120 }}>ID</TableCell>
-              <TableCell key='broker' style={{ minWidth: 120 }}>name</TableCell>
+              <TableCell key='broker' style={{ minWidth: 120 }}>Name</TableCell>
               <TableCell key='portfolio' style={{ minWidth: 120 }}>Keywords</TableCell>
             </TableRow>
           </TableHead>
