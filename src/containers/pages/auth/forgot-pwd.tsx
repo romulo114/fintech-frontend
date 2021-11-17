@@ -1,8 +1,8 @@
 import React, { useState, MouseEventHandler, MouseEvent } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
-import { AuthPaper, AuthTitle } from 'components/auth'
-import { ValidatedInput } from 'components/form'
+import { AuthPaper } from 'components/auth'
+import { ValidatedInput, FormTitle } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { DASHBOARD_URL } from 'types/user'
 import { emailValidators } from 'utils/validators'
@@ -40,9 +40,9 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <AuthPaper className='simple-paper'>
-      <AuthTitle>
+      <FormTitle>
         Reset your password
-      </AuthTitle>
+      </FormTitle>
       <form className='auth-form'>
         {busy && <LinearProgress />}
         {error.type && <Message type={error.type}>{error.message}</Message>}

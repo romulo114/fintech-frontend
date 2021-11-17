@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, Typography, LinearProgress } from '@mui/material'
-import { ValidatedInput } from 'components/form'
+import { Button, LinearProgress } from '@mui/material'
+import { ValidatedInput, FormTitle } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
 import { Message, MessageType } from 'components/base'
@@ -12,7 +12,7 @@ export const PortfolioForm: React.FC = () => {
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
-  const [name, setName] = useState<ValidatedText>({value: '', error: ''})
+  const [name, setName] = useState<ValidatedText>({ value: '', error: '' })
 
   const { tokens } = useAuthenticate()
   const history = useHistory()
@@ -38,12 +38,11 @@ export const PortfolioForm: React.FC = () => {
     }
   }
 
-
   return (
     <form className='portfolio-form'>
-      <Typography component='h6' variant='h6' textAlign="center">
+      <FormTitle>
         Create your Portfolio
-      </Typography>
+      </FormTitle>
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}

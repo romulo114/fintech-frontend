@@ -1,10 +1,13 @@
 import React from 'react'
+import { Paper, Container } from '@mui/material'
 import { PortfolioUpdateForm } from './portfolio-update-form'
 
 export const PortfolioUpdate: React.FC = () => {
   return (
-    <div>
-      <PortfolioUpdateForm />
-    </div>
+    <Container maxWidth='md'>
+      <Paper sx={{ p: 3, mt: 4 }}>
+        <PortfolioUpdateForm />
+      </Paper>
+    </Container>
   )
 }

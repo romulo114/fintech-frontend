@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
-import { AuthPaper, AuthTitle } from 'components/auth'
+import { AuthPaper } from 'components/auth'
 import { Message, MessageType } from 'components/base'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
-import { ValidatedInput } from 'components/form'
+import { ValidatedInput, FormTitle } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import {
-  nameValidators,
-  emailValidators,
   passValidators,
   confirmValidators
 } from 'utils/validators'
@@ -48,9 +46,9 @@ export const ResetPasswordPage: React.FC = () => {
 
   return (
     <AuthPaper className='simple-paper'>
-      <AuthTitle>
+      <FormTitle>
         Reset your password
-      </AuthTitle>
+      </FormTitle>
       <form className='auth-form'>
         {busy && <LinearProgress />}
         {error.type && (

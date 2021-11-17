@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, Typography, LinearProgress } from '@mui/material'
-import { ValidatedInput } from 'components/form'
+import { ValidatedInput, FormTitle } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
 import { AccountApis } from 'service/accounts'
@@ -68,9 +68,9 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
 
   return (
     <form className='account-form'>
-      <Typography component='h6' variant='h6' textAlign="center">
+      <FormTitle>
         {account ? 'Update your Account' : 'Create your Account'}
-      </Typography>
+      </FormTitle>
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}

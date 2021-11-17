@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
-import { AuthPaper, AuthTitle } from 'components/auth'
+import { AuthPaper } from 'components/auth'
 import { Message, MessageType } from 'components/base'
+import { FormTitle } from 'components/form'
 import { DASHBOARD_URL } from 'types/user'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
@@ -65,9 +66,9 @@ export const ConfirmEmailPage: React.FC = () => {
 
   return (
     <AuthPaper className='simple-paper'>
-      <AuthTitle>
+      <FormTitle>
         Confirm your email
-      </AuthTitle>
+      </FormTitle>
       <form className='auth-form'>
         {busy && <LinearProgress />}
         {error.type && (

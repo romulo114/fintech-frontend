@@ -3,7 +3,6 @@ import Axios from 'axios'
 async function processError(error: any): Promise<void> {
   const response = error.response
   let msg = response.data?.message
-  console.log(msg)
   if (typeof msg === 'string' && msg.includes('message')) {
     msg = JSON.parse(msg).message
   }
