@@ -27,7 +27,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
     e.preventDefault()
-    history.push(`/user/business/accounts/${id}`)
+    history.push(`/user/business/portfolios/${id}`)
   }
 
   return (

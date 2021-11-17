@@ -28,7 +28,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
       setError({ type: 'success', message: 'Email was sent. Please check your mail.' })
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message })
+      setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }

@@ -37,7 +37,7 @@ export const ResetPasswordPage: React.FC = () => {
 
       setError({ type: 'success', message: 'Password was reset successfully.' })
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error' })
+      setError({ type: 'error', message: e.message ?? 'Internal Server Error' })
     } finally {
       setBusy(false)
     }

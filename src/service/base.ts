@@ -2,8 +2,12 @@ import Axios from 'axios'
 
 async function processError(error: any): Promise<void> {
   const response = error.response
-  const msg = JSON.parse(response.data?.message)
-  throw new Error(`${response.status} ${msg.message ?? response.statusText}`)
+  let msg = response.data?.message
+  console.log(msg)
+  if (typeof msg === 'string' && msg.includes('message')) {
+    msg = JSON.parse(msg).message
+  }
+  throw new Error(`${response.status} ${msg ?? response.statusText}`)
 }
 
 class HttpClient {

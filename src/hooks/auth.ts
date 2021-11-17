@@ -89,7 +89,7 @@ export const useAuthenticate = (): AuthInterface => {
     try {
       await AuthApis.signout(token ?? tokens?.accessToken)
     } catch (e: any) {
-      console.log(e.response?.data?.message)
+      console.log(e.message)
     }
 
     dispatch({ type: AuthActions.clearUser })

@@ -31,7 +31,7 @@ export const ConfirmEmailPage: React.FC = () => {
         setError({ type: 'success', message: 'Email confirmed. Redirecting ...' })
         setTimeout(() => setRedir(DASHBOARD_URL), 3000)
       } catch (e: any) {
-        setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error'})
+        setError({ type: 'error', message: e.message ?? 'Internal Server Error'})
       } finally {
         setBusy(false)
       }
@@ -53,7 +53,7 @@ export const ConfirmEmailPage: React.FC = () => {
 
       setError({ type: 'success', message: 'Email was sent.' })
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error'})
+      setError({ type: 'error', message: e.message ?? 'Internal Server Error'})
     } finally {
       setBusy(false)
     }

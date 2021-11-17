@@ -74,7 +74,7 @@ export const Profile: React.FC = () => {
       })
       setError({ type: 'success', message: 'Profile saved' })
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message })
+      setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }
