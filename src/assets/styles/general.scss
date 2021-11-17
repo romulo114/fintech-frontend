@@ -1,3 +1,5 @@
+@import './base/placeholders';
+
 .m-auto {
   margin: auto;
 }
@@ -34,3 +36,22 @@
   font-size: 1rem;
   color: red;
 }
+
+.dialog {
+  position: fixed;
+  @extend %transform-center;
+  border-radius: 4px;
+  padding: 24px;
+  background: white;
+
+  .body {
+    padding: 24px 0;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    column-gap: 8px;
+  }
+}
+

@@ -16,3 +16,14 @@
   justify-content: center;
   align-items: center;
 }
+
+%transform-center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+%absolute-center {
+  position: absolute;
+  @extend %transform-center;
+}

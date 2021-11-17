@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { LinearProgress } from '@mui/material'
+import { LinearProgress, Button } from '@mui/material'
 import { AccountApis } from 'service/accounts'
 import { useAuthenticate } from 'hooks/auth'
-import { Button } from '@mui/material'
 
 import { AccountTable } from 'components/user/account-table'
 import { AccountInfo } from 'types/account'
-import { MessageType, Message } from 'components/base'
+import { MessageType, Message, Dialog } from 'components/base'
 
 export const AccountsPage: React.FC = () => {
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [busy, setBusy] = useState(false)
   const [accounts, setAccounts] = useState<AccountInfo[]>([])
+  const [busy, setBusy] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [deleteId, setDeleteId] = useState(-1)
 
   const { tokens } = useAuthenticate()
   const history = useHistory()
@@ -44,20 +45,30 @@ export const AccountsPage: React.FC = () => {
     // eslint-disable-next-line
   }, [])
 
-  const handleDelete: (id: number) => Promise<void> = useCallback(async (id: number) => {
+  const handleDelete: (id: number) => void = useCallback((id: number) => {
+    setDeleteId(id)
+    setOpen(true)
+  }, [])
+
+  const handleClose: () => void = useCallback(() => {
+    setOpen(false)
+  }, [])
+
+  const onDelete: () => Promise<void> = useCallback(async () => {
     try {
+      setOpen(false)
       setError({})
       setBusy(true)
 
       const accessToken = tokens?.accessToken ?? ''
-      await AccountApis.delete(accessToken, id)
+      await AccountApis.delete(accessToken, deleteId)
       setAccounts(await AccountApis.getAll(accessToken))
     } catch (e: any) {
       setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }
-  }, [tokens?.accessToken])
+  }, [tokens?.accessToken, deleteId])
 
   const handleEdit = useCallback((id: number) => {
     history.push(`/user/business/accounts/${id}/edit`)
@@ -66,6 +77,17 @@ export const AccountsPage: React.FC = () => {
   return (
     <>
       <h1 className='title'>My Accounts</h1>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        header='Confirm Delete account'
+        body='Are you sure to delete the account?'
+        yes='Delete'
+        cancel='Cancel'
+        onYes={onDelete}
+        onCancel={handleClose}
+      />
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
@@ -78,7 +100,7 @@ export const AccountsPage: React.FC = () => {
         />
       </section>
       <section className='actions'>
-        <Button variant='contained' onClick={handleCreate}>
+        <Button variant='contained' onClick={handleCreate} disabled={busy}>
           Create
         </Button>
       </section>

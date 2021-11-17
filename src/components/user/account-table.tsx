@@ -11,7 +11,7 @@ import { AccountInfo } from 'types/account'
 
 type AccountTableProps = {
   accounts: AccountInfo[];
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 }
 export const AccountTable: React.FC<AccountTableProps> = (props) => {
