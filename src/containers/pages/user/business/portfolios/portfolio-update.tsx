@@ -1,9 +1,9 @@
 import React from 'react'
 
-export const Portfolios: React.FC = () => {
+export const PortfolioUpdate: React.FC = () => {
   return (
     <div>
-      portfolios
+      
     </div>
   )
 }

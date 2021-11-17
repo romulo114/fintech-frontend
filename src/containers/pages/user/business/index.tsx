@@ -22,14 +22,14 @@ export const BusinessPages: React.FC = () => {
         <Route path={`${path}/accounts`}>
           <Accounts />
         </Route>
+        <Route path={`${path}/portfolios`}>
+          <Portfolios />
+        </Route>
         <Route path={`${path}/trades`}>
           <Trades />
         </Route>
         <Route path={`${path}/strategies`}>
           <Strategies />
-        </Route>
-        <Route path={`${path}/portfolios`}>
-          <Portfolios />
         </Route>
         <Route path={`${path}/documentation`}>
           <Documentation />
