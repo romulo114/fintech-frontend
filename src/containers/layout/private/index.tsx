@@ -16,7 +16,7 @@ export const PrivateLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => 
         }}
       >
         <Toolbar />
-        <Box sx={{ p: 3 }}>
+        <Box className='contents'>
           {children}
         </Box>
       </Box>

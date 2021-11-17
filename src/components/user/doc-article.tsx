@@ -16,12 +16,12 @@ export const DocArticle: React.FC<DocArticleProps> = (props) => {
         {Array.isArray(descs) ? (
           <>
             {descs.map(desc => (
-              <>
+              <React.Fragment key={desc.title}>
                 <h4>
                   {desc.title}
                 </h4>
                 <p>{desc.descs}</p>
-              </>
+              </React.Fragment>
             ))}
           </>
         ) : (

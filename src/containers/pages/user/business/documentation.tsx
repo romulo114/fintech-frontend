@@ -18,7 +18,7 @@ const docData = [
       },
       {
         title: '2. Create portfolio',
-        descs: 'Go to the accounts page and click Create Portfolio.'
+        descs: 'Go to the portfolio page and click Create Portfolio.'
       },
       {
         title: '3. Assign Accounts to Portfolio',
