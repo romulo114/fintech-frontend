@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, LinearProgress } from '@mui/material'
-import { ValidatedInput, FormTitle } from 'components/form'
+import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
-import { Message, MessageType } from 'components/base'
+import { Message, MessageType, PageTitle } from 'components/base'
 import { PortfolioApis } from 'service/portfolios'
 import { useAuthenticate } from 'hooks'
 
@@ -40,9 +40,9 @@ export const PortfolioForm: React.FC = () => {
 
   return (
     <form className='portfolio-form'>
-      <FormTitle>
+      <PageTitle>
         Create your Portfolio
-      </FormTitle>
+      </PageTitle>
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}

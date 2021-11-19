@@ -6,8 +6,7 @@ import {
 import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
-import { Message, MessageType } from 'components/base'
-import { FormTitle } from 'components/form'
+import { Message, MessageType, PageTitle } from 'components/base'
 import { AccountEditTable } from 'components/user/account-table-edit'
 import { PortfolioApis } from 'service/portfolios'
 import { AccountApis } from 'service/accounts'
@@ -118,7 +117,7 @@ export const PortfolioUpdateForm: React.FC = () => {
 
   return (
     <form className='portfolio-form'>
-      <FormTitle>Update Portfolio</FormTitle>
+      <PageTitle>Update Portfolio</PageTitle>
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}

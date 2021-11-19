@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
-import { Message, MessageType } from 'components/base'
+import { Message, MessageType, PageTitle } from 'components/base'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
-import { ValidatedInput, FormTitle } from 'components/form'
+import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import {
   passValidators,
@@ -46,9 +46,9 @@ export const ResetPasswordPage: React.FC = () => {
 
   return (
     <AuthPaper className='simple-paper'>
-      <FormTitle>
+      <PageTitle>
         Reset your password
-      </FormTitle>
+      </PageTitle>
       <form className='auth-form'>
         {busy && <LinearProgress />}
         {error.type && (
