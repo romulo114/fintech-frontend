@@ -81,15 +81,17 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 20, 50]}
-        component="div"
-        count={accounts.length}
-        page={page}
-        onPageChange={changePage}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={changePageSize}
-      />
+      {accounts.length > pageSize && (
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20, 50]}
+          component="div"
+          count={accounts.length}
+          page={page}
+          onPageChange={changePage}
+          rowsPerPage={pageSize}
+          onRowsPerPageChange={changePageSize}
+        />
+      )}
     </>
   )
 }

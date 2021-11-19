@@ -12,6 +12,10 @@
   position: relative;
 }
 
+.absolute {
+  position: absolute;
+}
+
 .absolute-center {
   position: absolute;
   left: 50%;
@@ -102,4 +106,14 @@
 
 .d-block {
   display: block !important;
+}
+
+.hover-wrapper {
+  & .hover-child {
+    visibility: hidden;
+  }
+
+  &:hover .hover-child {
+    visibility: visible;
+  }
 }

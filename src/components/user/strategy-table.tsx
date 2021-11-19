@@ -2,16 +2,16 @@ import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow, Paper
+  TableHead, TablePagination, TableRow
 } from '@mui/material'
-import { PortfolioInfo } from 'types/portfolio'
+import { ModelInfo } from 'types/model'
 
-type PortfolioTableProps = {
-  portfolios: PortfolioInfo[];
+type StrategyTableProps = {
+  models: ModelInfo[];
 }
-export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
+export const StrategyTable: React.FC<StrategyTableProps> = (props) => {
 
-  const { portfolios } = props
+  const { models } = props
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(0)
   const history = useHistory()
@@ -27,7 +27,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
     e.preventDefault()
-    history.push(`/user/business/portfolios/${id}`)
+    history.push(`/user/business/strategies/${id}`)
   }
 
   return (
@@ -42,27 +42,27 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {portfolios.map(portfolio => (
+            {models.map(model => (
               <TableRow
                 hover
-                key={portfolio.id}
+                key={model.id}
                 sx={{ cursor: 'pointer' }}
-                onClick={e => onSelect(e, portfolio.id)}
+                onClick={e => onSelect(e, model.id)}
               >
-                <TableCell>{portfolio.id}</TableCell>
-                <TableCell>{portfolio.name}</TableCell>
-                <TableCell>{[]}</TableCell>
+                <TableCell>{model.id}</TableCell>
+                <TableCell>{model.name}</TableCell>
+                <TableCell>{model.keywords.join(', ')}</TableCell>
                 
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {portfolios.length > pageSize && (
+      {models.length > pageSize && (
         <TablePagination
           rowsPerPageOptions={[5, 10, 20, 50]}
           component="div"
-          count={portfolios.length}
+          count={models.length}
           page={page}
           onPageChange={changePage}
           rowsPerPage={pageSize}

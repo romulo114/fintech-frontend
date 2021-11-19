@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Container } from '@mui/material'
+import { Container } from '@mui/material'
 import { PortfolioForm } from './portfolio-form'
 
 export const PortfolioCreate: React.FC = () => {

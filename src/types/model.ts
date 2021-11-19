@@ -1,14 +1,24 @@
-export interface ModelPosition {
-  id: number;
+export interface ModelPositionData {
   symbol: string;
   weight: number;
-  price: number;
+  price?: number;
 }
 
-export interface ModelInfo {
+export interface ModelPositionPayload {
+  positions: ModelPositionData[];
+}
+
+export interface ModelPosition extends ModelPositionData {
   id: number;
+}
+
+export interface ModelPayload {
   name: string;
-  keywords: string[];
+  keywords: string;
   isPublic: boolean;
-  positions: ModelPosition[]
+  description: string;
+}
+export interface ModelInfo extends ModelPayload {
+  id: number;
+  positions: ModelPosition[];
 }

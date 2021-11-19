@@ -55,7 +55,7 @@ main .contents {
     @include my(16);
   }
 
-  & .account-form {
+  & .account-form, .portfolio-form, .strategy-form {
     @include my(8);
 
     .input {
@@ -70,30 +70,31 @@ main .contents {
   }
 }
 
-.portfolio-form {
-  & .input-group {
-    @include my(24);
+.input-group {
+  @include my(24);
 
-    &.hover-show-wrapper {
+  &.hover-show-wrapper {
+    & .hover-show {
+      visibility: hidden;
+    }
+
+    &:hover {
       & .hover-show {
-        display: flex;
-        visibility: hidden;
-      }
+        visibility: visible;
+        margin-left: 32px;
 
-      &:hover {
-        & .hover-show {
-          visibility: visible;
-          margin-left: 32px;
+        & button {
+          margin-left: 8px;
 
-          & button {
-            margin-left: 8px;
-
-            &:first-child {
-              margin-left: 0;
-            }
+          &:first-child {
+            margin-left: 0;
           }
         }
       }
     }
   }
+}
+
+.strategy-list {
+  @include my(24);
 }
