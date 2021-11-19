@@ -6,7 +6,7 @@ import { useAuthenticate } from 'hooks/auth'
 
 import { AccountTable } from 'components/user/account-table'
 import { AccountInfo } from 'types/account'
-import { MessageType, Message, Dialog } from 'components/base'
+import { MessageType, Message, Dialog, PageTitle } from 'components/base'
 
 export const AccountsPage: React.FC = () => {
 
@@ -76,7 +76,7 @@ export const AccountsPage: React.FC = () => {
 
   return (
     <>
-      <h1 className='title'>My Accounts</h1>
+      <PageTitle>My Accounts</PageTitle>
 
       <Dialog
         open={open}

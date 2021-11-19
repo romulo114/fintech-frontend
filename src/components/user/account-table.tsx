@@ -8,6 +8,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { AccountInfo } from 'types/account'
+import { IconButton } from 'components/base'
 
 type AccountTableProps = {
   accounts: AccountInfo[];
@@ -69,12 +70,12 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
                 <TableCell>{acc.brokerName}</TableCell>
                 <TableCell>{acc.portfolioId}</TableCell>
                 <TableCell sx={{ p: 1 }}>
-                  <Fab color='primary' size='small' onClick={(e) => handleEdit(e, acc.id)}>
+                  <IconButton color='primary' onClick={(e) => handleEdit(e, acc.id)}>
                     <EditIcon fontSize='small' />
-                  </Fab>
-                  <Fab size='small' sx={{ ml: 2 }} onClick={(e) => handleDelete(e, acc.id)}>
+                  </IconButton>
+                  <IconButton sx={{ ml: 2 }} onClick={(e) => handleDelete(e, acc.id)}>
                     <DeleteIcon />
-                  </Fab>
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

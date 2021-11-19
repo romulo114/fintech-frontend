@@ -4,7 +4,7 @@ import { LinearProgress, Button } from '@mui/material'
 
 import { PortfolioTable } from 'components/user/portfolio-table'
 import { PortfolioInfo } from 'types/portfolio'
-import { MessageType, Message } from 'components/base'
+import { MessageType, Message, PageTitle } from 'components/base'
 import { useAuthenticate } from 'hooks/auth'
 import { PortfolioApis } from 'service/portfolios'
 
@@ -45,7 +45,7 @@ export const PortfoliosPage: React.FC = () => {
 
   return (
     <>
-      <h1 className='title'>My Portfolios</h1>
+      <PageTitle>My Portfolios</PageTitle>
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}

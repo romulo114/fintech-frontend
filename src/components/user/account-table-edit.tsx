@@ -66,7 +66,7 @@ export const AccountEditTable: React.FC<AccountTableProps> = (props) => {
   const data = editing ? all : accounts
   console.log(data)
   return (
-    <Paper sx={{ width: '100%' }}>
+    <>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader>
           <TableHead>
@@ -124,6 +124,6 @@ export const AccountEditTable: React.FC<AccountTableProps> = (props) => {
           onRowsPerPageChange={changePageSize}
         />
       )}
-    </Paper>
+    </>
   )
 }
