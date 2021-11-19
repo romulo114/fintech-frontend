@@ -4,10 +4,8 @@ import { PortfolioUpdateForm } from './portfolio-update-form'
 
 export const PortfolioUpdate: React.FC = () => {
   return (
-    <Container maxWidth='md'>
-      <Paper sx={{ p: 3, mt: 4 }}>
-        <PortfolioUpdateForm />
-      </Paper>
+    <Container maxWidth='md' sx={{ p: 3, mt: 4 }}>
+      <PortfolioUpdateForm />
     </Container>
   )
 }

@@ -31,7 +31,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
   }
 
   return (
-    <Paper sx={{ width: '100%' }}>
+    <>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader>
           <TableHead>
@@ -67,6 +67,6 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
         rowsPerPage={pageSize}
         onRowsPerPageChange={changePageSize}
       />
-    </Paper>
+    </>
   )
 }

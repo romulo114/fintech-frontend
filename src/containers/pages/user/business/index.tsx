@@ -8,6 +8,7 @@ import { Trades } from './trades'
 import { Strategies } from './strategies'
 import { Portfolios } from './portfolios'
 import { Documentation } from './documentation'
+import { BusinessPaper } from 'components/user/business-paper'
 
 export const BusinessPages: React.FC = () => {
 
@@ -15,26 +16,28 @@ export const BusinessPages: React.FC = () => {
 
   return (
     <PrivateLayout>
-      <Switch>
-        <Route path={`${path}/dashboard`}>
-          <Dashboard />
-        </Route>
-        <Route path={`${path}/accounts`}>
-          <Accounts />
-        </Route>
-        <Route path={`${path}/portfolios`}>
-          <Portfolios />
-        </Route>
-        <Route path={`${path}/trades`}>
-          <Trades />
-        </Route>
-        <Route path={`${path}/strategies`}>
-          <Strategies />
-        </Route>
-        <Route path={`${path}/documentation`}>
-          <Documentation />
-        </Route>
-      </Switch>
+      <BusinessPaper>
+        <Switch>
+          <Route path={`${path}/dashboard`}>
+            <Dashboard />
+          </Route>
+          <Route path={`${path}/accounts`}>
+            <Accounts />
+          </Route>
+          <Route path={`${path}/portfolios`}>
+            <Portfolios />
+          </Route>
+          <Route path={`${path}/trades`}>
+            <Trades />
+          </Route>
+          <Route path={`${path}/strategies`}>
+            <Strategies />
+          </Route>
+          <Route path={`${path}/documentation`}>
+            <Documentation />
+          </Route>
+        </Switch>
+      </BusinessPaper>
     </PrivateLayout>
   )
 }

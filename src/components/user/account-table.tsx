@@ -2,8 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow, Paper,
-  Fab
+  TableHead, TablePagination, TableRow
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -47,7 +46,7 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
   }
 
   return (
-    <Paper sx={{ width: '100%' }}>
+    <>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader>
           <TableHead>
@@ -91,6 +90,6 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
         rowsPerPage={pageSize}
         onRowsPerPageChange={changePageSize}
       />
-    </Paper>
+    </>
   )
 }
