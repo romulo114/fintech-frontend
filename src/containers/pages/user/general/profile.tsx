@@ -3,7 +3,7 @@ import {
   Paper, Container, Typography,
   Button, Grid, LinearProgress, Box
 } from '@mui/material'
-import { 
+import {
   confirmValidators, emailValidators,
   passValidators, requireValidators
 } from 'utils/validators'
@@ -81,10 +81,10 @@ export const Profile: React.FC = () => {
   }
 
   let enabled = !!fname.value && !!lname.value && !!email.value &&
-                  !fname.error && !lname.error && !email.error
+    !fname.error && !lname.error && !email.error
   if (pass) {
     enabled = enabled && !!oldpwd.value && !!newpwd.value && !!confirm.value &&
-              !oldpwd.error && !newpwd.error && !confirm.error
+      !oldpwd.error && !newpwd.error && !confirm.error
   }
   return (
     <Container maxWidth='md' className='profile-container'>

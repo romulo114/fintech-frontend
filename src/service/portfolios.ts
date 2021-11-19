@@ -1,5 +1,6 @@
 import { httpClient, BASE_URL } from './base'
 import { PortfolioInfo } from 'types/portfolio'
+import { map2Account } from './accounts'
 
 const PORTFOLIOS_BASE = `${BASE_URL}/portfolios`
 
@@ -16,10 +17,8 @@ export const PortfolioApis = {
   getAll: async (token: string): Promise<PortfolioInfo[]> => {
     const { portfolios } = await httpClient.authGet(token, `${PORTFOLIOS_BASE}`)
     return portfolios.map((item: any) => ({
-      id: item.id,
-      name: item.name,
-      accounts: item.accounts,
-      model: item.model
+      ...item,
+      accounts: item.accounts.map(map2Account)
     }))
   },
 
@@ -30,10 +29,8 @@ export const PortfolioApis = {
   get: async (token: string, id: number): Promise<PortfolioInfo> => {
     const data = await httpClient.authGet(token, `${PORTFOLIOS_BASE}/${id}`)
     const portfolio: PortfolioInfo = {
-      id: data.id,
-      name: data.name,
-      accounts: data.accounts,
-      model: data.model
+      ...data,
+      accounts: data.accounts.map(map2Account)
     }
 
     return portfolio
@@ -42,19 +39,22 @@ export const PortfolioApis = {
   update: async (
     token: string, id: number, payload: PortfolioPayload
   ): Promise<PortfolioInfo> => {
-    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}`, payload)
+    const data = await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}`, payload)
+    return { ...data, accounts: data.accounts.map(map2Account) }
   },
 
   updateAccounts: async (
     token: string, id: number, payload: UpdateAccountsPayload
   ): Promise<PortfolioInfo> => {
-    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}/accounts`, payload)
+    const data = await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}/accounts`, payload)
+    return { ...data, accounts: data.accounts.map(map2Account) }
   },
 
   updateModel: async (
     token: string, id: number, payload: UpdateModelPayload
   ): Promise<PortfolioInfo> => {
-    return await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}/model`, payload)
+    const data = await httpClient.authPut(token, `${PORTFOLIOS_BASE}/${id}/model`, payload)
+    return { ...data, accounts: data.accounts.map(map2Account) }
   },
 
   delete: async (token: string, id: number): Promise<void> => {

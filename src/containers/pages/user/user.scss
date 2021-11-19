@@ -70,3 +70,10 @@ main .contents {
     }
   }
 }
+
+.portfolio-form {
+  & .input-group {
+    @include my(24);
+  }
+
+}

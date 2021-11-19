@@ -3,6 +3,18 @@ import { AccountInfo } from 'types/account'
 
 const ACCOUNTS_BASE = `${BASE_URL}/accounts`
 
+export function map2Account(data: any): AccountInfo {
+  const account: AccountInfo = {
+    id: data.id,
+    accountNo: data.account_number,
+    brokerName: data.broker_name,
+    portfolioId: data.portfolio_id,
+    userId: data.user_id
+  }
+
+  return account
+}
+
 type AccountPayload = {
   accountNo?: string;
   brokerName?: string;
@@ -10,13 +22,7 @@ type AccountPayload = {
 export const AccountApis = {
   getAll: async (token: string): Promise<AccountInfo[]> => {
     const { accounts } = await httpClient.authGet(token, `${ACCOUNTS_BASE}`)
-    return accounts.map((item: any) => ({
-      id: item.id,
-      accountNo: item.account_number,
-      brokerName: item.broker_name,
-      portfolioId: item.portfolio_id,
-      userId: item.user_id
-    }))
+    return accounts.map(map2Account)
   },
 
   create: async (token: string, payload: AccountPayload): Promise<AccountInfo[]> => {
@@ -28,15 +34,7 @@ export const AccountApis = {
 
   get: async (token: string, id: number): Promise<AccountInfo> => {
     const data = await httpClient.authGet(token, `${ACCOUNTS_BASE}/${id}`)
-    const account: AccountInfo = {
-      id: data.id,
-      accountNo: data.account_number,
-      brokerName: data.broker_name,
-      portfolioId: data.portfolio_id,
-      userId: data.user_id
-    }
-
-    return account
+    return map2Account(data)
   },
 
   update: async (token: string, id: number, payload: AccountPayload): Promise<AccountInfo> => {
@@ -44,7 +42,8 @@ export const AccountApis = {
     payload.accountNo && (updatePayload.account_number = payload.accountNo)
     payload.brokerName && (updatePayload.broker_name = payload.brokerName)
 
-    return await httpClient.authPut(token, `${ACCOUNTS_BASE}/${id}`, updatePayload)
+    const data = await httpClient.authPut(token, `${ACCOUNTS_BASE}/${id}`, updatePayload)
+    return map2Account(data)
   },
 
   delete: async (token: string, id: number): Promise<void> => {
