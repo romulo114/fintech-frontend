@@ -27,7 +27,6 @@ export const AccountsPage: React.FC = () => {
 
         const data = await AccountApis.getAll(tokens?.accessToken ?? '')
         setAccounts(data)
-        console.log('accounts: ', data)
       } catch (e: any) {
         setError(e.message)
       } finally {

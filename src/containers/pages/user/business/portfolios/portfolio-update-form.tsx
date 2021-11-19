@@ -3,14 +3,17 @@ import { useParams } from 'react-router'
 import {
   Button, LinearProgress, Grid, Typography
 } from '@mui/material'
+import CheckIcon from '@mui/icons-material/Check'
+import EditIcon from '@mui/icons-material/Edit'
+import CloseIcon from '@mui/icons-material/Close'
+import { Message, MessageType, PageTitle, CircleIconButton } from 'components/base'
 import { ValidatedInput } from 'components/form'
-import { ValidatedText } from 'types/validate'
-import { requireValidators } from 'utils/validators'
-import { Message, MessageType, PageTitle } from 'components/base'
 import { AccountEditTable } from 'components/user/account-table-edit'
 import { PortfolioApis } from 'service/portfolios'
 import { AccountApis } from 'service/accounts'
 import { useAuthenticate } from 'hooks'
+import { requireValidators } from 'utils/validators'
+import { ValidatedText } from 'types/validate'
 import { AccountInfo } from 'types/account'
 import { PortfolioInfo } from 'types/portfolio'
 
@@ -76,6 +79,7 @@ export const PortfolioUpdateForm: React.FC = () => {
         tokens?.accessToken ?? '', +portfolioId, { accounts: selected.map(sel => sel.id) }
       )
       setPortfolio(updated)
+      setEditAccount(false)
       setError({ type: 'success', message: 'Accounts saved' })
     } catch (e: any) {
       setError({ type: 'error', message: e.message })
@@ -122,82 +126,80 @@ export const PortfolioUpdateForm: React.FC = () => {
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
-      <section className='input-group'>
-        <Grid spacing={2} container>
-          <Grid item xs={12} sm={8}>
-            <ValidatedInput
-              fullWidth
-              id='portfolio-name'
-              label='Name'
-              variant='standard'
-              className='input'
-              validators={requireValidators}
-              value={name}
-              setValue={setName}
-              disabled={!editName}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4} className='d-flex align-items-end justify-content-between'>
-            <Button variant='outlined' onClick={toggleEditName}>
-              {editName ? 'Cancel' : 'Edit'}
-            </Button>
+      <section className='input-group hover-show-wrapper'>
+        <div className='d-flex'>
+          <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
+            Name
+          </Typography>
+          <div className='align-items-center hover-show'>
+            <CircleIconButton onClick={toggleEditName}>
+              {editName ? <CloseIcon /> : <EditIcon />}
+            </CircleIconButton>
             {editName && (
-              <Button variant='contained' onClick={updateName}>
-                Save
-              </Button>
+              <CircleIconButton onClick={updateName}>
+                <CheckIcon />
+              </CircleIconButton>
             )}
-          </Grid>
-        </Grid>
+          </div>
+        </div>
+        <ValidatedInput
+          fullWidth
+          id='portfolio-name'
+          // label='Name'
+          variant='standard'
+          className='input'
+          validators={requireValidators}
+          value={name}
+          setValue={setName}
+          disabled={!editName}
+        />
       </section>
 
-      <section className='input-group'>
-        <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
-          Accounts
-        </Typography>
-        <Grid spacing={2} container>
-          <Grid item xs={12} sm={8}>
-            <AccountEditTable
-              all={accounts}
-              accounts={portfolio?.accounts ?? []}
-              editing={editAccount}
-              selected={selected}
-              setSelected={setSelected}
-            />
-          </Grid>
-          <Grid item xs={12} sm={4} className='d-flex align-items-end justify-content-between'>
-            <Button variant='outlined' onClick={toggleEditAccount}>
-              {editAccount ? 'Cancel' : 'Edit'}
-            </Button>
+      <section className='input-group hover-show-wrapper'>
+        <div className='d-flex'>
+          <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
+            Accounts
+          </Typography>
+          <div className='align-items-center hover-show'>
+            <CircleIconButton onClick={toggleEditAccount}>
+              {editAccount ? <CloseIcon /> : <EditIcon />}
+            </CircleIconButton>
             {editAccount && (
-              <Button variant='contained' onClick={updateAccounts}>
-                Save
-              </Button>
+              <CircleIconButton onClick={updateAccounts}>
+                <CheckIcon />
+              </CircleIconButton>
             )}
-          </Grid>
-        </Grid>
-      </section>
+          </div>
+        </div>
+        <AccountEditTable
+          all={accounts}
+          accounts={portfolio?.accounts ?? []}
+          editing={editAccount}
+          selected={selected}
+          setSelected={setSelected}
+        />
+      </section >
 
-      <section className='input-group'>
-        <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
-          Model
-        </Typography>
-
-        <Grid spacing={2} container>
-          <Grid item xs={12} sm={8}>
-
-          </Grid>
-          <Grid item xs={12} sm={4} className='d-flex align-items-end justify-content-between'>
-            <Button variant='outlined' onClick={toggleEditModel}>
-              {editModel ? 'Cancel' : 'Edit'}
-            </Button>
+      <section className='input-group hover-show-wrapper'>
+        <div className='d-flex'>
+          <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
+            Model
+          </Typography>
+          <div className='align-items-center hover-show'>
+            <CircleIconButton onClick={toggleEditModel}>
+              {editModel ? <CloseIcon /> : <EditIcon />}
+            </CircleIconButton>
             {editModel && (
-              <Button variant='contained' onClick={updateName}>
-                Save
-              </Button>
+              <CircleIconButton onClick={updateName}>
+                <CheckIcon />
+              </CircleIconButton>
             )}
-          </Grid>
-        </Grid>
+          </div>
+
+        </div>
+
+
       </section>
-    </form>
+    </form >
   )
 }

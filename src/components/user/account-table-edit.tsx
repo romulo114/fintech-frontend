@@ -64,7 +64,6 @@ export const AccountEditTable: React.FC<AccountTableProps> = (props) => {
   }
 
   const data = editing ? all : accounts
-  console.log(data)
   return (
     <>
       <TableContainer sx={{ maxHeight: 440 }}>

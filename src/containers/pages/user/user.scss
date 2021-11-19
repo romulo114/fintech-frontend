@@ -1,8 +1,7 @@
-@import 'assets/styles/base/variables';
-@import 'assets/styles/base/mixins';
+@import "assets/styles/base/variables";
+@import "assets/styles/base/mixins";
 
 .activate-paper {
-
   margin: auto;
   margin-top: 80px;
   max-width: 640px;
@@ -31,9 +30,9 @@
 
   & form {
     width: 100%;
-    
+
     & .input {
-      margin-top: 16px
+      margin-top: 16px;
     }
 
     & .actions {
@@ -74,6 +73,27 @@ main .contents {
 .portfolio-form {
   & .input-group {
     @include my(24);
-  }
 
+    &.hover-show-wrapper {
+      & .hover-show {
+        display: flex;
+        visibility: hidden;
+      }
+
+      &:hover {
+        & .hover-show {
+          visibility: visible;
+          margin-left: 32px;
+
+          & button {
+            margin-left: 8px;
+
+            &:first-child {
+              margin-left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
 }

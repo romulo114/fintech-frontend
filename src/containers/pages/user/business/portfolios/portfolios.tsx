@@ -25,7 +25,6 @@ export const PortfoliosPage: React.FC = () => {
 
         const data = await PortfolioApis.getAll(tokens?.accessToken ?? '')
         setPortfolios(data)
-        console.log('portfolios: ', data)
       } catch (e: any) {
         setError(e.message)
       } finally {

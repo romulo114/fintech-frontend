@@ -10,7 +10,6 @@ import { BlogEdit } from './blog-edit'
 export const BlogsPage: React.FC = () => {
 
   const { path } = useRouteMatch()
-  console.log(path)
   return (
     <Box component='div' className='home'>
 			<Switch>

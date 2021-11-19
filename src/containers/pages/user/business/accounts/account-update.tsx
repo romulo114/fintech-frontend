@@ -19,7 +19,6 @@ export const AccountUpdatePage: React.FC = () => {
       try {
         setBusy(true)
         const data = await AccountApis.get(tokens?.accessToken ?? '', +accountId)
-        console.log(data)
         setAccount(data)
       } catch (e: any) {
         setError(e.message)
