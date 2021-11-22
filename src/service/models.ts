@@ -7,17 +7,17 @@ function map2Model(data: any): ModelInfo {
   const { is_public, ...others } = data
   return {
     ...others,
-    isPublic: is_public
+    public: is_public
   }
 }
 
 export const ModelApis = {
-  getAll: async (token: string): Promise<ModelInfo[]> => {
-    const { models } = await httpClient.authGet(token, `${MODELS_BASE}`)
+  getAll: async (token: string, shared: boolean): Promise<ModelInfo[]> => {
+    const { models } = await httpClient.authGet(token, `${MODELS_BASE}?public=${shared}`)
     return models.map(map2Model)
   },
 
-  create: async (token: string, payload: ModelInfo): Promise<ModelInfo> => {
+  create: async (token: string, payload: ModelPayload): Promise<ModelInfo> => {
     const data = await httpClient.authPost(token, `${MODELS_BASE}`, payload)
     return map2Model(data)
   },

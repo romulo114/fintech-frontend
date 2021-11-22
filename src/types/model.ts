@@ -14,8 +14,8 @@ export interface ModelPosition extends ModelPositionData {
 
 export interface ModelPayload {
   name: string;
-  keywords: string;
-  isPublic: boolean;
+  keywords: string[];
+  public: boolean;
   description: string;
 }
 export interface ModelInfo extends ModelPayload {

@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   Box, Button, LinearProgress, FormControlLabel,
   Checkbox, Typography, TableHead, TableRow,
@@ -16,12 +17,9 @@ import { ValidatedInput } from 'components/form'
 import { useAuthenticate } from 'hooks'
 import { requireValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
-import { ModelInfo } from 'types/model'
+import { ModelInfo, ModelPositionData } from 'types/model'
+import { ModelApis } from 'service/models'
 
-type MPosition = {
-  symbol: string;
-  weight: number;
-}
 type StrategyFormProps = {
   model?: ModelInfo;
 }
@@ -31,16 +29,17 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
 
-  const [name, setName] = useState<ValidatedText>({ value: '', error: '' })
-  const [keywords, setKeywords] = useState('')
-  const [desc, setDesc] = useState('')
-  const [shared, setShared] = useState(false)
+  const [name, setName] = useState<ValidatedText>({ value: model?.name ?? '', error: '' })
+  const [keywords, setKeywords] = useState(model?.keywords?.join(',') ?? '')
+  const [desc, setDesc] = useState(model?.description ?? '')
+  const [shared, setShared] = useState(model?.public ?? false)
 
-  const [positions, setPositions] = useState<MPosition[]>([])
+  const [positions, setPositions] = useState<ModelPositionData[]>(model?.positions ?? [])
   const [symbol, setSymbol] = useState<ValidatedText>({ value: '', error: '' })
   const [weight, setWeight] = useState<ValidatedText>({ value: '0.0', error: '' })
   const [editing, setEditing] = useState(-1)
 
+  const history = useHistory()
   const { tokens } = useAuthenticate()
 
   const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,15 +86,35 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
     setEditing(-1)
   }
 
-  const onSubmit = (e: React.MouseEvent<HTMLButtonElement>): void => {
+  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault()
 
     try {
       setBusy(true)
       setError({})
 
-    } catch (e: any) {
+      const payload = {
+        name: name.value,
+        keywords: keywords.split(','),
+        description: desc,
+        public: shared
+      }
 
+      let result
+      if (model) {
+        const result = await ModelApis.update(tokens?.accessToken ?? '', model.id, payload)
+        await ModelApis.updatePositions(tokens?.accessToken ?? '', result.id, { positions })
+        setError({ type: 'success', message: 'Strategy updated' })
+      } else {
+        const result = await ModelApis.create(tokens?.accessToken ?? '', payload)
+        await ModelApis.updatePositions(tokens?.accessToken ?? '', result.id, { positions })
+        setError({ type: 'success', message: 'Strategy created' })
+        setTimeout(() => {
+          history.push('/user/business/strategies')
+        }, 1500)
+      }
+    } catch (e: any) {
+      setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }
@@ -248,7 +267,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
 
       <section className='actions'>
         <Button type='submit' variant='contained' onClick={onSubmit} disabled={disabled}>
-          Create
+          {model ? 'Update' : 'Create'}
         </Button>
       </section>
     </form >
