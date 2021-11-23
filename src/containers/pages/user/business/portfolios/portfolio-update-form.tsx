@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router'
-import {
-  Button, LinearProgress, Grid, Typography
-} from '@mui/material'
+import { LinearProgress, Typography } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import EditIcon from '@mui/icons-material/Edit'
 import CloseIcon from '@mui/icons-material/Close'
-import { Message, MessageType, PageTitle, CircleIconButton } from 'components/base'
 import { ValidatedInput } from 'components/form'
-import { AccountEditTable } from 'components/user/account-table-edit'
+import { Message, MessageType, PageTitle, CircleIconButton } from 'components/base'
+import { AccountEditTable, StrategySelectTable } from 'components/user'
 import { PortfolioApis } from 'service/portfolios'
 import { AccountApis } from 'service/accounts'
+import { ModelApis } from 'service/models'
 import { useAuthenticate } from 'hooks'
 import { requireValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
 import { AccountInfo } from 'types/account'
 import { PortfolioInfo } from 'types/portfolio'
+import { ModelInfo } from 'types/model'
 
 export const PortfolioUpdateForm: React.FC = () => {
 
@@ -36,6 +36,9 @@ export const PortfolioUpdateForm: React.FC = () => {
 
   // update Model
   const [editModel, setEditModel] = useState(false)
+  const [publics, setPublics] = useState<ModelInfo[]>([])
+  const [privates, setPrivates] = useState<ModelInfo[]>([])
+  const [model, setModel] = useState<ModelInfo | null>(portfolio?.model ?? null)
   const { tokens } = useAuthenticate()
 
   const toggleEditName: () => void = useCallback(() => {
@@ -50,7 +53,8 @@ export const PortfolioUpdateForm: React.FC = () => {
 
   const toggleEditModel: () => void = useCallback(() => {
     setEditModel(edit => !edit)
-  }, [])
+    setModel(portfolio?.model ?? null)
+  }, [portfolio?.model])
 
   const updateName: () => Promise<void> = useCallback(async () => {
     try {
@@ -88,15 +92,62 @@ export const PortfolioUpdateForm: React.FC = () => {
     }
   }
 
+  const updateModel: () => Promise<void> = async () => {
+    if (!tokens?.accessToken) return
+
+    try {
+      setBusy(true)
+      setError({})
+
+      const updated = await PortfolioApis.updateModel(
+        tokens.accessToken,
+        +portfolioId,
+        { model_id: model?.id ?? null }
+      )
+      setPortfolio(updated)
+      setEditModel(false)
+      setError({ type: 'success', message: 'Model changed' })
+    } catch (e: any) {
+      setError({ type: 'error', message: e.message })
+    } finally {
+      setBusy(false)
+    }
+  }
+
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
+      if (!tokens?.accessToken) return
+
       try {
         setBusy(true)
         setError({})
 
         const result = await Promise.all([
-          PortfolioApis.get(tokens?.accessToken ?? '', +portfolioId),
-          AccountApis.getAll(tokens?.accessToken ?? '')
+          ModelApis.getAll(tokens.accessToken, true),
+          ModelApis.getAll(tokens.accessToken, false)
+        ])
+        setPublics(result[0])
+        setPrivates(result[1])
+      } catch (e: any) {
+        setError({ type: 'error', message: e.message })
+      } finally {
+        setBusy(false)
+      }
+    }
+
+    fetchFn()
+  }, [tokens?.accessToken])
+
+  useEffect(() => {
+    const fetchFn = async (): Promise<void> => {
+      if (!tokens?.accessToken) return
+      try {
+        setBusy(true)
+        setError({})
+
+        const result = await Promise.all([
+          PortfolioApis.get(tokens.accessToken, +portfolioId),
+          AccountApis.getAll(tokens.accessToken)
         ])
         setPortfolio(result[0])
         setName({ value: result[0].name, error: '' })
@@ -118,6 +169,10 @@ export const PortfolioUpdateForm: React.FC = () => {
     }
   }, [editAccount, portfolio?.accounts])
 
+  useEffect(() => {
+    setModel(portfolio?.model ?? null)
+  }, [portfolio?.model])
+
 
   return (
     <form className='portfolio-form'>
@@ -127,7 +182,7 @@ export const PortfolioUpdateForm: React.FC = () => {
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
       <section className='input-group hover-show-wrapper'>
-        <div className='d-flex'>
+        <div className='d-flex align-items-end'>
           <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
             Name
           </Typography>
@@ -145,7 +200,6 @@ export const PortfolioUpdateForm: React.FC = () => {
         <ValidatedInput
           fullWidth
           id='portfolio-name'
-          // label='Name'
           variant='standard'
           className='input'
           validators={requireValidators}
@@ -156,7 +210,7 @@ export const PortfolioUpdateForm: React.FC = () => {
       </section>
 
       <section className='input-group hover-show-wrapper'>
-        <div className='d-flex'>
+        <div className='d-flex align-items-end'>
           <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
             Accounts
           </Typography>
@@ -181,7 +235,7 @@ export const PortfolioUpdateForm: React.FC = () => {
       </section >
 
       <section className='input-group hover-show-wrapper'>
-        <div className='d-flex'>
+        <div className='d-flex align-items-end'>
           <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
             Model
           </Typography>
@@ -190,15 +244,19 @@ export const PortfolioUpdateForm: React.FC = () => {
               {editModel ? <CloseIcon /> : <EditIcon />}
             </CircleIconButton>
             {editModel && (
-              <CircleIconButton onClick={updateName}>
+              <CircleIconButton onClick={updateModel}>
                 <CheckIcon />
               </CircleIconButton>
             )}
           </div>
-
         </div>
-
-
+        <StrategySelectTable
+          publics={publics}
+          privates={privates}
+          editing={editModel}
+          value={model}
+          setModel={setModel}
+        />
       </section>
     </form >
   )

@@ -14,6 +14,8 @@ export const StrategyList: React.FC = () => {
 
   const [mine, setMine] = useState(true)
   const [models, setModels] = useState<ModelInfo[]>([])
+  const [publics, setPublics] = useState<ModelInfo[]>([])
+  const [privates, setPrivates] = useState<ModelInfo[]>([])
   const history = useHistory()
   const { tokens } = useAuthenticate()
 
@@ -33,9 +35,14 @@ export const StrategyList: React.FC = () => {
       try {
         setBusy(true)
         setError({})
-        const data = await ModelApis.getAll(tokens?.accessToken ?? '', !mine)
-        console.log(data)
-        setModels(data)
+        
+        const result = await Promise.all([
+          ModelApis.getAll(tokens?.accessToken ?? '', false),
+          ModelApis.getAll(tokens?.accessToken ?? '', true)
+        ])
+
+        setPrivates(result[0])
+        setPublics(result[1])
       } catch (e: any) {
         setError({ type: 'error', message: e.message })
       } finally {
@@ -44,7 +51,11 @@ export const StrategyList: React.FC = () => {
     }
 
     fetchFn()
-  }, [mine, tokens?.accessToken])
+  }, [tokens?.accessToken])
+
+  useEffect(() => {
+    setModels(mine ? privates : publics)
+  }, [mine, publics, privates])
 
   return (
     <>

@@ -2,8 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow, Paper,
-  Checkbox
+  TableHead, TablePagination, TableRow, Checkbox
 } from '@mui/material'
 import { AccountInfo } from 'types/account'
 

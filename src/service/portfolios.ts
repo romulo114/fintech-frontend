@@ -11,7 +11,7 @@ export type UpdateAccountsPayload = {
   accounts: number[];
 }
 export type UpdateModelPayload = {
-  model_id: number;
+  model_id: number | null;
 }
 export const PortfolioApis = {
   getAll: async (token: string): Promise<PortfolioInfo[]> => {
