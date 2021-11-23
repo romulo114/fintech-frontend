@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ModelInfo } from 'types/model'
 import {
-  Table, TableBody, TableCell, TableContainer,
+  Table, TableBody, TableCell, TableContainer, Box,
   TableHead, TablePagination, TableRow, Checkbox
 } from '@mui/material'
 import { usePagedData } from 'hooks/use-paged-data'
@@ -54,6 +54,10 @@ export const StrategySelectTable: React.FC<StrategySelectTableProps> = (props) =
     }
   }
 
+  if (!editing && !value) {
+    return <Box sx={{ my: 2 }}>Not selected</Box>
+  }
+
   return (
     <>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -66,44 +70,38 @@ export const StrategySelectTable: React.FC<StrategySelectTableProps> = (props) =
               )}
               <TableCell key='id' style={{ minWidth: 120 }}>Name</TableCell>
               <TableCell key='broker' style={{ minWidth: 120 }}>Keywords</TableCell>
+              <TableCell key='public' style={{ minWidth: 120 }}>Public</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {editing && data.map(model => (
+            {editing ? data.map(model => (
               <TableRow
                 hover
                 key={model.id}
                 sx={{ cursor: 'pointer' }}
                 onClick={e => onSelect(e, model.id)}
               >
-                {editing && (
-                  <TableCell padding='checkbox'>
-                    <Checkbox
-                      color='primary'
-                      checked={value?.id === model.id}
-                      onChange={e => onSelectOne(e, model)}
-                      onClick={onClick}
-                    />
-                  </TableCell>
-                )}
+                <TableCell padding='checkbox'>
+                  <Checkbox
+                    color='primary'
+                    checked={value?.id === model.id}
+                    onChange={e => onSelectOne(e, model)}
+                    onClick={onClick}
+                  />
+                </TableCell>
                 <TableCell>{model.name}</TableCell>
                 <TableCell>{model.keywords.join(', ')}</TableCell>
+                <TableCell><b>{model.public ? 'true' : 'false'}</b></TableCell>
               </TableRow>
-            ))}
-            {!editing && (
+            )) : (
               <TableRow
                 hover
                 sx={{ cursor: 'pointer' }}
                 onClick={!value ? undefined : e => onSelect(e, value.id)}
               >
-                {!value ? (
-                  <TableCell rowSpan={2}>Not selected</TableCell>
-                ) : (
-                  <>
-                    <TableCell>{value.name}</TableCell>
-                    <TableCell>{value.keywords.join(', ')}</TableCell>
-                  </>
-                )}
+                <TableCell>{value?.name}</TableCell>
+                <TableCell>{value?.keywords.join(', ')}</TableCell>
+                <TableCell><b>{value?.public ? 'true' : 'false'}</b></TableCell>
               </TableRow>
             )}
           </TableBody>

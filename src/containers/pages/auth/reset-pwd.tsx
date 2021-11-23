@@ -2,17 +2,16 @@ import React, { useState } from 'react'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
 import { Message, MessageType, PageTitle } from 'components/base'
+import { ValidatedInput } from 'components/form'
+import { useTitle } from 'contexts/app'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
-import { ValidatedInput } from 'components/form'
+import { passValidators, confirmValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
-import {
-  passValidators,
-  confirmValidators
-} from 'utils/validators'
 
 export const ResetPasswordPage: React.FC = () => {
 
+  useTitle('Reset password')
   const resetToken = useQuery().get('reset_token')
 
   const [busy, setBusy] = useState(false)

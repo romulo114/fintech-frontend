@@ -3,13 +3,16 @@ import { Redirect } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
 import { ValidatedInput } from 'components/form'
+import { Message, MessageType, PageTitle } from 'components/base'
+import { useTitle } from 'contexts/app'
+import { useAuthenticate } from 'hooks/auth'
+import { emailValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
 import { DASHBOARD_URL } from 'types/user'
-import { emailValidators } from 'utils/validators'
-import { useAuthenticate } from 'hooks/auth'
-import { Message, MessageType, PageTitle } from 'components/base'
 
 export const ForgotPasswordPage: React.FC = () => {
+
+  useTitle('Reset your password')
 
   const [email, setEmail] = useState<ValidatedText>({ value: '', error: '' })
   const [busy, setBusy] = useState(false)

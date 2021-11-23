@@ -1,9 +1,16 @@
 import React from 'react'
-import { Paper, Container } from '@mui/material'
+import { Container } from '@mui/material'
 import { AccountForm } from './account-form'
+import { useTitle } from 'contexts/app'
 
-export const AccountCreatePage: React.FC = () => (
-  <Container maxWidth='sm' sx={{ p: 3, mt: 4 }}>
-    <AccountForm />
-  </Container>
-)
+export const AccountCreatePage: React.FC = () => {
+
+  useTitle('Create account')
+
+  return (
+    <Container maxWidth='sm' sx={{ p: 3, mt: 4 }}>
+      <AccountForm />
+    </Container>
+  )
+}
+

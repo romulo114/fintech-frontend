@@ -2,12 +2,15 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { LinearProgress, Button, ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { MessageType, Message, PageTitle } from 'components/base'
-import { useAuthenticate } from 'hooks/auth'
 import { StrategyTable } from 'components/user'
+import { useTitle } from 'contexts/app'
+import { useAuthenticate } from 'hooks/auth'
 import { ModelApis } from 'service/models'
 import { ModelInfo } from 'types/model'
 
 export const StrategyList: React.FC = () => {
+
+  useTitle('My Strategies')
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)

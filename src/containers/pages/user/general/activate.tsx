@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
 import { Button, Paper, LinearProgress } from '@mui/material'
 import { Message, MessageType } from 'components/base'
-import { DASHBOARD_URL } from 'types/user'
+import { useTitle } from 'contexts/app'
 import { useAuthenticate } from 'hooks/auth'
+import { DASHBOARD_URL } from 'types/user'
 
 export const ActivateUser: React.FC = () => {
 
+  useTitle('Activate')
   const { user, tokens, sendConfirm } = useAuthenticate()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})

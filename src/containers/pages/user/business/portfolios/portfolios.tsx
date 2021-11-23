@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { LinearProgress, Button } from '@mui/material'
-
-import { PortfolioTable } from 'components/user/portfolio-table'
-import { PortfolioInfo } from 'types/portfolio'
 import { MessageType, Message, PageTitle } from 'components/base'
+import { PortfolioTable } from 'components/user'
+import { useTitle } from 'contexts/app'
 import { useAuthenticate } from 'hooks/auth'
 import { PortfolioApis } from 'service/portfolios'
+import { PortfolioInfo } from 'types/portfolio'
 
 export const PortfoliosPage: React.FC = () => {
+
+  useTitle('My Portfolios')
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)

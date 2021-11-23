@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Container, LinearProgress } from '@mui/material'
-import { AccountForm } from './account-form'
 import { Message, MessageType } from 'components/base'
-import { AccountApis } from 'service/accounts'
+import { AccountForm } from './account-form'
+import { useTitle } from 'contexts/app'
 import { useAuthenticate } from 'hooks'
+import { AccountApis } from 'service/accounts'
 import { AccountInfo } from 'types'
 
 export const AccountUpdatePage: React.FC = () => {
+
+  useTitle('Update account')
 
   const { accountId } = useParams<{ accountId: string }>()
   const [busy, setBusy] = useState(false)

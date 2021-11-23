@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { LinearProgress, Button } from '@mui/material'
-import { AccountApis } from 'service/accounts'
-import { useAuthenticate } from 'hooks/auth'
-
-import { AccountTable } from 'components/user/account-table'
-import { AccountInfo } from 'types/account'
 import { MessageType, Message, Dialog, PageTitle } from 'components/base'
+import { AccountTable } from 'components/user'
+import { useTitle } from 'contexts/app'
+import { useAuthenticate } from 'hooks/auth'
+import { AccountApis } from 'service/accounts'
+import { AccountInfo } from 'types/account'
 
 export const AccountsPage: React.FC = () => {
+
+  useTitle('My Accounts')
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [accounts, setAccounts] = useState<AccountInfo[]>([])

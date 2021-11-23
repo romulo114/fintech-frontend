@@ -3,18 +3,21 @@ import {
   Paper, Container, Typography,
   Button, Grid, LinearProgress, Box
 } from '@mui/material'
+import { ValidatedInput } from 'components/form'
+import { Message, MessageType } from 'components/base'
+import { useTitle } from 'contexts/app'
+import { AuthActions } from 'contexts/auth'
+import { useAuthenticate, useDispatch } from 'hooks/auth'
 import {
   confirmValidators, emailValidators,
   passValidators, requireValidators
 } from 'utils/validators'
-import { ValidatedInput } from 'components/form'
-import { ValidatedText } from 'types/validate'
-import { Message, MessageType } from 'components/base'
-import { useAuthenticate, useDispatch } from 'hooks/auth'
-import { AuthActions } from 'contexts/auth'
 import { UserApis, UpdatePayload } from 'service/user'
+import { ValidatedText } from 'types/validate'
 
 export const Profile: React.FC = () => {
+
+  useTitle('Profile')
 
   const { user, tokens } = useAuthenticate()
   const dispatch = useDispatch()

@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
 import { Message, MessageType, PageTitle } from 'components/base'
+import { useTitle } from 'contexts/app'
 import { DASHBOARD_URL } from 'types/user'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
@@ -15,6 +16,7 @@ export const ConfirmEmailPage: React.FC = () => {
   
   const { user, confirm, tokens, sendConfirm } = useAuthenticate()
   const [redir, setRedir] = useState(() => user?.active ? DASHBOARD_URL : '')
+  useTitle('Confirm your email')
   
   useEffect(() => {
     if (!tokens?.accessToken || !confirmToken) {

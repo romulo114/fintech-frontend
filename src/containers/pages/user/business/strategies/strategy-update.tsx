@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Container, LinearProgress } from '@mui/material'
-import { StrategyForm } from './strategy-form'
 import { Message, MessageType } from 'components/base'
+import { StrategyForm } from './strategy-form'
+import { useTitle } from 'contexts/app'
 import { useAuthenticate } from 'hooks'
 import { ModelApis } from 'service/models'
 import { ModelInfo } from 'types/model'
 
 export const StrategyUpdate: React.FC = () => {
+
+  useTitle('Update strategy')
 
   const { strategyId } = useParams<{ strategyId: string }>()
   const [busy, setBusy] = useState(false)
