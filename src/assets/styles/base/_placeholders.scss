@@ -27,3 +27,8 @@
   position: absolute;
   @extend %transform-center;
 }
+
+%actions-base {
+  display: flex;
+  justify-content: flex-end;
+}

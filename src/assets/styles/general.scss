@@ -48,13 +48,12 @@
   padding: 24px;
   background: white;
 
-  .body {
+  & .body {
     padding: 24px 0;
   }
 
-  .actions {
-    display: flex;
-    justify-content: flex-end;
+  & .actions {
+    @extend %actions-base;
     column-gap: 8px;
   }
 }

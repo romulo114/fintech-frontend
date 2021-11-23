@@ -1,5 +1,6 @@
 @import "assets/styles/base/variables";
 @import "assets/styles/base/mixins";
+@import "assets/styles/base/placeholders";
 
 .activate-paper {
   margin: auto;
@@ -11,9 +12,8 @@
   }
 
   & .actions {
+    @extend %actions-base;
     margin-top: 16px;
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
 
     & .desc {
@@ -36,9 +36,8 @@
     }
 
     & .actions {
+      @extend %actions-base;
       margin: 32px 0 16px;
-      display: flex;
-      justify-content: flex-end;
     }
   }
 }
@@ -63,9 +62,8 @@ main .contents {
     }
 
     .actions {
+      @extend %actions-base;
       margin-top: 24px;
-      display: flex;
-      flex-direction: row-reverse;
     }
   }
 }

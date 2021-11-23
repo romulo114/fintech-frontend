@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useParams } from 'react-router'
-import { LinearProgress, Typography } from '@mui/material'
+import { useParams, useHistory } from 'react-router-dom'
+import { LinearProgress, Typography, Button } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import EditIcon from '@mui/icons-material/Edit'
 import CloseIcon from '@mui/icons-material/Close'
@@ -20,6 +20,7 @@ import { ModelInfo } from 'types/model'
 export const PortfolioUpdateForm: React.FC = () => {
 
   const { portfolioId } = useParams<{ portfolioId: string }>()
+  const history = useHistory()
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
@@ -107,6 +108,25 @@ export const PortfolioUpdateForm: React.FC = () => {
       setPortfolio(updated)
       setEditModel(false)
       setError({ type: 'success', message: 'Model changed' })
+    } catch (e: any) {
+      setError({ type: 'error', message: e.message })
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const onDelete: () => Promise<void> = async () => {
+    if (!tokens?.accessToken) return
+
+    try {
+      setBusy(true)
+      setError({})
+
+      await PortfolioApis.delete(tokens.accessToken, +portfolioId)
+      setError({ type: 'success', message: 'Portfolio deleted' })
+      setTimeout(() => {
+        history.push('/user/business/portfolios')
+      }, 2000)
     } catch (e: any) {
       setError({ type: 'error', message: e.message })
     } finally {
@@ -257,6 +277,12 @@ export const PortfolioUpdateForm: React.FC = () => {
           value={model}
           setModel={setModel}
         />
+      </section>
+
+      <section className='actions justify-content-start'>
+        <Button variant='outlined' color='error' onClick={onDelete}>
+          Delete
+        </Button>
       </section>
     </form >
   )
