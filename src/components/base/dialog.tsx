@@ -41,7 +41,7 @@ export const Dialog: React.FC<DialogProps> = (props) => {
 
         <section className='actions'>
           {cancel && onCancel && (
-            <Button type='button' color='inherit' onClick={onCancel} variant="outlined">
+            <Button type='button' onClick={onCancel} variant="outlined">
               {cancel}
             </Button>
           )}

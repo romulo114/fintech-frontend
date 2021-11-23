@@ -1,19 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
-  Box, Button, LinearProgress, FormControlLabel,
-  Checkbox, Typography, TableHead, TableRow,
-  Table, TableBody, TableCell, TableContainer, TextField,
+  Button, LinearProgress, FormControlLabel,
+  Checkbox, TextField
 } from '@mui/material'
-import CheckIcon from '@mui/icons-material/Check'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import CloseIcon from '@mui/icons-material/Close'
-import AddIcon from '@mui/icons-material/Add'
-import {
-  Message, MessageType, PageTitle, CircleIconButton
-} from 'components/base'
+import { Message, MessageType, PageTitle, Dialog } from 'components/base'
 import { ValidatedInput } from 'components/form'
+import { EditablePosition } from './editable-position'
 import { useAuthenticate } from 'hooks'
 import { requireValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
@@ -35,12 +28,12 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
   const [shared, setShared] = useState(model?.public ?? false)
 
   const [positions, setPositions] = useState<ModelPositionData[]>(model?.positions ?? [])
-  const [symbol, setSymbol] = useState<ValidatedText>({ value: '', error: '' })
-  const [weight, setWeight] = useState<ValidatedText>({ value: '0.0', error: '' })
-  const [editing, setEditing] = useState(-1)
+
+  const [open, setOpen] = useState(false)
+
 
   const history = useHistory()
-  const { tokens } = useAuthenticate()
+  const { user, tokens } = useAuthenticate()
 
   const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setShared(e.target.checked)
@@ -53,38 +46,6 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
   const changeDesc = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setDesc(e.target.value)
   }, [])
-
-  const addNewPosition = (): void => {
-    setSymbol({ value: '', error: '' })
-    setWeight({ value: '0.0', error: '' })
-    setEditing(positions.length)
-  }
-
-  const editPosition = (idx: number): void => {
-    setEditing(idx)
-    setSymbol({ value: positions[idx].symbol, error: '' })
-    setWeight({ value: `${positions[idx].weight}`, error: '' })
-  }
-
-  const deletePosition = (idx: number): void => {
-    positions.splice(idx, 1)
-    setPositions([...positions])
-  }
-
-  const cancelChange = (): void => {
-    setEditing(-1)
-  }
-
-  const saveChange = (): void => {
-    if (editing === positions.length) {
-      positions.push({ symbol: symbol.value, weight: +weight.value })
-    } else {
-      positions[editing].symbol = symbol.value
-      positions[editing].weight = +weight.value
-    }
-    setPositions([...positions])
-    setEditing(-1)
-  }
 
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault()
@@ -100,7 +61,6 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
         public: shared
       }
 
-      let result
       if (model) {
         const result = await ModelApis.update(tokens?.accessToken ?? '', model.id, payload)
         await ModelApis.updatePositions(tokens?.accessToken ?? '', result.id, { positions })
@@ -120,58 +80,34 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
     }
   }
 
-  const editingPosition = (
-    <>
-      <TableCell sx={{ verticalAlign: 'top' }}>
-        <ValidatedInput
-          fullWidth
-          id='model-symbol'
-          variant='standard'
-          className='input'
-          validators={requireValidators}
-          value={symbol}
-          setValue={setSymbol}
-        />
-      </TableCell>
-      <TableCell sx={{ verticalAlign: 'top' }}>
-        <ValidatedInput
-          fullWidth
-          type='number'
-          id='model-weight'
-          variant='standard'
-          className='input'
-          validators={requireValidators}
-          value={weight}
-          setValue={setWeight}
-        />
-      </TableCell>
-    </>
-  )
+  const handleDelete = useCallback(() => {
+    setOpen(true)
+  }, [])
 
-  const normalActions = (idx: number): JSX.Element => (
-    <div className='absolute hover-child' style={{ right: 24, top: 8 }}>
-      <CircleIconButton onClick={() => editPosition(idx)}>
-        <EditIcon />
-      </CircleIconButton>
-      <CircleIconButton onClick={() => deletePosition(idx)}>
-        <DeleteIcon />
-      </CircleIconButton>
-    </div>
-  )
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  }, [])
 
-  const editingActions = (
-    <div className='absolute hover-child' style={{ right: 24, top: 8 }}>
-      <CircleIconButton onClick={cancelChange}>
-        <CloseIcon />
-      </CircleIconButton>
-      <CircleIconButton
-        onClick={saveChange}
-        disabled={!weight.value || !!weight.error || !symbol.value || !!symbol.error}
-      >
-        <CheckIcon />
-      </CircleIconButton>
-    </div>
-  )
+  const onDelete: () => Promise<void> = useCallback(async () => {
+    if (!model) return
+
+    try {
+      setOpen(false)
+      setError({})
+      setBusy(true)
+
+      const accessToken = tokens?.accessToken ?? ''
+      await ModelApis.delete(accessToken, model.id)
+      setError({ type: 'success', message: 'Strategy deleted' })
+      setTimeout(() => {
+        history.push('/user/business/strategies')
+      }, 1500)
+    } catch (e: any) {
+      setError({ type: 'error', message: e.message })
+    } finally {
+      setBusy(false)
+    }
+  }, [tokens?.accessToken, model, history])
 
   const disabled = !name.value || !!name.error
 
@@ -180,6 +116,17 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       <PageTitle>
         Create a Strategy
       </PageTitle>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        header='Confirm Delete strategy'
+        body='Are you sure to delete the strategy?'
+        yes='Delete'
+        cancel='Cancel'
+        onYes={onDelete}
+        onCancel={handleClose}
+      />
 
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
@@ -223,52 +170,21 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       </section>
 
       <section className='input-group'>
-        <div className='d-flex'>
-          <Typography component='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
-            Positions
-          </Typography>
-          <Box className='d-flex align-items-center' sx={{ ml: 2 }}>
-            <CircleIconButton onClick={addNewPosition}>
-              <AddIcon />
-            </CircleIconButton>
-          </Box>
-        </div>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell key='symbol' style={{ minWidth: 120 }}>Symbol</TableCell>
-                <TableCell key='weight' style={{ minWidth: 120 }}>Weight</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {positions.map((pos, idx) => idx === editing ? (
-                <TableRow key={idx} className='relative'>
-                  {editingPosition}
-                  {editingActions}
-                </TableRow>
-              ) : (
-                <TableRow key={pos.symbol} className='relative hover-wrapper'>
-                  <TableCell>{pos.symbol}</TableCell>
-                  <TableCell>{pos.weight}</TableCell>
-                  {normalActions(idx)}
-                </TableRow>
-              ))}
-              {editing === positions.length && (
-                <TableRow className='relative hover-wrapper'>
-                  {editingPosition}
-                  {editingActions}
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <EditablePosition
+          positions={positions}
+          onChange={setPositions}
+        />
       </section>
 
       <section className='actions'>
         <Button type='submit' variant='contained' onClick={onSubmit} disabled={disabled}>
           {model ? 'Update' : 'Create'}
         </Button>
+        {!!model && model.userId === user?.id && (
+          <Button color='error' variant='outlined' onClick={handleDelete} sx={{ mr: 2 }}>
+            Delete
+          </Button>
+        )}
       </section>
     </form >
   )

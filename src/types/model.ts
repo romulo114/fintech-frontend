@@ -21,4 +21,5 @@ export interface ModelPayload {
 export interface ModelInfo extends ModelPayload {
   id: number;
   positions: ModelPosition[];
+  userId: number;
 }

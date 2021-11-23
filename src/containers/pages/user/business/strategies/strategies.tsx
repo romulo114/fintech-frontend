@@ -12,7 +12,7 @@ export const StrategyList: React.FC = () => {
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
 
-  const [mine, setMine] = useState(false)
+  const [mine, setMine] = useState(true)
   const [models, setModels] = useState<ModelInfo[]>([])
   const history = useHistory()
   const { tokens } = useAuthenticate()

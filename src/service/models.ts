@@ -4,10 +4,11 @@ import { ModelInfo, ModelPayload, ModelPositionPayload } from 'types/model'
 const MODELS_BASE = `${BASE_URL}/models`
 
 function map2Model(data: any): ModelInfo {
-  const { is_public, ...others } = data
+  const { user_id, is_public, ...others } = data
   return {
     ...others,
-    public: is_public
+    public: is_public,
+    userId: user_id
   }
 }
 
