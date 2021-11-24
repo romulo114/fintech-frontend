@@ -1,5 +1,6 @@
 @import 'assets/styles/base/variables';
 @import 'assets/styles/base/mixins';
+@import 'assets/styles/base/placeholders';
 
 %shared-card {
   width: 100%;
@@ -29,8 +30,7 @@
   }
 
   & .actions {
-    display: flex;
-    justify-content: flex-end;
+    @extend %actions-base;
     @include my(32);
 
     & .button {

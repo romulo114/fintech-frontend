@@ -2,16 +2,16 @@ import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow, Paper,
-  Fab
+  TableHead, TablePagination, TableRow
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { AccountInfo } from 'types/account'
+import { CircleIconButton } from 'components/base'
 
 type AccountTableProps = {
   accounts: AccountInfo[];
-  onDelete: (id: number) => Promise<void>;
+  onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 }
 export const AccountTable: React.FC<AccountTableProps> = (props) => {
@@ -46,7 +46,7 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
   }
 
   return (
-    <Paper sx={{ width: '100%' }}>
+    <>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader>
           <TableHead>
@@ -69,27 +69,36 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
                 <TableCell>{acc.brokerName}</TableCell>
                 <TableCell>{acc.portfolioId}</TableCell>
                 <TableCell sx={{ p: 1 }}>
-                  <Fab color='primary' size='small' onClick={(e) => handleEdit(e, acc.id)}>
+                  <CircleIconButton
+                    color='primary'
+                    onClick={(e) => handleEdit(e, acc.id)}
+                  >
                     <EditIcon fontSize='small' />
-                  </Fab>
-                  <Fab size='small' sx={{ ml: 2 }} onClick={(e) => handleDelete(e, acc.id)}>
+                  </CircleIconButton>
+                  <CircleIconButton
+                    color='error'
+                    sx={{ ml: 2 }}
+                    onClick={(e) => handleDelete(e, acc.id)}
+                  >
                     <DeleteIcon />
-                  </Fab>
+                  </CircleIconButton>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 20, 50]}
-        component="div"
-        count={accounts.length}
-        page={page}
-        onPageChange={changePage}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={changePageSize}
-      />
-    </Paper>
+      {accounts.length > pageSize && (
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 20, 50]}
+          component="div"
+          count={accounts.length}
+          page={page}
+          onPageChange={changePage}
+          rowsPerPage={pageSize}
+          onRowsPerPageChange={changePageSize}
+        />
+      )}
+    </>
   )
 }

@@ -30,27 +30,30 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = (props) => {
 		)
 	}
 
-	if (!user.active && pathname !== activateUrl) {
-		return (
-			<Redirect
-				to={{
-					pathname: activateUrl,
-					state: { referrer: pathname }
-				}}
-			/>
-		)
+	if (!user.active) {
+		if (pathname !== activateUrl) {
+			return (
+				<Redirect
+					to={{
+						pathname: activateUrl,
+						state: { referrer: pathname }
+					}}
+				/>
+			)
+		}
+	} else {
+		if (!user.firstName && pathname !== profileUrl) {
+			return (
+				<Redirect
+					to={{
+						pathname: profileUrl,
+						state: { referrer: pathname }
+					}}
+				/>
+			)
+		}
 	}
 
-	if (!user.firstName && pathname !== profileUrl) {
-		return (
-			<Redirect
-				to={{
-					pathname: profileUrl,
-					state: { referrer: pathname }
-				}}
-			/>
-		)
-	}
 
 	const Component = component as React.ComponentClass<RouteComponentProps>
 	if (Component) {

@@ -1,15 +1,18 @@
 import React, { useState, MouseEventHandler, MouseEvent } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
-import { AuthPaper, AuthTitle } from 'components/auth'
+import { AuthPaper } from 'components/auth'
 import { ValidatedInput } from 'components/form'
+import { Message, MessageType, PageTitle } from 'components/base'
+import { useTitle } from 'contexts/app'
+import { useAuthenticate } from 'hooks/auth'
+import { emailValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
 import { DASHBOARD_URL } from 'types/user'
-import { emailValidators } from 'utils/validators'
-import { useAuthenticate } from 'hooks/auth'
-import { Message, MessageType } from 'components/base'
 
 export const ForgotPasswordPage: React.FC = () => {
+
+  useTitle('Reset your password')
 
   const [email, setEmail] = useState<ValidatedText>({ value: '', error: '' })
   const [busy, setBusy] = useState(false)
@@ -28,7 +31,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
       setError({ type: 'success', message: 'Email was sent. Please check your mail.' })
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message })
+      setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }
@@ -40,9 +43,9 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <AuthPaper className='simple-paper'>
-      <AuthTitle>
+      <PageTitle>
         Reset your password
-      </AuthTitle>
+      </PageTitle>
       <form className='auth-form'>
         {busy && <LinearProgress />}
         {error.type && <Message type={error.type}>{error.message}</Message>}

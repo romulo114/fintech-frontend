@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
-import { AuthPaper, AuthTitle } from 'components/auth'
-import { Message, MessageType } from 'components/base'
+import { AuthPaper } from 'components/auth'
+import { Message, MessageType, PageTitle } from 'components/base'
+import { ValidatedInput } from 'components/form'
+import { useTitle } from 'contexts/app'
 import { useQuery } from 'hooks/use-query'
 import { useAuthenticate } from 'hooks/auth'
-import { ValidatedInput } from 'components/form'
+import { passValidators, confirmValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
-import {
-  nameValidators,
-  emailValidators,
-  passValidators,
-  confirmValidators
-} from 'utils/validators'
 
 export const ResetPasswordPage: React.FC = () => {
 
+  useTitle('Reset password')
   const resetToken = useQuery().get('reset_token')
 
   const [busy, setBusy] = useState(false)
@@ -37,7 +34,7 @@ export const ResetPasswordPage: React.FC = () => {
 
       setError({ type: 'success', message: 'Password was reset successfully.' })
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message ?? 'Internal Server Error' })
+      setError({ type: 'error', message: e.message ?? 'Internal Server Error' })
     } finally {
       setBusy(false)
     }
@@ -48,9 +45,9 @@ export const ResetPasswordPage: React.FC = () => {
 
   return (
     <AuthPaper className='simple-paper'>
-      <AuthTitle>
+      <PageTitle>
         Reset your password
-      </AuthTitle>
+      </PageTitle>
       <form className='auth-form'>
         {busy && <LinearProgress />}
         {error.type && (

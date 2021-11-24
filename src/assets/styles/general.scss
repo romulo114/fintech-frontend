@@ -1,3 +1,5 @@
+@import './base/placeholders';
+
 .m-auto {
   margin: auto;
 }
@@ -8,6 +10,10 @@
 
 .relative {
   position: relative;
+}
+
+.absolute {
+  position: absolute;
 }
 
 .absolute-center {
@@ -33,4 +39,80 @@
 .error {
   font-size: 1rem;
   color: red;
+}
+
+.dialog {
+  position: fixed;
+  @extend %transform-center;
+  border-radius: 4px;
+  padding: 24px;
+  background: white;
+
+  & .body {
+    padding: 24px 0;
+  }
+
+  & .actions {
+    @extend %actions-base;
+    column-gap: 8px;
+  }
+}
+
+.page-title {
+  font-weight: 600 !important;
+  text-align: center;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.col-gap-2 {
+  column-gap: 2 !important;
+}
+
+.flex-column {
+  flex-direction: column !important;
+}
+
+.align-items-start {
+  align-items: flex-start !important;
+}
+
+.align-items-center {
+  align-items: center !important;
+}
+
+.align-items-end {
+  align-items: flex-end !important;
+}
+
+.justify-content-start {
+  justify-content: flex-start !important;
+}
+
+.justify-content-center {
+  justify-content: center !important;
+}
+
+.justify-content-end {
+  justify-content: flex-end !important;
+}
+
+.justify-content-between {
+  justify-content: space-between !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.hover-wrapper {
+  & .hover-child {
+    visibility: hidden;
+  }
+
+  &:hover .hover-child {
+    visibility: visible;
+  }
 }

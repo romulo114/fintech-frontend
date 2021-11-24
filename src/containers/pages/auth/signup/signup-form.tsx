@@ -37,7 +37,7 @@ export const SignupForm: React.FC = () => {
       setError({ type: 'success', message: 'Account created. Redirecting you to your dashboard'})
       setTimeout(() => setRedir(DASHBOARD_URL), 3000)
     } catch (e: any) {
-      setError({type: 'error', message: e.response?.data?.message})
+      setError({type: 'error', message: e.message})
     } finally {
       setBusy(false)
     }

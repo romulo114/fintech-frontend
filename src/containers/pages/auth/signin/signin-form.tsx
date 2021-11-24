@@ -32,7 +32,7 @@ export const SigninForm: React.FC = () => {
       setError({ type: 'success', message: 'Redirecting ...' })
       setTimeout(() => setRedir(location.state?.referrer ?? DASHBOARD_URL), 1000)
     } catch (e: any) {
-      setError({ type: 'error', message: e.response?.data?.message })
+      setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }

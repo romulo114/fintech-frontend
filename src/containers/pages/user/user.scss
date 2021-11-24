@@ -1,8 +1,8 @@
-@import 'assets/styles/base/variables';
-@import 'assets/styles/base/mixins';
+@import "assets/styles/base/variables";
+@import "assets/styles/base/mixins";
+@import "assets/styles/base/placeholders";
 
 .activate-paper {
-
   margin: auto;
   margin-top: 80px;
   max-width: 640px;
@@ -12,9 +12,8 @@
   }
 
   & .actions {
+    @extend %actions-base;
     margin-top: 16px;
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
 
     & .desc {
@@ -31,15 +30,14 @@
 
   & form {
     width: 100%;
-    
+
     & .input {
-      margin-top: 16px
+      margin-top: 16px;
     }
 
     & .actions {
+      @extend %actions-base;
       margin: 32px 0 16px;
-      display: flex;
-      justify-content: flex-end;
     }
   }
 }
@@ -56,7 +54,7 @@ main .contents {
     @include my(16);
   }
 
-  & .account-form {
+  & .account-form, .portfolio-form, .strategy-form {
     @include my(8);
 
     .input {
@@ -64,9 +62,37 @@ main .contents {
     }
 
     .actions {
+      @extend %actions-base;
       margin-top: 24px;
-      display: flex;
-      flex-direction: row-reverse;
     }
   }
+}
+
+.input-group {
+  @include my(24);
+
+  &.hover-show-wrapper {
+    & .hover-show {
+      visibility: hidden;
+    }
+
+    &:hover {
+      & .hover-show {
+        visibility: visible;
+        margin-left: 32px;
+
+        & button {
+          margin-left: 8px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.strategy-list {
+  @include my(24);
 }

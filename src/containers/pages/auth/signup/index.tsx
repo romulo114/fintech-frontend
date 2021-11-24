@@ -1,7 +1,8 @@
 import React from 'react'
 import { Avatar } from '@mui/material'
 import { useTitle } from 'contexts/app'
-import { AuthPaper, AuthTitle } from 'components/auth'
+import { AuthPaper } from 'components/auth'
+import { PageTitle } from 'components/base'
 import { SignupForm } from './signup-form'
 
 export const SignupPage: React.FC = () => {
@@ -11,9 +12,9 @@ export const SignupPage: React.FC = () => {
   return (
     <AuthPaper>
       <Avatar src="/broken-image.jpg" className='avatar' />
-      <AuthTitle>
+      <PageTitle>
           Create your fithm account
-      </AuthTitle>
+      </PageTitle>
       <SignupForm />
     </AuthPaper>
   )
