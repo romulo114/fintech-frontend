@@ -62,12 +62,12 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       }
 
       if (model) {
-        const result = await ModelApis.update(tokens?.accessToken ?? '', model.id, payload)
-        await ModelApis.updatePositions(tokens?.accessToken ?? '', result.id, { positions })
+        const result = await ModelApis.update(model.id, payload)
+        await ModelApis.updatePositions(result.id, { positions })
         setError({ type: 'success', message: 'Strategy updated' })
       } else {
-        const result = await ModelApis.create(tokens?.accessToken ?? '', payload)
-        await ModelApis.updatePositions(tokens?.accessToken ?? '', result.id, { positions })
+        const result = await ModelApis.create(payload)
+        await ModelApis.updatePositions(result.id, { positions })
         setError({ type: 'success', message: 'Strategy created' })
         setTimeout(() => {
           history.push('/user/business/strategies')
@@ -96,8 +96,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       setError({})
       setBusy(true)
 
-      const accessToken = tokens?.accessToken ?? ''
-      await ModelApis.delete(accessToken, model.id)
+      await ModelApis.delete(model.id)
       setError({ type: 'success', message: 'Strategy deleted' })
       setTimeout(() => {
         history.push('/user/business/strategies')
@@ -107,7 +106,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
     } finally {
       setBusy(false)
     }
-  }, [tokens?.accessToken, model, history])
+  }, [model, history])
 
   const disabled = !name.value || !!name.error
 
@@ -176,7 +175,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
         />
       </section>
 
-      <section className='actions'>
+      <section className='actions justify-content-between row-reverse'>
         <Button type='submit' variant='contained' onClick={onSubmit} disabled={disabled}>
           {model ? 'Update' : 'Create'}
         </Button>

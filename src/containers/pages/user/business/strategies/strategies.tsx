@@ -40,8 +40,8 @@ export const StrategyList: React.FC = () => {
         setError({})
         
         const result = await Promise.all([
-          ModelApis.getAll(tokens?.accessToken ?? '', false),
-          ModelApis.getAll(tokens?.accessToken ?? '', true)
+          ModelApis.getAll(false),
+          ModelApis.getAll(true)
         ])
 
         setPrivates(result[0])

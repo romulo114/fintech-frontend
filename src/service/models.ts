@@ -13,34 +13,34 @@ function map2Model(data: any): ModelInfo {
 }
 
 export const ModelApis = {
-  getAll: async (token: string, shared: boolean): Promise<ModelInfo[]> => {
-    const { models } = await httpClient.authGet(token, `${MODELS_BASE}?public=${shared}`)
+  getAll: async (shared: boolean): Promise<ModelInfo[]> => {
+    const { models } = await httpClient.authGet(`${MODELS_BASE}?public=${shared}`)
     return models.map(map2Model)
   },
 
-  create: async (token: string, payload: ModelPayload): Promise<ModelInfo> => {
-    const data = await httpClient.authPost(token, `${MODELS_BASE}`, payload)
+  create: async (payload: ModelPayload): Promise<ModelInfo> => {
+    const data = await httpClient.authPost(`${MODELS_BASE}`, payload)
     return map2Model(data)
   },
 
-  get: async (token: string, id: number): Promise<ModelInfo> => {
-    const data = await httpClient.authGet(token, `${MODELS_BASE}/${id}`)
+  get: async (id: number): Promise<ModelInfo> => {
+    const data = await httpClient.authGet(`${MODELS_BASE}/${id}`)
     return map2Model(data)
   },
 
-  update: async (token: string, id: number, payload: ModelPayload): Promise<ModelInfo> => {
-    const data = await httpClient.authPut(token, `${MODELS_BASE}/${id}`, payload)
+  update: async (id: number, payload: ModelPayload): Promise<ModelInfo> => {
+    const data = await httpClient.authPut(`${MODELS_BASE}/${id}`, payload)
     return map2Model(data)
   },
 
-  delete: async (token: string, id: number): Promise<void> => {
-    await httpClient.authDelete(token, `${MODELS_BASE}/${id}`)
+  delete: async (id: number): Promise<void> => {
+    await httpClient.authDelete(`${MODELS_BASE}/${id}`)
   },
 
   updatePositions: async (
-    token: string, id: number, payload: ModelPositionPayload
+    id: number, payload: ModelPositionPayload
   ): Promise<ModelInfo> => {
-    const data = await httpClient.authPut(token, `${MODELS_BASE}/${id}/position`, payload)
+    const data = await httpClient.authPut(`${MODELS_BASE}/${id}/position`, payload)
     return map2Model(data)
   }
 }

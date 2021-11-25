@@ -59,7 +59,7 @@ export const Profile: React.FC = () => {
         payload.new_password = newpwd.value
       }
 
-      const response = await UserApis.update(tokens?.accessToken ?? '', payload)
+      const response = await UserApis.update(payload)
       dispatch({
         type: AuthActions.setUser,
         payload: {

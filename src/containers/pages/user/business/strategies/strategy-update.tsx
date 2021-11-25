@@ -22,7 +22,7 @@ export const StrategyUpdate: React.FC = () => {
     const fetchFn = async (): Promise<void> => {
       try {
         setBusy(true)
-        const data = await ModelApis.get(tokens?.accessToken ?? '', +strategyId)
+        const data = await ModelApis.get(+strategyId)
         setModel(data)
       } catch (e: any) {
         setError({ type: 'error', message: e.message })
