@@ -26,7 +26,7 @@ export const PortfolioForm: React.FC = () => {
       setError({})
       setBusy(true)
 
-      await PortfolioApis.create(tokens?.accessToken ?? '', { name: name.value })
+      await PortfolioApis.create({ name: name.value })
       setError({ type: 'success', message: 'Portfolio created' })
       setTimeout(() => {
         history.push('/user/business/portfolios')

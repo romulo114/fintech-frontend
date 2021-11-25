@@ -40,14 +40,14 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
       setBusy(true)
 
       if (account) {
-        await AccountApis.update(tokens?.accessToken ?? '', account.id, {
+        await AccountApis.update(account.id, {
           accountNo: accountNo.value,
           brokerName: brokerName.value
         })
         setError({ type: 'success', message: 'Account updated' })
        
       } else {
-        await AccountApis.create(tokens?.accessToken ?? '', {
+        await AccountApis.create({
           accountNo: accountNo.value,
           brokerName: brokerName.value
         })

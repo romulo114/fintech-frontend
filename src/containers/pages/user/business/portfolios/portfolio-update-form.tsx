@@ -63,7 +63,7 @@ export const PortfolioUpdateForm: React.FC = () => {
       setError({})
 
       const updated = await PortfolioApis.update(
-        tokens?.accessToken ?? '', +portfolioId, { name: name.value }
+        +portfolioId, { name: name.value }
       )
       setPortfolio(updated)
       setName({ value: updated.name, error: '' })
@@ -73,7 +73,7 @@ export const PortfolioUpdateForm: React.FC = () => {
     } finally {
       setBusy(false)
     }
-  }, [tokens?.accessToken, name, portfolioId])
+  }, [name, portfolioId])
 
   const updateAccounts: () => Promise<void> = async () => {
     try {
@@ -81,7 +81,7 @@ export const PortfolioUpdateForm: React.FC = () => {
       setError({})
 
       const updated = await PortfolioApis.updateAccounts(
-        tokens?.accessToken ?? '', +portfolioId, { accounts: selected.map(sel => sel.id) }
+        +portfolioId, { accounts: selected.map(sel => sel.id) }
       )
       setPortfolio(updated)
       setEditAccount(false)
@@ -94,14 +94,11 @@ export const PortfolioUpdateForm: React.FC = () => {
   }
 
   const updateModel: () => Promise<void> = async () => {
-    if (!tokens?.accessToken) return
-
     try {
       setBusy(true)
       setError({})
 
       const updated = await PortfolioApis.updateModel(
-        tokens.accessToken,
         +portfolioId,
         { model_id: model?.id ?? null }
       )
@@ -116,13 +113,11 @@ export const PortfolioUpdateForm: React.FC = () => {
   }
 
   const onDelete: () => Promise<void> = async () => {
-    if (!tokens?.accessToken) return
-
     try {
       setBusy(true)
       setError({})
 
-      await PortfolioApis.delete(tokens.accessToken, +portfolioId)
+      await PortfolioApis.delete(+portfolioId)
       setError({ type: 'success', message: 'Portfolio deleted' })
       setTimeout(() => {
         history.push('/user/business/portfolios')
@@ -136,15 +131,13 @@ export const PortfolioUpdateForm: React.FC = () => {
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
-      if (!tokens?.accessToken) return
-
       try {
         setBusy(true)
         setError({})
 
         const result = await Promise.all([
-          ModelApis.getAll(tokens.accessToken, true),
-          ModelApis.getAll(tokens.accessToken, false)
+          ModelApis.getAll(true),
+          ModelApis.getAll(false)
         ])
         setPublics(result[0])
         setPrivates(result[1])
@@ -156,18 +149,17 @@ export const PortfolioUpdateForm: React.FC = () => {
     }
 
     fetchFn()
-  }, [tokens?.accessToken])
+  }, [])
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
-      if (!tokens?.accessToken) return
       try {
         setBusy(true)
         setError({})
 
         const result = await Promise.all([
-          PortfolioApis.get(tokens.accessToken, +portfolioId),
-          AccountApis.getAll(tokens.accessToken)
+          PortfolioApis.get(+portfolioId),
+          AccountApis.getAll()
         ])
         setPortfolio(result[0])
         setName({ value: result[0].name, error: '' })
@@ -180,7 +172,7 @@ export const PortfolioUpdateForm: React.FC = () => {
     }
 
     fetchFn()
-  }, [portfolioId, tokens?.accessToken])
+  }, [portfolioId])
 
   useEffect(() => {
     if (editAccount) {

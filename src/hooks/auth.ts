@@ -1,4 +1,4 @@
-import { useContext, Dispatch, useCallback } from 'react'
+import { useContext, Dispatch, useCallback, useEffect } from 'react'
 import {
   AuthActions,
   UserContext,
@@ -7,7 +7,7 @@ import {
   UserState
 } from 'contexts/auth'
 import { ActionType } from 'contexts/context'
-import { AuthApis, UserApis } from 'service'
+import { AuthApis, httpClient, UserApis } from 'service'
 import { User } from 'types/user'
 
 export const useSelector = (selectorFn: UserStateSelector): any => {
@@ -36,8 +36,19 @@ export const useAuthenticate = (): AuthInterface => {
   const tokens = useSelector((state: UserState) => state.token)
   const dispatch = useDispatch()
 
+  useEffect(() => {
+    httpClient.init(AuthApis, dispatch)
+
+    if (tokens?.accessToken && tokens?.refreshToken) {
+      AuthApis.setTokens(tokens.accessToken, tokens.refreshToken)
+    }
+  // eslint-disable-next-line
+  }, [])
+
   const signin = useCallback(async (email: string, pass: string): Promise<void> => {
     const response = await AuthApis.signin(email, pass)
+    AuthApis.setTokens(response.tokens.access_token, response.tokens.refresh_token)
+
     dispatch({
       type: AuthActions.setUser,
       payload: {
@@ -63,6 +74,7 @@ export const useAuthenticate = (): AuthInterface => {
     async (email: string, username: string, pass: string): Promise<void> => {
       await AuthApis.signup(email, username, pass)
       const response = await AuthApis.signin(email, pass)
+      AuthApis.setTokens(response.tokens.access_token, response.tokens.refresh_token)
 
       dispatch({
         type: AuthActions.setUser,
@@ -85,36 +97,34 @@ export const useAuthenticate = (): AuthInterface => {
       })
     }, [dispatch])
 
-  const signout = useCallback(async (token?: string): Promise<void> => {
+  const signout = useCallback(async (): Promise<void> => {
     try {
-      await AuthApis.signout(token ?? tokens?.accessToken)
+      await AuthApis.signout()
     } catch (e: any) {
       console.log(e.message)
     }
 
+    AuthApis.clearTokens()
     dispatch({ type: AuthActions.clearUser })
-  }, [dispatch, tokens?.accessToken])
-
-  const confirm = useCallback(async (accessToken: string, confirmToken: string): Promise<void> => {
-    await AuthApis.confirm(confirmToken)
-    const user = await UserApis.get(accessToken)
-
-    dispatch({
-      type: AuthActions.setUser,
-      payload: { user }
-    })
   }, [dispatch])
 
-  const sendConfirm = useCallback(async (accessToken: string): Promise<void> => {
-    await AuthApis.sendConfirm(accessToken)
+  const confirm = useCallback(async (confirmToken: string): Promise<void> => {
+    await AuthApis.confirm(confirmToken)
+    const user = await UserApis.get()
+
+    dispatch({ type: AuthActions.setUser, payload: { user } })
+  }, [dispatch])
+
+  const sendConfirm = useCallback(async (): Promise<void> => {
+    await AuthApis.sendConfirm()
   }, [])
 
   const forgotPass = useCallback(async (email: string): Promise<void> => {
     await AuthApis.forgotPassword(email)
   }, [])
 
-  const resetPass = useCallback(async (token: string, pass: string): Promise<void> => {
-    await AuthApis.resetPassword(token, pass)
+  const resetPass = useCallback(async (resetToken: string, pass: string): Promise<void> => {
+    await AuthApis.resetPassword(resetToken, pass)
   }, [])
 
   return {

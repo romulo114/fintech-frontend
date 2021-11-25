@@ -12,15 +12,11 @@ export type UpdatePayload = {
   new_password?: string;
 }
 export const UserApis = {
-  get: async (token: string) => {
-    return httpClient.authGet(token, `${USER_BASE}`)
+  get: async () => {
+    return await httpClient.authGet(`${USER_BASE}`)
   },
 
-  update: async (
-    token: string,
-    payload: UpdatePayload
-  ): Promise<any> => {
-  
-    return httpClient.authPut(token, `${USER_BASE}`, payload)
+  update: async (payload: UpdatePayload): Promise<any> => {
+    return await httpClient.authPut(`${USER_BASE}`, payload)
   }
 }

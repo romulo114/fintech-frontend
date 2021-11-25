@@ -25,10 +25,10 @@ export const PortfoliosPage: React.FC = () => {
         setError({})
         setBusy(true)
 
-        const data = await PortfolioApis.getAll(tokens?.accessToken ?? '')
+        const data = await PortfolioApis.getAll()
         setPortfolios(data)
       } catch (e: any) {
-        setError(e.message)
+        setError({ type: 'error', message: e.message })
       } finally {
         setBusy(false)
       }

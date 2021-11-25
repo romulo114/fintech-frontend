@@ -22,7 +22,7 @@ export const AccountUpdatePage: React.FC = () => {
     const fetchFn = async (): Promise<void> => {
       try {
         setBusy(true)
-        const data = await AccountApis.get(tokens?.accessToken ?? '', +accountId)
+        const data = await AccountApis.get(+accountId)
         setAccount(data)
       } catch (e: any) {
         setError({ type: 'error', message: e.message })

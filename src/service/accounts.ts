@@ -20,33 +20,33 @@ type AccountPayload = {
   brokerName?: string;
 }
 export const AccountApis = {
-  getAll: async (token: string): Promise<AccountInfo[]> => {
-    const { accounts } = await httpClient.authGet(token, `${ACCOUNTS_BASE}`)
+  getAll: async (): Promise<AccountInfo[]> => {
+    const { accounts } = await httpClient.authGet(`${ACCOUNTS_BASE}`)
     return accounts.map(map2Account)
   },
 
-  create: async (token: string, payload: AccountPayload): Promise<AccountInfo[]> => {
-    return await httpClient.authPost(token, `${ACCOUNTS_BASE}`, {
+  create: async (payload: AccountPayload): Promise<AccountInfo[]> => {
+    return await httpClient.authPost(`${ACCOUNTS_BASE}`, {
       account_number: payload.accountNo,
       broker_name: payload.brokerName
     })
   },
 
-  get: async (token: string, id: number): Promise<AccountInfo> => {
-    const data = await httpClient.authGet(token, `${ACCOUNTS_BASE}/${id}`)
+  get: async (id: number): Promise<AccountInfo> => {
+    const data = await httpClient.authGet(`${ACCOUNTS_BASE}/${id}`)
     return map2Account(data)
   },
 
-  update: async (token: string, id: number, payload: AccountPayload): Promise<AccountInfo> => {
+  update: async (id: number, payload: AccountPayload): Promise<AccountInfo> => {
     const updatePayload: any = {}
     payload.accountNo && (updatePayload.account_number = payload.accountNo)
     payload.brokerName && (updatePayload.broker_name = payload.brokerName)
 
-    const data = await httpClient.authPut(token, `${ACCOUNTS_BASE}/${id}`, updatePayload)
+    const data = await httpClient.authPut(`${ACCOUNTS_BASE}/${id}`, updatePayload)
     return map2Account(data)
   },
 
-  delete: async (token: string, id: number): Promise<void> => {
-    return await httpClient.authDelete(token, `${ACCOUNTS_BASE}/${id}`)
+  delete: async (id: number): Promise<void> => {
+    return await httpClient.authDelete(`${ACCOUNTS_BASE}/${id}`)
   }
 }

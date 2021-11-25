@@ -27,10 +27,10 @@ export const AccountsPage: React.FC = () => {
         setError({})
         setBusy(true)
 
-        const data = await AccountApis.getAll(tokens?.accessToken ?? '')
+        const data = await AccountApis.getAll()
         setAccounts(data)
       } catch (e: any) {
-        setError(e.message)
+        setError({ type: 'error', message: e.message })
       } finally {
         setBusy(false)
       }
@@ -61,15 +61,14 @@ export const AccountsPage: React.FC = () => {
       setError({})
       setBusy(true)
 
-      const accessToken = tokens?.accessToken ?? ''
-      await AccountApis.delete(accessToken, deleteId)
-      setAccounts(await AccountApis.getAll(accessToken))
+      await AccountApis.delete(deleteId)
+      setAccounts(await AccountApis.getAll())
     } catch (e: any) {
       setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }
-  }, [tokens?.accessToken, deleteId])
+  }, [deleteId])
 
   const handleEdit = useCallback((id: number) => {
     history.push(`/user/business/accounts/${id}/edit`)
