@@ -54,7 +54,7 @@ export const StrategyList: React.FC = () => {
     }
 
     fetchFn()
-  }, [tokens?.accessToken])
+  }, [])
 
   useEffect(() => {
     setModels(mine ? privates : publics)

@@ -32,7 +32,7 @@ export const AccountUpdatePage: React.FC = () => {
     }
 
     fetchFn()
-  }, [tokens?.accessToken, accountId])
+  }, [accountId])
 
   return (
     <Container maxWidth='sm' sx={{ p: 3, mt: 4 }}>

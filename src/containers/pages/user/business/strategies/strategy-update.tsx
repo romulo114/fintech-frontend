@@ -32,7 +32,7 @@ export const StrategyUpdate: React.FC = () => {
     }
 
     fetchFn()
-  }, [tokens?.accessToken, strategyId])
+  }, [strategyId])
   return (
     <Container maxWidth='sm' sx={{ p: 3, mt: 4 }}>
       {busy && (<LinearProgress />)}

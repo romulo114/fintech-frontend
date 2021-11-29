@@ -37,7 +37,7 @@ export const AccountsPage: React.FC = () => {
     }
 
     fetchFn()
-  }, [tokens?.accessToken])
+  }, [])
 
   const handleCreate: React.MouseEventHandler = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault()

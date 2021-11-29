@@ -19,7 +19,7 @@ export const ConfirmEmailPage: React.FC = () => {
   useTitle('Confirm your email')
   
   useEffect(() => {
-    if (!tokens?.accessToken || !confirmToken) {
+    if (!confirmToken) {
       return
     }
 
@@ -28,7 +28,7 @@ export const ConfirmEmailPage: React.FC = () => {
         setBusy(true)
         setError({})
 
-        await confirm(tokens.accessToken, confirmToken)
+        await confirm(confirmToken)
 
         setError({ type: 'success', message: 'Email confirmed. Redirecting ...' })
         setTimeout(() => setRedir(DASHBOARD_URL), 3000)
@@ -40,18 +40,14 @@ export const ConfirmEmailPage: React.FC = () => {
     }
 
     confirmFn()
-  }, [confirmToken, tokens?.accessToken, confirm])
+  }, [confirmToken, confirm])
 
   const onResend = async (): Promise<void> => {
-    if (!tokens?.accessToken) {
-      return
-    }
-
     try {
       setBusy(true)
       setError({})
 
-      await sendConfirm(tokens.accessToken)
+      await sendConfirm()
 
       setError({ type: 'success', message: 'Email was sent.' })
     } catch (e: any) {

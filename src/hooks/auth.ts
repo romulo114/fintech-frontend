@@ -26,8 +26,8 @@ interface AuthInterface {
   signin: (email: string, pass: string) => Promise<void>;
   signup: (email: string, username: string, pass: string) => Promise<void>;
   signout: (token?: string) => Promise<void>;
-  confirm: (accessToken: string, confirmToken: string) => Promise<void>;
-  sendConfirm: (accessToken: string) => Promise<void>;
+  confirm: (confirmToken: string) => Promise<void>;
+  sendConfirm: () => Promise<void>;
   forgotPass: (email: string) => Promise<void>;
   resetPass: (token: string, pass: string) => Promise<void>;
 }

@@ -15,15 +15,11 @@ export const ActivateUser: React.FC = () => {
 
   const location = useLocation<{ referrer?: string }>()
   const onResend = async (): Promise<void> => {
-    if (!tokens?.accessToken) {
-      return
-    }
-
     try {
       setBusy(true)
       setError({})
 
-      await sendConfirm(tokens.accessToken)
+      await sendConfirm()
 
       setError({ type: 'success', message: 'Email was sent.' })
     } catch (e: any) {
