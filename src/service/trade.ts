@@ -6,7 +6,7 @@ function map2Trade(data: any): TradeInfo {
   const trade: TradeInfo = {
     id: data.id,
     name: data.name,
-    created: new Date(data.created),
+    created: new Date(data.created).toLocaleTimeString(),
     status: data.status === 'true',
     pendings: data.pendings,
     prices: data.prices
@@ -35,14 +35,12 @@ export const TradeApis = {
   getAll: async (): Promise<TradeInfo[]> => {
     const { trades } = await httpClient.authGet(`${TRADE_BASE}`)
   
-    console.log('trades: ', trades)
     return trades.map(map2Trade)
   },
 
   create: async (payload: TradePayload): Promise<TradeInfo> => {
     const data = await httpClient.authPost(`${TRADE_BASE}`, payload)
 
-    console.log('created: ', data)
     return map2Trade(data)
   },
 

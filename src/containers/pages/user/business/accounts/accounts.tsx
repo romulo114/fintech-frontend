@@ -92,7 +92,7 @@ export const AccountsPage: React.FC = () => {
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
-      <section className='accounts-list'>
+      <section className='data-list'>
         <AccountTable
           accounts={accounts}
           onDelete={handleDelete}

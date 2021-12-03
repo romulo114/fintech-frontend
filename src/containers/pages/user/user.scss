@@ -50,22 +50,22 @@ main .contents {
     @include my(8);
   }
 
-  & .accounts-list {
+  & .data-list {
     @include my(16);
   }
 
-  & .account-form, .portfolio-form, .strategy-form {
+  & .account-form, .portfolio-form, .strategy-form, .trade-form {
     @include my(8);
 
     .input {
       @include my(8);
     }
-
-    .actions {
-      @extend %actions-base;
-      margin-top: 24px;
-    }
   }
+}
+
+.actions {
+  @extend %actions-base;
+  margin-top: 24px;
 }
 
 .input-group {
@@ -93,6 +93,6 @@ main .contents {
   }
 }
 
-.strategy-list {
-  @include my(24);
+.data-list {
+  @include my(16);
 }

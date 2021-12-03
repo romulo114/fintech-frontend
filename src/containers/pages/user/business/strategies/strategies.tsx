@@ -4,7 +4,6 @@ import { LinearProgress, Button, ToggleButtonGroup, ToggleButton } from '@mui/ma
 import { MessageType, Message, PageTitle } from 'components/base'
 import { StrategyTable } from 'components/user'
 import { useTitle } from 'contexts/app'
-import { useAuthenticate } from 'hooks/auth'
 import { ModelApis } from 'service/models'
 import { ModelInfo } from 'types/model'
 
@@ -20,7 +19,6 @@ export const StrategyList: React.FC = () => {
   const [publics, setPublics] = useState<ModelInfo[]>([])
   const [privates, setPrivates] = useState<ModelInfo[]>([])
   const history = useHistory()
-  const { tokens } = useAuthenticate()
 
   const handleChange = useCallback((
     event: React.MouseEvent<HTMLElement>,
@@ -67,7 +65,7 @@ export const StrategyList: React.FC = () => {
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
-      <section className='strategy-list'>
+      <section className='data-list'>
         <ToggleButtonGroup
           color='primary'
           value={mine ? 'mine': 'public'}

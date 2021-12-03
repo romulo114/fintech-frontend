@@ -51,7 +51,7 @@ export const PortfoliosPage: React.FC = () => {
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
-      <section className='accounts-list'>
+      <section className='data-list'>
         <PortfolioTable portfolios={portfolios} />
       </section>
       <section className='actions'>

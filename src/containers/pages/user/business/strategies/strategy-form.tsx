@@ -33,7 +33,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
 
 
   const history = useHistory()
-  const { user, tokens } = useAuthenticate()
+  const { user } = useAuthenticate()
 
   const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setShared(e.target.checked)
@@ -113,7 +113,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
   return (
     <form className='strategy-form'>
       <PageTitle>
-        Create a Strategy
+        {model ? 'Update a Strategy' : 'Create a Strategy'}
       </PageTitle>
 
       <Dialog

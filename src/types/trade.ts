@@ -14,7 +14,7 @@ export interface PriceInfo {
 export interface TradeInfo {
   id: number;
   name: string;
-  created: Date;
+  created: string;
   status: boolean;
   pendings: PendingInfo[];
   prices: PriceInfo[];
