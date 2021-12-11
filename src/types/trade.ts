@@ -1,8 +1,4 @@
-export interface PendingInfo {
-  portfolio: number;
-  portfolioName: string;
-  modelId: number;
-}
+import { PortfolioInfo } from './portfolio'
 
 export interface PriceInfo {
   accountPosition: number;
@@ -16,6 +12,5 @@ export interface TradeInfo {
   name: string;
   created: string;
   status: boolean;
-  pendings: PendingInfo[];
-  prices: PriceInfo[];
+  portfolios: PortfolioInfo[];
 }

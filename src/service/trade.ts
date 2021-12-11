@@ -8,8 +8,7 @@ function map2Trade(data: any): TradeInfo {
     name: data.name,
     created: new Date(data.created).toLocaleTimeString(),
     status: data.status === 'true',
-    pendings: data.pendings,
-    prices: data.prices
+    portfolios: data.portfolios
   }
 
   return trade
@@ -17,7 +16,7 @@ function map2Trade(data: any): TradeInfo {
 type TradePayload = {
   name: string;
 }
-type UpdateStatusPayload = {
+type UpdateTradePayload = {
   status: boolean;
   name: string;
 }
@@ -55,7 +54,7 @@ export const TradeApis = {
     return await httpClient.authDelete(`${TRADE_BASE}/${id}`)
   },
 
-  update: async (id: number, payload: UpdateStatusPayload): Promise<TradeInfo> => {
+  update: async (id: number, payload: UpdateTradePayload): Promise<TradeInfo> => {
     const data = await httpClient.authPut(`${TRADE_BASE}/${id}`, payload)
 
     console.log('update: ', data)

@@ -1,19 +1,17 @@
 import React from 'react'
+import { Container } from '@mui/material'
+import { TradeUpdateForm } from './trade-update-form'
 import { useTitle } from 'contexts/app'
-import { TradeInfo } from 'types'
 
-type TradeUpdateProps = {
-  trade: TradeInfo;
-}
-export const TradeUpdate: React.FC<TradeUpdateProps> = (props) => {
+export const TradeUpdate: React.FC = () => {
 
-  const { trade } = props
 
   useTitle('Update trade')
 
   return (
-    <form className='trade-update-form'>
-      
-    </form>
+    <Container maxWidth='md' sx={{ p: 3, mt: 4 }}>
+      <TradeUpdateForm />
+    </Container>
   )
+
 }
