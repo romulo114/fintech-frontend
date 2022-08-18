@@ -1,4 +1,4 @@
-import Axios from 'axios'
+import Axios, { AxiosRequestHeaders } from 'axios'
 import { AuthActions } from 'contexts/auth'
 
 
@@ -6,7 +6,7 @@ class HttpClient {
   get = async (
     url: string,
     params: object = {},
-    headers: object = {}
+    headers: AxiosRequestHeaders = {}
   ): Promise<any> => {
     const { data } = await Axios.get(url, { params, headers })
     return data
@@ -16,7 +16,7 @@ class HttpClient {
     url: string,
     body: object,
     params: object = {},
-    headers: object = {}
+    headers: AxiosRequestHeaders = {}
   ): Promise<any> => {
     const { data } = await Axios.post(url, body, { params, headers })
     return data
@@ -26,7 +26,7 @@ class HttpClient {
     url: string,
     body: object,
     params: object = {},
-    headers: object = {}
+    headers: AxiosRequestHeaders = {}
   ): Promise<any> => {
     const { data } = await Axios.put(url, body, { params, headers })
     return data
@@ -35,7 +35,7 @@ class HttpClient {
   delete = async (
     url: string,
     params: object = {},
-    headers: object = {}
+    headers: AxiosRequestHeaders = {}
   ): Promise<any> => {
     const { data } = await Axios.delete(url, { params, headers })
     return data

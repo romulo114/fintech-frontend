@@ -1,9 +1,10 @@
-import React, { PropsWithChildren } from 'react'
-import { Box, Toolbar } from '@mui/material'
-import { Header, DRAWER_WIDTH } from './header'
-import { Footer } from './footer'
+import { Outlet } from 'react-router-dom';
+import { Box, Toolbar } from '@mui/material';
+import { Header, DRAWER_WIDTH } from './header';
+import { Footer } from './footer';
+import { BusinessPaper } from 'components/user/business-paper';
 
-export const PrivateLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+export const PrivateLayout = () => {
   return (
     <Box className='private-layout'>
       <Header />
@@ -17,7 +18,9 @@ export const PrivateLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => 
       >
         <Toolbar />
         <Box className='contents'>
-          {children}
+          <BusinessPaper>
+            <Outlet />
+          </BusinessPaper>
         </Box>
       </Box>
       <Footer />

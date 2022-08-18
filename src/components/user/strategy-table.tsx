@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TablePagination, TableRow
@@ -14,7 +14,7 @@ export const StrategyTable: React.FC<StrategyTableProps> = (props) => {
   const { models } = props
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(0)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -26,8 +26,8 @@ export const StrategyTable: React.FC<StrategyTableProps> = (props) => {
   }, [])
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
-    e.preventDefault()
-    history.push(`/user/business/strategies/${id}`)
+    e.preventDefault();
+    navigate(`/user/business/strategies/${id}`);
   }
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography } from '@mui/material'
 
-export const PageTitle: React.FC = ({ children }) => (
+export const PageTitle = ({ children }: { children: React.ReactNode }) => (
   <Typography
     variant='h1'
     sx={{

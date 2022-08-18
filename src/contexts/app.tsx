@@ -1,12 +1,19 @@
-import { createContext, Dispatch, useContext, useEffect } from 'react'
-import { StoreType, ActionType, PureAction } from './context'
+import {
+  createContext,
+  Dispatch,
+  useContext,
+  useEffect,
+  useReducer,
+  PropsWithChildren
+} from 'react';
+import { StoreType, ActionType, PureAction } from './context';
 
 export interface AppState {
 	title: string;
 }
 
 type AppStateStoreType = StoreType<AppState>
-export const initialState: AppStateStoreType = {
+const initialState: AppStateStoreType = {
   state: {
 		title: 'Fithm'
 	},
@@ -26,7 +33,7 @@ export const useDispatch = (): Dispatch<ActionType> => {
 	return value.dispatch;
 }
 
-export function reducer(state: AppState, action: PureAction): AppState {
+export function appReducer(state: AppState, action: PureAction): AppState {
   switch (action.type) {
     case 'SET_TITLE':
       return {
@@ -46,4 +53,13 @@ export function useTitle(title: string): void {
       payload: title
     })
   }, [title, dispatch])
+}
+
+export const AppProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+  const [state, dispatch] = useReducer(appReducer, initialState.state)
+  return (
+    <AppStateContext.Provider value={{ state, dispatch: dispatch as Dispatch<ActionType> }}>
+      {children}
+    </AppStateContext.Provider>
+  )
 }

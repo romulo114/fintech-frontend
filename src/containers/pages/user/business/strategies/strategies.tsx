@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import { LinearProgress, Button, ToggleButtonGroup, ToggleButton } from '@mui/material'
-import { MessageType, Message, PageTitle } from 'components/base'
-import { StrategyTable } from 'components/user'
-import { useTitle } from 'contexts/app'
-import { useAuthenticate } from 'hooks/auth'
-import { ModelApis } from 'service/models'
-import { ModelInfo } from 'types/model'
+import React, { useState, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LinearProgress, Button, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { MessageType, Message, PageTitle } from 'components/base';
+import { StrategyTable } from 'components/user';
+import { useTitle } from 'contexts/app';
+import { useAuthenticate } from 'hooks/auth';
+import { ModelApis } from 'service/models';
+import { ModelInfo } from 'types/model';
 
 export const StrategyList: React.FC = () => {
 
@@ -19,7 +19,7 @@ export const StrategyList: React.FC = () => {
   const [models, setModels] = useState<ModelInfo[]>([])
   const [publics, setPublics] = useState<ModelInfo[]>([])
   const [privates, setPrivates] = useState<ModelInfo[]>([])
-  const history = useHistory()
+  const naviagate = useNavigate()
   const { tokens } = useAuthenticate()
 
   const handleChange = useCallback((
@@ -30,8 +30,8 @@ export const StrategyList: React.FC = () => {
   }, [])
 
   const handleCreate = useCallback(() => {
-    history.push('/user/business/strategies/create')
-  }, [history])
+    naviagate('/user/business/strategies/create');
+  }, [naviagate]);
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {

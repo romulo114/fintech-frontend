@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { LinearProgress, Button } from '@mui/material'
 import { MessageType, Message, Dialog, PageTitle } from 'components/base'
 import { AccountTable } from 'components/user'
@@ -19,7 +19,7 @@ export const AccountsPage: React.FC = () => {
   const [deleteId, setDeleteId] = useState(-1)
 
   const { tokens } = useAuthenticate()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
@@ -42,37 +42,37 @@ export const AccountsPage: React.FC = () => {
   const handleCreate: React.MouseEventHandler = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault()
 
-    history.push('/user/business/accounts/create')
+    navigate('/user/business/accounts/create')
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   const handleDelete: (id: number) => void = useCallback((id: number) => {
-    setDeleteId(id)
-    setOpen(true)
-  }, [])
+    setDeleteId(id);
+    setOpen(true);
+  }, []);
 
   const handleClose: () => void = useCallback(() => {
-    setOpen(false)
-  }, [])
+    setOpen(false);
+  }, []);
 
   const onDelete: () => Promise<void> = useCallback(async () => {
     try {
-      setOpen(false)
-      setError({})
-      setBusy(true)
+      setOpen(false);
+      setError({});
+      setBusy(true);
 
-      await AccountApis.delete(deleteId)
-      setAccounts(await AccountApis.getAll())
+      await AccountApis.delete(deleteId);
+      setAccounts(await AccountApis.getAll());
     } catch (e: any) {
-      setError({ type: 'error', message: e.message })
+      setError({ type: 'error', message: e.message });
     } finally {
-      setBusy(false)
+      setBusy(false);
     }
   }, [deleteId])
 
   const handleEdit = useCallback((id: number) => {
-    history.push(`/user/business/accounts/${id}/edit`)
-  }, [history])
+    navigate(`/user/business/accounts/${id}/edit`);
+  }, [navigate]);
 
   return (
     <>

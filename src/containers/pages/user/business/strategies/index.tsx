@@ -1,25 +1,20 @@
 import React from 'react'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import { StrategyList } from './strategies'
 import { StrategyCreate } from './strategy-create'
 import { StrategyUpdate } from './strategy-update'
 
-export const Strategies: React.FC = () => {
-
-  const { path } = useRouteMatch()
-
-  return (
-    <Switch>
-      <Route exact path={`${path}`}>
+export const Strategies: React.FC = () => (
+    <>
+      <Route path='/user/business/strategies'>
         <StrategyList />
       </Route>
-      <Route path={`${path}/create`}>
+      <Route path='/user/business/strategies/create'>
         <StrategyCreate />
       </Route>
-      <Route path={`${path}/:strategyId`}>
+      <Route path='/user/business/strategies/:strategyId'>
         <StrategyUpdate />
       </Route>
-    </Switch>
-  )
-}
+    </>
+  );

@@ -20,6 +20,8 @@ export const AccountUpdatePage: React.FC = () => {
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
+      if (!accountId) return;
+
       try {
         setBusy(true)
         const data = await AccountApis.get(+accountId)

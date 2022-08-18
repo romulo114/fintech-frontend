@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRouteMatch, Switch, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import { SigninPage } from './signin'
 import { SignupPage } from './signup'
@@ -9,26 +9,22 @@ import { ConfirmEmailPage } from './confirm-mail'
 
 import './auth.scss'
 
-export const AuthPage: React.FC = () => {
-
-  const { path } = useRouteMatch()
-  return (
-    <Switch>
-      <Route path={`${path}/signin`}>
-        <SigninPage />
-      </Route>
-      <Route path={`${path}/signup`}>
-        <SignupPage />
-      </Route>
-      <Route path={`${path}/forgotpass`}>
-        <ForgotPasswordPage />
-      </Route>
-      <Route path={`${path}/resetpass`}>
-        <ResetPasswordPage />
-      </Route>
-      <Route path={`${path}/confirm`}>
-        <ConfirmEmailPage />
-      </Route>
-    </Switch>
-  )
-}
+export const AuthPage: React.FC = () => (
+  <>
+    <Route path='/auth/signin'>
+      <SigninPage />
+    </Route>
+    <Route path='/auth/signup'>
+      <SignupPage />
+    </Route>
+    <Route path='/auth/forgotpass'>
+      <ForgotPasswordPage />
+    </Route>
+    <Route path='/auth/resetpass'>
+      <ResetPasswordPage />
+    </Route>
+    <Route path='/auth/confirm'>
+      <ConfirmEmailPage />
+    </Route>
+  </>
+);
