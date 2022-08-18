@@ -17,5 +17,11 @@ jobs:
       - name: Install dependencies
         run: yarn install
         
-      - name: Run eslint
-        run: yarn lint
+      - uses: a-b-r-o-w-n/eslint-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          files: "src/**/*"
+          ignore: "*.svg, *.scss"
+          extensions: ".js,.ts,.tsx"
+          working-directory: "./fithm_front"
+          quiet: "false"
