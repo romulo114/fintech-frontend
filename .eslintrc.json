@@ -22,39 +22,17 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "react/jsx-filename-extension": [
-            2,
-            {
-                "extensions": [
-                    ".js",
-                    ".jsx",
-                    ".ts",
-                    ".tsx"
-                ]
-            }
-        ],
+        "react/jsx-filename-extension": [ 2, { "extensions": [ ".ts", ".tsx" ] } ],
         "react/react-in-jsx-scope": "off",
         "no-use-before-define": "off",
         "import/prefer-default-export": "off",
-        "@typescript-eslint/no-use-before-define": [
-            "error"
-        ],
+        "@typescript-eslint/no-use-before-define": ["error"],
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": [
-            "warn",
-            {
-                "argsIgnorePattern": "^_"
-            }
-        ],
+        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "@typescript-eslint/explicit-function-return-type": "off",
-        "max-len": [
-            "warn",
-            {
-                "code": 100
-            }
-        ],
+        "max-len": ["warn", { "code": 100 }],
         "react/prop-types": "off",
         "import/extensions": [
             "error",
@@ -68,10 +46,7 @@
         ]
     },
     "settings": {
-        "import/extensions": [
-            ".ts",
-            ".tsx"
-        ],
+        "import/extensions": [".ts", ".tsx"],
         "import/parsers": {
             "@typescript-eslint/parser": [
                 ".ts",
