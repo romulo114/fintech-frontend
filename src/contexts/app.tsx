@@ -43,7 +43,7 @@ export function appReducer(state: AppState, action: PureAction): AppState {
     default:
       return state
   }
-};
+}
 
 export function useTitle(title: string): void {
   const dispatch = useDispatch()
