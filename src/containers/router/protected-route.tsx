@@ -1,12 +1,10 @@
-import React from 'react'
 import {
 	RouteProps,
 	Navigate,
-	Route,
 	useLocation,
 	Outlet
-} from 'react-router-dom'
-import { useAuthenticate } from 'hooks'
+} from 'react-router-dom';
+import { useAuthenticate } from 'hooks';
 
 interface ProtectedRouteProps extends RouteProps {
 	authUrl?: string;

@@ -9,29 +9,29 @@ import {
 import { StoreType, ActionType, PureAction } from './context';
 
 export interface AppState {
-	title: string;
+  title: string;
 }
 
-type AppStateStoreType = StoreType<AppState>
+type AppStateStoreType = StoreType<AppState>;
 const initialState: AppStateStoreType = {
   state: {
-		title: 'Fithm'
-	},
-	dispatch: (action: ActionType) => {}
-}
+    title: 'Fithm'
+  },
+  dispatch: (_: ActionType) => { }
+};
 
-export const AppStateContext = createContext<AppStateStoreType>(initialState)
-type ReportCheckStatusSelector = (store: AppState) => any
+export const AppStateContext = createContext<AppStateStoreType>(initialState);
+type ReportCheckStatusSelector = (store: AppState) => any;
 
 export const useSelector = (selectorFn: ReportCheckStatusSelector): any => {
-	const value = useContext<AppStateStoreType>(AppStateContext);
-	return selectorFn(value.state);
-}
+  const value = useContext<AppStateStoreType>(AppStateContext);
+  return selectorFn(value.state);
+};
 
 export const useDispatch = (): Dispatch<ActionType> => {
-	const value = useContext<AppStateStoreType>(AppStateContext);
-	return value.dispatch;
-}
+  const value = useContext<AppStateStoreType>(AppStateContext);
+  return value.dispatch;
+};
 
 export function appReducer(state: AppState, action: PureAction): AppState {
   switch (action.type) {
@@ -43,7 +43,7 @@ export function appReducer(state: AppState, action: PureAction): AppState {
     default:
       return state
   }
-}
+};
 
 export function useTitle(title: string): void {
   const dispatch = useDispatch()
@@ -55,11 +55,11 @@ export function useTitle(title: string): void {
   }, [title, dispatch])
 }
 
-export const AppProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+export const AppProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(appReducer, initialState.state)
   return (
     <AppStateContext.Provider value={{ state, dispatch: dispatch as Dispatch<ActionType> }}>
       {children}
     </AppStateContext.Provider>
   )
-}
+};

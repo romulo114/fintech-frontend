@@ -1,8 +1,5 @@
-import React from 'react';
-import { Outlet, Route, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
-
-import { AuthPage } from 'containers/pages/auth';
 import { HomePage } from 'containers/pages/home/home';
 import { Blogs } from 'containers/pages/home/blog/blogs';
 import { BlogPost } from 'containers/pages/home/blog/blog-post';
