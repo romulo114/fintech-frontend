@@ -20,6 +20,8 @@ export const StrategyUpdate: React.FC = () => {
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
+      if (!strategyId) return;
+
       try {
         setBusy(true)
         const data = await ModelApis.get(+strategyId)

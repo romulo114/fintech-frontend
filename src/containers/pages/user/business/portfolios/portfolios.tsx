@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { LinearProgress, Button } from '@mui/material'
 import { MessageType, Message, PageTitle } from 'components/base'
 import { PortfolioTable } from 'components/user'
@@ -17,7 +17,7 @@ export const PortfoliosPage: React.FC = () => {
   const [portfolios, setPortfolios] = useState<PortfolioInfo[]>([])
 
   const { tokens } = useAuthenticate()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
@@ -40,9 +40,9 @@ export const PortfoliosPage: React.FC = () => {
   const handleCreate: React.MouseEventHandler = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault()
 
-    history.push('/user/business/portfolios/create')
+    navigate('/user/business/portfolios/create');
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   return (
     <>

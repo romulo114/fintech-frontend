@@ -1,40 +1,40 @@
-import React, { useState } from 'react'
-import { useLocation, Redirect } from 'react-router-dom'
-import { Button, Paper, LinearProgress } from '@mui/material'
-import { Message, MessageType } from 'components/base'
-import { useTitle } from 'contexts/app'
-import { useAuthenticate } from 'hooks/auth'
-import { DASHBOARD_URL } from 'types/user'
+import React, { useState } from 'react';
+import { useLocation, Navigate } from 'react-router-dom';
+import { Button, Paper, LinearProgress } from '@mui/material';
+import { Message, MessageType } from 'components/base';
+import { useTitle } from 'contexts/app';
+import { useAuthenticate } from 'hooks/auth';
+import { DASHBOARD_URL } from 'types/user';
 
 export const ActivateUser: React.FC = () => {
+  useTitle('Activate');
+  const { user, tokens, sendConfirm } = useAuthenticate();
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
+  const location = useLocation();
+  const state: any = location.state;
 
-  useTitle('Activate')
-  const { user, tokens, sendConfirm } = useAuthenticate()
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-
-  const location = useLocation<{ referrer?: string }>()
   const onResend = async (): Promise<void> => {
     if (!tokens?.accessToken) {
-      return
+      return;
     }
 
     try {
-      setBusy(true)
-      setError({})
+      setBusy(true);
+      setError({});
 
-      await sendConfirm(tokens.accessToken)
+      await sendConfirm(tokens.accessToken);
 
-      setError({ type: 'success', message: 'Email was sent.' })
+      setError({ type: 'success', message: 'Email was sent.' });
     } catch (e: any) {
-      setError({ type: 'error', message: e.message ?? 'Internal Server Error'})
+      setError({ type: 'error', message: e.message ?? 'Internal Server Error'});
     } finally {
-      setBusy(false)
+      setBusy(false);
     }
   }
 
   if (user?.active) {
-    return <Redirect to={location.state?.referrer ?? DASHBOARD_URL} />
+    return <Navigate to={state?.referrer ?? DASHBOARD_URL} />;
   }
 
   return (
@@ -46,7 +46,7 @@ export const ActivateUser: React.FC = () => {
         <p>Please activate your account by checking confirmation email.</p>
       </div>
       {busy && <LinearProgress />}
-      {error.type && <Message type={error.type}>{error.message}</Message>}
+      {error.type && <Message type={error.type}>{error.message ?? ''}</Message>}
       <div className='actions'>
         <span className='desc'>Don&apos;t received email yet? </span>
         <Button onClick={onResend} variant='contained'>

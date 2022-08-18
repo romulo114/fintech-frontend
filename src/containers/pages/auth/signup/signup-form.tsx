@@ -1,5 +1,5 @@
 import React, { useState, MouseEventHandler, MouseEvent } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Box, Button, Link, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
 import { DASHBOARD_URL } from 'types/user'
@@ -44,7 +44,7 @@ export const SignupForm: React.FC = () => {
   }
 
   if (redir) {
-    return <Redirect to={redir} />
+    return <Navigate to={redir} />
   }
 
   const enabled = !!username.value && !!email.value && !!password.value && !!confirm.value && 

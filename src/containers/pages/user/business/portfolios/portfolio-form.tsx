@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
@@ -8,28 +8,28 @@ import { Message, MessageType, PageTitle } from 'components/base'
 import { PortfolioApis } from 'service/portfolios'
 import { useAuthenticate } from 'hooks'
 
-export const PortfolioForm: React.FC = () => {
+export const PortfolioForm = () => {
 
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [busy, setBusy] = useState(false)
-  const [name, setName] = useState<ValidatedText>({ value: '', error: '' })
+  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
+  const [busy, setBusy] = useState(false);
+  const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
 
-  const { tokens } = useAuthenticate()
-  const history = useHistory()
+  const { tokens } = useAuthenticate();
+  const navigate = useNavigate();
 
-  const disabled = !!name.error || !name.value
+  const disabled = !!name.error || !name.value;
 
   const onSubmit: React.MouseEventHandler = async (e): Promise<void> => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      setError({})
-      setBusy(true)
+      setError({});
+      setBusy(true);
 
-      await PortfolioApis.create({ name: name.value })
-      setError({ type: 'success', message: 'Portfolio created' })
+      await PortfolioApis.create({ name: name.value });
+      setError({ type: 'success', message: 'Portfolio created' });
       setTimeout(() => {
-        history.push('/user/business/portfolios')
+        navigate('/user/business/portfolios');
       }, 1500)
     } catch (e: any) {
       setError({ type: 'error', message: e.message })

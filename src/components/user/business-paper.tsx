@@ -3,8 +3,9 @@ import { Paper } from '@mui/material'
 
 type BusinessPaperProps = {
   className?: string;
+  children: React.ReactElement;
 }
-export const BusinessPaper: React.FC<BusinessPaperProps> = ({children, className}) => {
+export const BusinessPaper = ({children, className}: BusinessPaperProps) => {
   return (
     <Paper
       sx={{

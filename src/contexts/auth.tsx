@@ -1,6 +1,6 @@
-import { createContext, Dispatch, useContext, useEffect } from 'react'
-import { StoreType, ActionType, PureAction } from './context'
-import { User } from 'types/user'
+import React, { createContext, Dispatch, useContext, useEffect, PropsWithChildren } from 'react';
+import { StoreType, ActionType, PureAction, useReducerWithSubscriber } from './context';
+import { User } from 'types/user';
 
 export const AuthActions = {
   setUser: 'SET_USER',
@@ -31,7 +31,7 @@ function loadState(): UserState | null {
 }
 
 const savedState = loadState()
-export const initialState: UserStateStoreType = {
+const initialState: UserStateStoreType = {
   state: savedState ?? {
     user: null,
     token: null
@@ -42,7 +42,7 @@ export const initialState: UserStateStoreType = {
 export const UserContext = createContext<UserStateStoreType>(initialState)
 export type UserStateSelector = (store: UserState) => any
 
-export function reducer(state: UserState, action: PureAction): UserState {
+export function authReducer(state: UserState, action: PureAction): UserState {
   switch (action.type) {
     case AuthActions.setUser:
       return {
@@ -59,3 +59,13 @@ export function reducer(state: UserState, action: PureAction): UserState {
       return state
   }
 }
+
+export const AuthProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+  const { state, dispatch } = useReducerWithSubscriber(authReducer, initialState.state, [saveState])
+  return (
+    <UserContext.Provider value={{ state, dispatch: dispatch as Dispatch<ActionType> }}>
+      {children}
+    </UserContext.Provider>
+  )
+}
+

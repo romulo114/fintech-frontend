@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
 import { Message, MessageType, PageTitle } from 'components/base'
@@ -19,7 +19,7 @@ export const ConfirmEmailPage: React.FC = () => {
   useTitle('Confirm your email')
   
   useEffect(() => {
-    if (!tokens?.accessToken || !confirmToken) {
+    if (!confirmToken) {
       return
     }
 
@@ -28,7 +28,7 @@ export const ConfirmEmailPage: React.FC = () => {
         setBusy(true)
         setError({})
 
-        await confirm(tokens.accessToken, confirmToken)
+        await confirm(confirmToken)
 
         setError({ type: 'success', message: 'Email confirmed. Redirecting ...' })
         setTimeout(() => setRedir(DASHBOARD_URL), 3000)
@@ -40,7 +40,7 @@ export const ConfirmEmailPage: React.FC = () => {
     }
 
     confirmFn()
-  }, [confirmToken, tokens?.accessToken, confirm])
+  }, [confirmToken, confirm])
 
   const onResend = async (): Promise<void> => {
     if (!tokens?.accessToken) {
@@ -62,7 +62,7 @@ export const ConfirmEmailPage: React.FC = () => {
   }
 
   if (redir) {
-    return <Redirect to={redir} />
+    return <Navigate to={redir} />
   }
 
   return (

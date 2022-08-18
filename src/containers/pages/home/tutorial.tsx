@@ -4,7 +4,7 @@ import { TutPaper, VideoHelp } from 'components/home'
 import { tutIntro, tutDepth } from './data'
 import { useTitle } from 'contexts/app'
 
-export const TutorialPage: React.FC = () => {
+export const TutorialPage = () => {
 
   useTitle('Tutorials')
 

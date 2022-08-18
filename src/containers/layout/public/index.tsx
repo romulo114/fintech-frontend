@@ -1,14 +1,16 @@
-import React, { PropsWithChildren } from 'react'
-import { Box } from '@mui/material'
+import React, { PropsWithChildren } from 'react';
+import { Outlet } from 'react-router-dom';
+import { Box, CssBaseline } from '@mui/material';
 
-import { Header, Footer } from '../shared'
+import { Header, Footer } from '../shared';
 
-export const PublicLayout: React.FC<PropsWithChildren<{}>> = ({children}) => {
+export const PublicLayout = () => {
   return (
     <Box className='public-layout'>
+      <CssBaseline />
       <Header />
       <Box component='main' className='main'>
-        {children}
+        <Outlet />
       </Box>
       <Footer />
     </Box>

@@ -1,26 +1,26 @@
-import React, { MouseEvent, MouseEventHandler, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { MouseEvent, MouseEventHandler, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Menu, List, ListItem, ListItemText,
   ListItemIcon, Avatar, Link
-} from '@mui/material'
-import DashIcon from '@mui/icons-material/Dashboard'
-import ABoxIcon from '@mui/icons-material/AccountBox'
+} from '@mui/material';
+import DashIcon from '@mui/icons-material/Dashboard';
+import ABoxIcon from '@mui/icons-material/AccountBox';
 import ExitIcon from '@mui/icons-material/ExitToApp';
-import { useAuthenticate } from 'hooks/auth'
-import { nameToAbbr } from 'utils/strings'
+import { useAuthenticate } from 'hooks/auth';
+import { nameToAbbr } from 'utils/strings';
 
 
 export const UserMenu: React.FC = () => {
 
-  const { user, signout } = useAuthenticate()
+  const { user, signout } = useAuthenticate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const history = useHistory()
+  const navigate = useNavigate();
 
   const handleSignout = async (): Promise<void> => {
-    await signout()
-    history.replace('/')
+    await signout();
+    navigate('/', { replace: true });
   }
 
   const menuOpen: MouseEventHandler<HTMLDivElement> = (e: MouseEvent<HTMLDivElement>) => {
@@ -33,12 +33,12 @@ export const UserMenu: React.FC = () => {
 
   const goProfile = (): void => {
     setAnchorEl(null);
-    history.push('/user/profile')
+    navigate('/user/profile');
   }
 
   const goDashboard = (): void => {
     setAnchorEl(null);
-    history.push('/user/business/dashboard')
+    navigate('/user/business/dashboard');
   }
 
   if (!user) {

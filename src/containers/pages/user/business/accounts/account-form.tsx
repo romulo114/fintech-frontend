@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
@@ -29,7 +29,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
   const [busy, setBusy] = useState(false)
 
   const { tokens } = useAuthenticate()
-  const history = useHistory()
+  const navigate = useNavigate()
 
 
   const onSubmit: React.MouseEventHandler = async (e): Promise<void> => {
@@ -55,7 +55,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
       }
 
       setTimeout(() => {
-        history.push('/user/business/accounts')
+        navigate('/user/business/accounts');
       }, 2000)
     } catch (e: any) {
       setError({ type: 'error', message: e.message })

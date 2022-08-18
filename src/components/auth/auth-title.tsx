@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography } from '@mui/material'
 
-export const AuthTitle: React.FC = ({ children }) => {
+export const AuthTitle = ({ children }: React.PropsWithChildren) => {
   return (
     <Typography
       variant='h1'

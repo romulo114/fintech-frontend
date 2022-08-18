@@ -22,14 +22,13 @@
     ],
     "rules": {
         "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+        "react/react-in-jsx-scope": "off",
         "no-use-before-define": "off",
         "import/prefer-default-export": "off",
         "@typescript-eslint/no-use-before-define": ["error"],
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
-        "@typescript-eslint/explicit-function-return-type": [
-            "error", { "allowExpressions": true }
-        ],
+        "@typescript-eslint/explicit-function-return-type": "off",
         "max-len": ["warn", { "code": 100 }],
         "react/prop-types": "off",
         "import/extensions": [

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   AppBar, Box, Toolbar, IconButton, CssBaseline,
   Drawer, Divider, List, ListItem, ListItemIcon,
@@ -19,16 +19,15 @@ export const DRAWER_WIDTH = 240
 const BASE_URL = '/user/business'
 
 export const Header: React.FC = () => {
-
-  const history = useHistory()
-  const [mobileOpen, setMobileOpen] = useState(false)
+  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const toggleDrawer = useCallback(() => {
-    setMobileOpen(flag => !flag)
-  }, [])
+    setMobileOpen(flag => !flag);
+  }, []);
 
   const handleLink = (link: string) => () => {
-    setMobileOpen(false)
-    history.push(link)
+    setMobileOpen(false);
+    navigate(link);
   }
 
   const drawer = (

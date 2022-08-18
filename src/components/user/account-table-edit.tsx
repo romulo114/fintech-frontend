@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TablePagination, TableRow, Checkbox
-} from '@mui/material'
-import { AccountInfo } from 'types/account'
+} from '@mui/material';
+import { AccountInfo } from 'types/account';
 
 type AccountTableProps = {
   all: AccountInfo[];
@@ -17,50 +17,50 @@ export const AccountEditTable: React.FC<AccountTableProps> = (props) => {
 
   const { accounts, all, editing, selected, setSelected } = props
 
-  const [pageSize, setPageSize] = useState(10)
-  const [page, setPage] = useState(0)
-  const history = useHistory()
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const navigate = useNavigate();
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
-  }, [])
+  }, []);
 
   const changePageSize = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setPageSize(+event.target.value);
     setPage(0);
-  }, [])
+  }, []);
 
   const onSelectAll = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      setSelected([...all])
+      setSelected([...all]);
     } else {
-      setSelected([])
+      setSelected([]);
     }
-  }, [all, setSelected])
+  }, [all, setSelected]);
 
   const onSelectOne = (e: React.ChangeEvent<HTMLInputElement>, acc: AccountInfo): void => {
-    const exists = selected.find(sel => sel.id === acc.id)
+    const exists = selected.find(sel => sel.id === acc.id);
     if (e.target.checked) {
       if (!exists) {
-        selected.push(acc)
-        setSelected([...selected])
+        selected.push(acc);
+        setSelected([...selected]);
       }
     } else {
       if (exists) {
-        selected.push(acc)
-        setSelected(selected.filter(sel => sel.id !== acc.id))
+        selected.push(acc);
+        setSelected(selected.filter(sel => sel.id !== acc.id));
       }
     }
-  }
+  };
 
   const onClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-  }, [])
+    e.stopPropagation();
+  }, []);
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
-    e.preventDefault()
-    history.push(`/user/business/accounts/${id}`)
-  }
+    e.preventDefault();
+    navigate(`/user/business/accounts/${id}`);
+  };
 
   const data = editing ? all : accounts
   return (
