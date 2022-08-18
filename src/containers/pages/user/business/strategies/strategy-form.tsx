@@ -33,7 +33,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
 
 
   const navigate = useNavigate()
-  const { user, tokens } = useAuthenticate()
+  const { user } = useAuthenticate()
 
   const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setShared(e.target.checked)

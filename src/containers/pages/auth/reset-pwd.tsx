@@ -19,7 +19,7 @@ export const ResetPasswordPage: React.FC = () => {
   const [password, setPassword] = useState<ValidatedText>({ value: '', error: '' })
   const [confirm, setConfirm] = useState<ValidatedText>({ value: '', error: '' })
 
-  const { user, resetPass } = useAuthenticate()
+  const { resetPass } = useAuthenticate()
 
   const onReset = async (): Promise<void> => {
     if (!resetToken) {

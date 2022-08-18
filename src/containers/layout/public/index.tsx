@@ -1,4 +1,3 @@
-import React, { PropsWithChildren } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, CssBaseline } from '@mui/material';
 

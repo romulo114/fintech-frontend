@@ -6,7 +6,6 @@ import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
 import { Message, MessageType, PageTitle } from 'components/base'
 import { PortfolioApis } from 'service/portfolios'
-import { useAuthenticate } from 'hooks'
 
 export const PortfolioForm = () => {
 
@@ -14,7 +13,6 @@ export const PortfolioForm = () => {
   const [busy, setBusy] = useState(false);
   const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
 
-  const { tokens } = useAuthenticate();
   const navigate = useNavigate();
 
   const disabled = !!name.error || !name.value;

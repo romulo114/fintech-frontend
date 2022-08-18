@@ -5,7 +5,6 @@ import { ValidatedInput } from 'components/form'
 import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
 import { AccountApis } from 'service/accounts'
-import { useAuthenticate } from 'hooks'
 import { Message, MessageType, PageTitle } from 'components/base'
 import { AccountInfo } from 'types'
 
@@ -28,7 +27,6 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
 
-  const { tokens } = useAuthenticate()
   const navigate = useNavigate()
 
 

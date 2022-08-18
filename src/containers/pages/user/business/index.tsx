@@ -1,6 +1,5 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { PrivateLayout } from 'containers/layout/private'
 
 import { Dashboard } from './dashboard'
 import { Accounts } from './accounts'
@@ -8,7 +7,6 @@ import { Trades } from './trades'
 import { Strategies } from './strategies'
 import { Portfolios } from './portfolios'
 import { Documentation } from './documentation'
-import { BusinessPaper } from 'components/user/business-paper'
 
 export const BusinessPages: React.FC = () => (
     <>

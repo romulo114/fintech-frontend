@@ -28,7 +28,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "lint": "eslint src/* --fix",
+    "lint": "eslint src/**/* --fix --ignore-pattern src/assets/**/*",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

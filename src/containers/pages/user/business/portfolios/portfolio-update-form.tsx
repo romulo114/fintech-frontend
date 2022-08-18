@@ -10,7 +10,6 @@ import { AccountEditTable, StrategySelectTable } from 'components/user';
 import { PortfolioApis } from 'service/portfolios';
 import { AccountApis } from 'service/accounts';
 import { ModelApis } from 'service/models';
-import { useAuthenticate } from 'hooks';
 import { requireValidators } from 'utils/validators';
 import { ValidatedText } from 'types/validate';
 import { AccountInfo } from 'types/account';
@@ -40,7 +39,6 @@ export const PortfolioUpdateForm: React.FC = () => {
   const [publics, setPublics] = useState<ModelInfo[]>([]);
   const [privates, setPrivates] = useState<ModelInfo[]>([]);
   const [model, setModel] = useState<ModelInfo | null>(portfolio?.model ?? null);
-  const { tokens } = useAuthenticate();
 
   const toggleEditName: () => void = useCallback(() => {
     setEditName(edit => !edit)

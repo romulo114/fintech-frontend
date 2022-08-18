@@ -5,7 +5,6 @@ import {
   Drawer, Divider, List, ListItem, ListItemIcon,
   ListItemText
 } from '@mui/material'
-import InfoIcon from '@mui/icons-material/Info'
 import DescIcon from '@mui/icons-material/Description'
 import MenuIcon from '@mui/icons-material/Menu'
 import DashIcon from '@mui/icons-material/Dashboard'

@@ -4,10 +4,8 @@ import { BlogType } from 'types/blog'
 type BlogItemProps = {
   data: BlogType;
 }
-export const BlogItem: React.FC<BlogItemProps> = (props) => {
+export const BlogItem: React.FC<BlogItemProps> = (_: BlogItemProps) => {
 
-  const { data } = props
-  
   return (
     <div>
       

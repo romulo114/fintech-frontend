@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow, Paper
+  TableHead, TablePagination, TableRow
 } from '@mui/material'
 import { PortfolioInfo } from 'types/portfolio'
 
