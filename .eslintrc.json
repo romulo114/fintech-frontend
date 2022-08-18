@@ -68,6 +68,10 @@
         ]
     },
     "settings": {
+        "import/extensions": [
+            ".ts",
+            ".tsx"
+        ],
         "import/parsers": {
             "@typescript-eslint/parser": [
                 ".ts",
