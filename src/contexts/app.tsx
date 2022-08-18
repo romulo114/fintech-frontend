@@ -21,7 +21,7 @@ const initialState: AppStateStoreType = {
 };
 
 export const AppStateContext = createContext<AppStateStoreType>(initialState);
-type ReportCheckStatusSelector = (store: AppState) => any;
+type ReportCheckStatusSelector = (_: AppState) => any;
 
 export const useSelector = (selectorFn: ReportCheckStatusSelector): any => {
   const value = useContext<AppStateStoreType>(AppStateContext);

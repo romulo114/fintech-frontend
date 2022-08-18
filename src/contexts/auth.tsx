@@ -40,7 +40,7 @@ const initialState: UserStateStoreType = {
 };
 
 export const UserContext = createContext<UserStateStoreType>(initialState);
-export type UserStateSelector = (store: UserState) => any;
+export type UserStateSelector = (_: UserState) => any;
 
 export function authReducer(state: UserState, action: PureAction): UserState {
   switch (action.type) {
