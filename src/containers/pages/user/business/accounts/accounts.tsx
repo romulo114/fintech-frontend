@@ -71,7 +71,7 @@ export const AccountsPage: React.FC = () => {
   }, [deleteId])
 
   const handleEdit = useCallback((id: number) => {
-    navigate(`/user/business/accounts/${id}/edit`);
+    navigate(`/user/business/accounts/${id}`);
   }, [navigate]);
 
   return (
