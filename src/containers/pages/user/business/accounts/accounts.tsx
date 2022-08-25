@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LinearProgress, Button } from '@mui/material'
+import { LinearProgress, Button, Container } from '@mui/material'
 import { MessageType, Message, Dialog, PageTitle } from 'components/base'
-import { AccountTable } from 'components/user'
+import { AccountTable } from '../../../../../components/user/account-table'
 import { useTitle } from 'contexts/app'
 import { useAuthenticate } from 'hooks/auth'
 import { AccountApis } from 'service/accounts'
@@ -75,7 +75,7 @@ export const AccountsPage: React.FC = () => {
   }, [navigate]);
 
   return (
-    <>
+    <Container maxWidth='md'>
       <PageTitle>My Accounts</PageTitle>
 
       <Dialog
@@ -104,6 +104,6 @@ export const AccountsPage: React.FC = () => {
           Create
         </Button>
       </section>
-    </>
+    </Container>
   )
 }

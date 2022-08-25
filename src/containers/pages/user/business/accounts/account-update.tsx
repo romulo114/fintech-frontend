@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Container, LinearProgress } from '@mui/material'
-import { Message, MessageType } from 'components/base'
-import { AccountForm } from './account-form'
-import { useTitle } from 'contexts/app'
-import { useAuthenticate } from 'hooks'
-import { AccountApis } from 'service/accounts'
-import { AccountInfo } from 'types'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Container, LinearProgress, Grid } from '@mui/material';
+import { Message, MessageType, PageTitle } from 'components/base';
+import { AccountForm, AccountPositions } from './components';
+import { useTitle } from 'contexts/app';
+import { useAuthenticate } from 'hooks';
+import { AccountApis } from 'service/accounts';
+import { AccountInfo } from 'types';
 
 export const AccountUpdatePage: React.FC = () => {
 
@@ -15,7 +15,7 @@ export const AccountUpdatePage: React.FC = () => {
   const { accountId } = useParams<{ accountId: string }>()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [account, setAccount] = useState<AccountInfo | null>(null)
+  const [account, setAccount] = useState<AccountInfo>()
   const { tokens } = useAuthenticate()
 
   useEffect(() => {
@@ -37,10 +37,23 @@ export const AccountUpdatePage: React.FC = () => {
   }, [tokens?.accessToken, accountId])
 
   return (
-    <Container maxWidth='sm' sx={{ p: 3, mt: 4 }}>
+    <Container maxWidth='lg' sx={{ p: 3, mt: 3 }}>
+      <PageTitle>
+        {account ? 'Update your Account' : 'Create your Account'}
+      </PageTitle>
+
       {busy && (<LinearProgress />)}
       {error.type && <Message type={error.type}>{error.message}</Message>}
-      {account && (<AccountForm account={account} />)}
+      {account && (
+        <Grid container spacing={6}>
+          <Grid item xs={12} md={account ? 4 : 12}>
+            <AccountForm account={account} />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <AccountPositions account={account} />
+          </Grid>
+        </Grid>
+      )}
     </Container>
   )
 }

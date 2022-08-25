@@ -5,10 +5,11 @@ export interface Price {
 }
 
 export interface AccountPosition {
+  id: number;
   symbol: string;
   share: number;
   isCash: boolean;
-  price: Price[];
+  price?: Price;
 }
 
 export interface AccountInfo {

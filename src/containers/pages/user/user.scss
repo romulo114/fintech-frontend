@@ -54,7 +54,7 @@ main .contents {
     @include my(16);
   }
 
-  & .account-form, .portfolio-form, .strategy-form {
+  & .portfolio-form, .strategy-form {
     @include my(8);
 
     .input {
