@@ -1,15 +1,25 @@
-import { httpClient, BASE_URL } from './base'
-import { AccountInfo } from 'types/account'
+import { useCallback, useEffect, useState } from 'react';
+import { httpClient, BASE_URL } from './base';
+import { AccountInfo, AccountPosition } from 'types/account';
 
-const ACCOUNTS_BASE = `${BASE_URL}/accounts`
+const ACCOUNTS_BASE = `${BASE_URL}/accounts`;
 
+function mapPositions(positions: any[]): AccountPosition[] {
+  return positions.map(pos => ({
+    id: pos.id,
+    isCash: pos.is_cash,
+    shares: pos.shares,
+    price: pos.price,
+    symbol: pos.symbol
+  }))
+}
 export function map2Account(data: any): AccountInfo {
   const account: AccountInfo = {
     id: data.id,
     accountNo: data.account_number,
     brokerName: data.broker_name,
     portfolioId: data.portfolio_id,
-    positions: data.positions,
+    positions: mapPositions(data.account_positions ?? []),
     userId: data.user_id
   }
 
@@ -52,15 +62,64 @@ export const AccountApis = {
   },
 
   createPosition: async (
-    id: number, symbol: string, share: number, isCash: boolean, prices: string[] = []
+    id: number, symbol: string, shares: number, isCash: boolean, price: number | null = null
   ) => {
     return httpClient.authPost(
       `${ACCOUNTS_BASE}/${id}/positions`,
-      { symbol, share, is_cash: isCash, prices }
+      { symbol, shares, is_cash: isCash, price }
     );
   },
 
   updatePosition: async (id: number, positions: string[]) => {
     return httpClient.authPut(`${ACCOUNTS_BASE}/${id}/positions`, { positions });
   }
+}
+
+export const useAccount = (id: number) => {
+  const [account, setAccount] = useState<AccountInfo>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const fetch = async (id: number) => {
+    const account = await AccountApis.get(id);
+    setAccount(account);
+  }
+
+  useEffect(() => {
+    const fetchAccount = async (id: number) => {
+      setLoading(true);
+      try {
+        await fetch(id);
+      } catch (e: any) {
+        setError(e.message ?? JSON.stringify(e));
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchAccount(id);
+  }, [id]);
+
+  const addPosition = useCallback(async (
+    symbol: string,
+    share: number,
+    isCash: boolean,
+    price: number | null
+  ) => {
+    await AccountApis.createPosition(id, symbol, share, isCash, price);
+    await fetch(id);
+  }, [id]);
+
+  const updatePositions = useCallback(async (positions: AccountPosition[]) => {
+    console.log(positions);
+  }, []);
+
+  const deletePosition = useCallback(async (positionId: number) => {
+    console.log(positionId);
+  }, []);
+
+  return {
+    account, loading, error,
+    addPosition, updatePositions, deletePosition
+  };
 }

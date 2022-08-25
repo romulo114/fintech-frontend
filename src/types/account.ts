@@ -1,4 +1,5 @@
 export interface Price {
+  id: number;
   symbol: string;
   share: number;
   updated: Date;
@@ -7,7 +8,7 @@ export interface Price {
 export interface AccountPosition {
   id: number;
   symbol: string;
-  share: number;
+  shares: number;
   isCash: boolean;
   price?: Price;
 }
