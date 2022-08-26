@@ -70,7 +70,7 @@ export const AccountApis = {
     );
   },
 
-  updatePosition: async (id: number, positions: string[]) => {
+  updatePosition: async (id: number, positions: AccountPosition[]) => {
     return httpClient.authPut(`${ACCOUNTS_BASE}/${id}/positions`, { positions });
   }
 }
@@ -111,15 +111,12 @@ export const useAccount = (id: number) => {
   }, [id]);
 
   const updatePositions = useCallback(async (positions: AccountPosition[]) => {
-    console.log(positions);
-  }, []);
+    await AccountApis.updatePosition(id, positions);
+  }, [id]);
 
-  const deletePosition = useCallback(async (positionId: number) => {
-    console.log(positionId);
-  }, []);
 
   return {
     account, loading, error,
-    addPosition, updatePositions, deletePosition
+    addPosition, updatePositions
   };
 }
