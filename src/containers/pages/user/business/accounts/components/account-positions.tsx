@@ -16,10 +16,9 @@ type AccountPositionsProps = {
 		price: number | null
 	) => Promise<void>;
 	onUpdatePositions: (positions: AccountPosition[]) => Promise<void>;
-	onDeletePosition: (positionId: number) => Promise<void>;
 }
 export const AccountPositions = (
-	{ account, onAddPosition, onUpdatePositions, onDeletePosition }: AccountPositionsProps
+	{ account, onAddPosition, onUpdatePositions }: AccountPositionsProps
 ) => {
 	const [showDialog, setShowDialog] = useState(false);
 	const [busy, setBusy] = useState(false);
@@ -33,6 +32,10 @@ export const AccountPositions = (
 	const onEditPosition = (id: number) => {
 		setPosition(id);
 		openDialog();
+	}
+
+	const onDeletePosition = (id: number) => {
+		setPositions(positions.filter(pos => pos.id !== id));
 	}
 
 	const onNewPosition = () => {
@@ -72,7 +75,7 @@ export const AccountPositions = (
 
 	return (
 		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      {!!error && <Message type='error'>{error}</Message>}
+			{!!error && <Message type='error'>{error}</Message>}
 			<Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
 				<Typography variant='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
 					Positions
@@ -83,7 +86,7 @@ export const AccountPositions = (
 			</Box>
 
 			<AccountPositionsTable
-				positions={account?.positions ?? []}
+				positions={positions}
 				onDelete={onDeletePosition}
 				onEdit={onEditPosition}
 			/>
@@ -95,7 +98,7 @@ export const AccountPositions = (
 			</Box>
 			<AccountPositionDialog
 				open={showDialog}
-				position={account.positions.find(pos => pos.id === position)}
+				position={positions.find(pos => pos.id === position)}
 				onClose={closeDialog}
 				onAdd={onAddPosition}
 				onUpdate={onUpdatePosition}

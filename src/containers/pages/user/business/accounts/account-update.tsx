@@ -13,7 +13,7 @@ export const AccountUpdatePage: React.FC = () => {
   const { accountId } = useParams<{ accountId: string }>();
   const {
     account, loading, error: actionErr,
-    addPosition, updatePositions, deletePosition
+    addPosition, updatePositions
   } = useAccount(+(accountId ?? 0));
 
   return (
@@ -34,7 +34,6 @@ export const AccountUpdatePage: React.FC = () => {
               account={account}
               onAddPosition={addPosition}
               onUpdatePositions={updatePositions}
-              onDeletePosition={deletePosition}
             />
           </Grid>
         </Grid>
