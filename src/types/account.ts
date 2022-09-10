@@ -10,7 +10,6 @@ export interface AccountPosition {
   symbol: string;
   shares: number;
   isCash: boolean;
-  price?: Price;
 }
 
 export interface AccountInfo {

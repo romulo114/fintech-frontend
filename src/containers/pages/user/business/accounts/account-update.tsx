@@ -5,6 +5,7 @@ import { Message, PageTitle } from 'components/base';
 import { AccountForm, AccountPositions } from './components';
 import { useTitle } from 'contexts/app';
 import { useAccount } from 'service/accounts';
+import { BusinessPrices } from './components/business-prices';
 
 export const AccountUpdatePage: React.FC = () => {
 
@@ -29,12 +30,13 @@ export const AccountUpdatePage: React.FC = () => {
           <Grid item xs={12} md={account ? 4 : 12}>
             <AccountForm account={account} />
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <AccountPositions
               account={account}
               onAddPosition={addPosition}
               onUpdatePositions={updatePositions}
             />
+            <BusinessPrices />
           </Grid>
         </Grid>
       )}

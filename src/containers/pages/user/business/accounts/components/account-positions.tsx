@@ -12,8 +12,7 @@ type AccountPositionsProps = {
 	onAddPosition: (
 		symbol: string,
 		share: number,
-		isCash: boolean,
-		price: number | null
+		isCash: boolean
 	) => Promise<void>;
 	onUpdatePositions: (positions: AccountPosition[]) => Promise<void>;
 }
@@ -44,9 +43,8 @@ export const AccountPositions = (
 	}
 
 	const onUpdatePosition = (
-		id: number, symbol: string, shares: number, isCash: boolean, price: number | null
+		id: number, symbol: string, shares: number, isCash: boolean
 	) => {
-		console.log(price);
 		for (const pos of positions) {
 			if (pos.id !== id) continue;
 			pos.symbol = symbol;
@@ -90,12 +88,14 @@ export const AccountPositions = (
 				onDelete={onDeletePosition}
 				onEdit={onEditPosition}
 			/>
-			<Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-				<Button onClick={onResetPositions} variant='outlined'>Reset</Button>
-				<ActionButton onClick={onSavePositions} variant='contained' loading={busy}>
-					Save
-				</ActionButton>
-			</Box>
+			{positions && positions.length > 0 && (
+				<Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+					<Button onClick={onResetPositions} variant='outlined'>Reset</Button>
+					<ActionButton onClick={onSavePositions} variant='contained' loading={busy}>
+						Save
+					</ActionButton>
+				</Box>
+			)}
 			<AccountPositionDialog
 				open={showDialog}
 				position={positions.find(pos => pos.id === position)}

@@ -62,11 +62,11 @@ export const AccountApis = {
   },
 
   createPosition: async (
-    id: number, symbol: string, shares: number, isCash: boolean, price: number | null = null
+    id: number, symbol: string, shares: number, isCash: boolean
   ) => {
     return httpClient.authPost(
       `${ACCOUNTS_BASE}/${id}/positions`,
-      { symbol, shares, is_cash: isCash, price }
+      { symbol, shares, is_cash: isCash }
     );
   },
 
@@ -103,10 +103,9 @@ export const useAccount = (id: number) => {
   const addPosition = useCallback(async (
     symbol: string,
     share: number,
-    isCash: boolean,
-    price: number | null
+    isCash: boolean
   ) => {
-    await AccountApis.createPosition(id, symbol, share, isCash, price);
+    await AccountApis.createPosition(id, symbol, share, isCash);
     await fetch(id);
   }, [id]);
 

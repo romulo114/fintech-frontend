@@ -2,21 +2,21 @@ import React, { useCallback, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TablePagination, TableRow,
-  Checkbox, Typography
+  Typography
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { AccountPosition } from 'types/account';
+import { BusinessPrice } from 'types/business';
 import { CircleIconButton } from 'components/base';
 
-type AccountPositionsTableProps = {
-  positions: AccountPosition[];
+type BusinessPricesTableProps = {
+  prices: BusinessPrice[];
   onDelete: (id: number) => void;
   onEdit: (id: number) => void;
 }
-export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (props) => {
+export const BusinessPricesTable: React.FC<BusinessPricesTableProps> = (props) => {
 
-  const { positions, onDelete, onEdit } = props;
+  const { prices, onDelete, onEdit } = props;
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
 
@@ -41,7 +41,7 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
 
   return (
     <>
-      {positions?.length ? (
+      {prices?.length ? (
         <>
           <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader>
@@ -49,13 +49,12 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
                 <TableRow>
                   <TableCell style={{ minWidth: 60 }}>No</TableCell>
                   <TableCell style={{ minWidth: 120 }}>Symbol</TableCell>
-                  <TableCell style={{ minWidth: 120 }}>Share</TableCell>
-                  <TableCell style={{ minWidth: 120 }}>Cash</TableCell>
+                  <TableCell style={{ minWidth: 120 }}>Price</TableCell>
                   <TableCell style={{ minWidth: 120 }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {positions.map((pos, idx) => (
+                {prices.map((pos, idx) => (
                   <TableRow
                     hover
                     key={pos.id}
@@ -63,10 +62,7 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
                   >
                     <TableCell>{idx + 1}</TableCell>
                     <TableCell>{pos.symbol}</TableCell>
-                    <TableCell>{pos.shares}</TableCell>
-                    <TableCell>
-                      <Checkbox checked={pos.isCash} disabled />
-                    </TableCell>
+                    <TableCell>{pos.price}</TableCell>
                     <TableCell sx={{ p: 1 }}>
                       <CircleIconButton
                         color='primary'
@@ -87,11 +83,11 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
               </TableBody>
             </Table>
           </TableContainer>
-          {positions.length > pageSize && (
+          {prices.length > pageSize && (
             <TablePagination
               rowsPerPageOptions={[5, 10, 20, 50]}
               component="div"
-              count={positions.length}
+              count={prices.length}
               page={page}
               onPageChange={changePage}
               rowsPerPage={pageSize}
@@ -100,7 +96,7 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
           )}
         </>
       ) : (
-        <Typography>No positions yet</Typography>
+        <Typography>No prices yet</Typography>
       )}
     </>
   )
