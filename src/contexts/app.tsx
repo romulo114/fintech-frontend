@@ -46,12 +46,12 @@ export function appReducer(state: AppState, action: PureAction): AppState {
 }
 
 export function useTitle(title: string): void {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch({
       type: 'SET_TITLE',
       payload: title
-    })
+    });
   }, [title, dispatch])
 }
 
