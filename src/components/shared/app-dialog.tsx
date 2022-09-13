@@ -1,7 +1,7 @@
 import { Modal, Typography, Box } from '@mui/material'
 import { useDialog } from 'hooks/use-dialog';
 
-export const AppNotification = () => {
+export const AppDialog = () => {
 	const { open, title, body, onClose } = useDialog();
 
 	return (

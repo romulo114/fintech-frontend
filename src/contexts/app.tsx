@@ -7,6 +7,8 @@ import {
   PropsWithChildren
 } from 'react';
 import { StoreType, ActionType, PureAction } from './context';
+import { NotificationProvider } from './notification';
+import { DialogProvider } from './dialog';
 
 export interface AppState {
   title: string;
@@ -59,7 +61,11 @@ export const AppProvider = ({ children }: PropsWithChildren) => {
   const [state, dispatch] = useReducer(appReducer, initialState.state)
   return (
     <AppStateContext.Provider value={{ state, dispatch: dispatch as Dispatch<ActionType> }}>
-      {children}
+      <NotificationProvider>
+        <DialogProvider>
+          {children}
+        </DialogProvider>
+      </NotificationProvider>
     </AppStateContext.Provider>
   )
 };

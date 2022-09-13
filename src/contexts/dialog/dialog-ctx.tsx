@@ -11,7 +11,7 @@ const initialState: DialogContextType = {
 
 export const DialogContext = createContext<DialogContextType | null>(null);
 
-export const BusinessProvider = ({ children }: PropsWithChildren): JSX.Element => {
+export const DialogProvider = ({ children }: PropsWithChildren): JSX.Element => {
 	const [data, setData] = useState<DialogContextType>(initialState);
 
 	const onClose = useCallback(() => {
