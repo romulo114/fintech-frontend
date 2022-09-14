@@ -14,7 +14,7 @@ export const AccountUpdatePage: React.FC = () => {
   const { accountId } = useParams<{ accountId: string }>();
   const {
     account, loading, error: actionErr,
-    addPosition, updatePositions
+    updatePositions
   } = useAccount(+(accountId ?? 0));
 
   return (
@@ -33,7 +33,6 @@ export const AccountUpdatePage: React.FC = () => {
           <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <AccountPositions
               account={account}
-              onAddPosition={addPosition}
               onUpdatePositions={updatePositions}
             />
             <BusinessPrices />

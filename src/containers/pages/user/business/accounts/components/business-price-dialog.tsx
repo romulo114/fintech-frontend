@@ -99,7 +99,7 @@ export const BusinessPriceDialog = (
 						id='price'
 						type='number'
 						fullWidth
-						label='Shares'
+						label='Price'
 						value={values.price}
 						onChange={handleChange}
 						onBlur={handleBlur}

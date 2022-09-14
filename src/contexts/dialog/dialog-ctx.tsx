@@ -19,11 +19,11 @@ export const DialogProvider = ({ children }: PropsWithChildren): JSX.Element => 
 	}, []);
 
 	const openDialog = (title: string, body: React.ReactNode) => {
-		setData((data: DialogContextType) => ({ ...data, open: true, onClose, title, body }));
+		setData((data: DialogContextType) => ({ ...data, open: true, title, body }));
 	}
 
 	return (
-		<DialogContext.Provider value={{ ...data, openDialog }}>
+		<DialogContext.Provider value={{ ...data, openDialog, onClose }}>
 			{children}
 		</DialogContext.Provider>
 	);

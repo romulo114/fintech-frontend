@@ -6,7 +6,7 @@ export interface Price {
 }
 
 export interface AccountPosition {
-  id: number;
+  id?: number;
   symbol: string;
   shares: number;
   isCash: boolean;

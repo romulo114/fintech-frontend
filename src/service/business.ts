@@ -14,7 +14,7 @@ function mapPrice(price: any): BusinessPrice {
 
 export const BusinessApis = {
 	getPrices: async (): Promise<BusinessPrice[]> => {
-		const { prices } = await httpClient.authGet(`${BUSINESS_BASE}/prices`);
+		const prices = await httpClient.authGet(`${BUSINESS_BASE}/prices`);
 		return prices.map(mapPrice);
 	},
 

@@ -9,8 +9,7 @@ import { BusinessPricesTable } from './business-price-table';
 import { useDialog } from 'hooks/use-dialog';
 
 export const BusinessPrices = () => {
-  const business = useBusiness();
-  const { prices, createPrice, updatePrice, deletePrice } = business;
+  const { prices, createPrice, updatePrice, deletePrice } = useBusiness();
   const { openDialog, onClose } = useDialog();
 
   const [showPriceDialog, setShowPriceDialog] = useState(false);
@@ -37,6 +36,7 @@ export const BusinessPrices = () => {
     setBusy(true);
     try {
       await deletePrice(price);
+      onClose();
     } catch (e: any) {
       setError(e.message ?? JSON.stringify(e));
     } finally {
@@ -48,10 +48,12 @@ export const BusinessPrices = () => {
     setPrice(id);
     openDialog('Delete Price', (
       <Box>
-        <Typography>Are you sure to delete the price?</Typography>
+        <Typography sx={{ color: theme => theme.palette.grey['700'], mb: 2 }}>
+          Are you sure to delete the price and related positions?
+        </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 2 }}>
           <Button variant='outlined' onClick={onClose}>Cancel</Button>
-          <ActionButton variant='outlined' onClick={handleDelete} color='error' loading={busy}>
+          <ActionButton variant='contained' onClick={handleDelete} color='error' loading={busy}>
             Delete
           </ActionButton>
         </Box>

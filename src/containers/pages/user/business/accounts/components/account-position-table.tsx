@@ -29,14 +29,14 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
     setPage(0);
   }, []);
 
-  const handleEdit = (e: React.MouseEvent, id: number): void => {
+  const handleEdit = (e: React.MouseEvent, id?: number): void => {
     e.stopPropagation();
-    onEdit(id);
+    id && onEdit(id);
   };
 
-  const handleDelete = (e: React.MouseEvent, id: number): void => {
+  const handleDelete = (e: React.MouseEvent, id?: number): void => {
     e.stopPropagation();
-    onDelete(id);
+    id && onDelete(id);
   };
 
   return (
@@ -65,7 +65,7 @@ export const AccountPositionsTable: React.FC<AccountPositionsTableProps> = (prop
                     <TableCell>{pos.symbol}</TableCell>
                     <TableCell>{pos.shares}</TableCell>
                     <TableCell>
-                      <Checkbox checked={pos.isCash} disabled />
+                      <Checkbox checked={pos.isCash} size='small' disabled />
                     </TableCell>
                     <TableCell sx={{ p: 1 }}>
                       <CircleIconButton

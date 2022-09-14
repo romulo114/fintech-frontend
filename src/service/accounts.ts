@@ -71,7 +71,10 @@ export const AccountApis = {
   },
 
   updatePosition: async (id: number, positions: AccountPosition[]) => {
-    return httpClient.authPut(`${ACCOUNTS_BASE}/${id}/positions`, { positions });
+    return httpClient.authPut(
+      `${ACCOUNTS_BASE}/${id}/positions`,
+      { positions: positions.map(pos => ({ ...pos, is_cash: pos.isCash })) }
+    );
   }
 }
 
@@ -111,6 +114,7 @@ export const useAccount = (id: number) => {
 
   const updatePositions = useCallback(async (positions: AccountPosition[]) => {
     await AccountApis.updatePosition(id, positions);
+    await fetch(id);
   }, [id]);
 
 

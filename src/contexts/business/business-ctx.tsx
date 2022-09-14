@@ -45,7 +45,7 @@ export const BusinessProvider = ({ children }: PropsWithChildren): JSX.Element =
 
 	const deletePrice = useCallback(async (id: number) => {
 		await BusinessApis.deletePrice(id);
-		await fetchAll()
+		await fetchAll();
 	}, []);
 
 	return (

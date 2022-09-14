@@ -12,21 +12,21 @@ export const AppDialog = () => {
 			aria-describedby='dialog-body'
 		>
 			<Box className='dialog'>
-				<section className='header'>
+				<Box component='section' sx={{ my: 2 }}>
 					{typeof title === 'string' ? (
 						<Typography id='dialog-header' variant='h6' component='h2'>
 							{title}
 						</Typography>
 					) : title}
-				</section>
+				</Box>
 
-				<section className='body'>
+				<Box component='section' sx={{ mt: 2 }}>
 					{typeof body === 'string' ? (
 						<Typography id='dialog-body'>
 							{body}
 						</Typography>
 					) : body}
-				</section>
+				</Box>
 			</Box>
 		</Modal>
 	)
