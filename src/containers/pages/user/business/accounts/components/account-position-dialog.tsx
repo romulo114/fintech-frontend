@@ -33,13 +33,14 @@ const validationSchema = Yup.object().shape({
 });
 type AccountPositionDialogProps = {
   open: boolean;
+  positions: AccountPosition[];
   position?: AccountPosition;
   onClose: () => void;
   onAdd: (symbol: string, shares: number, isCash: boolean) => Promise<void>;
   onUpdate: (id: number, symbol: string, shares: number, isCash: boolean) => Promise<void>;
 }
 export const AccountPositionDialog = (
-  { open, position, onClose, onAdd, onUpdate }: AccountPositionDialogProps
+  { open, position, positions, onClose, onAdd, onUpdate }: AccountPositionDialogProps
 ) => {
   const { prices } = useBusiness();
   const { sendNotification } = useNotification();
@@ -98,6 +99,9 @@ export const AccountPositionDialog = (
     }
   }, [open, position, setValues]);
 
+  const availablePrices = prices.filter(price => {
+    return positions.every(pos => pos.symbol !== price.symbol) || price.symbol === position?.symbol;
+  })
   return (
     <Dialog open={open} maxWidth='md'>
       <form onSubmit={handleSubmit}>
@@ -118,13 +122,13 @@ export const AccountPositionDialog = (
               onBlur={handleBlur}
               sx={{ width: 400 }}
             >
-              {prices.map((price: BusinessPrice) => (
+              {availablePrices.map((price: BusinessPrice) => (
                 <MenuItem key={price.id} value={price.symbol}>
                   {price.symbol}
                 </MenuItem>
               ))}
             </Select>
-            {prices.length === 0 && (
+            {availablePrices.length === 0 && (
               <Typography
                 variant='body2'
                 sx={{
@@ -134,7 +138,7 @@ export const AccountPositionDialog = (
                   my: 1
                 }}
               >
-                There are no prices. Please add prices first
+                There are no available prices. Please add prices first
               </Typography>
             )}
           </FormControl>

@@ -83,7 +83,7 @@ export const useAccount = (id: number) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const fetch = async (id: number) => {
+  const refetch = async (id: number) => {
     const account = await AccountApis.get(id);
     setAccount(account);
   }
@@ -92,7 +92,7 @@ export const useAccount = (id: number) => {
     const fetchAccount = async (id: number) => {
       setLoading(true);
       try {
-        await fetch(id);
+        await refetch(id);
       } catch (e: any) {
         setError(e.message ?? JSON.stringify(e));
       } finally {
@@ -109,17 +109,17 @@ export const useAccount = (id: number) => {
     isCash: boolean
   ) => {
     await AccountApis.createPosition(id, symbol, share, isCash);
-    await fetch(id);
+    await refetch(id);
   }, [id]);
 
   const updatePositions = useCallback(async (positions: AccountPosition[]) => {
     await AccountApis.updatePosition(id, positions);
-    await fetch(id);
+    await refetch(id);
   }, [id]);
 
 
   return {
     account, loading, error,
-    addPosition, updatePositions
+    addPosition, updatePositions, refetch
   };
 }

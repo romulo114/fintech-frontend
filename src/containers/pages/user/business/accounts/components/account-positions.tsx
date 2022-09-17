@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add'
 import { CircleIconButton, Dialog } from 'components/base';
 import { AccountPositionsTable } from './account-position-table';
 import { AccountPositionDialog } from './account-position-dialog';
 import { AccountInfo, AccountPosition } from 'types';
-import { ActionButton, Message } from 'components/base';
+import { Message } from 'components/base';
 
 type AccountPositionsProps = {
 	account: AccountInfo;
@@ -87,21 +87,17 @@ export const AccountPositions = (
 		}
 	}
 
-	const onSavePositions = async () => {
-		setBusy(true);
-
-		try {
-			await onUpdatePositions(positions);
-		} catch (e: any) {
-			setError(e.message ?? JSON.stringify(e));
-		} finally {
-			setBusy(false);
-		}
-	}
-
 	return (
-		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+		<Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, position: 'relative' }}>
 			{!!error && <Message type='error'>{error}</Message>}
+			{busy && (
+				<CircularProgress sx={{
+					position: 'absolute',
+					left: '50%',
+					top: '50%',
+					transform: 'translate(-50%, -50%)' }}
+				/>
+			)}
 			<Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
 				<Typography variant='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
 					Positions
@@ -116,15 +112,10 @@ export const AccountPositions = (
 				onDelete={onDeletePosition}
 				onEdit={onEditPosition}
 			/>
-			{positions && positions.length > 0 && (
-				<Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-					<ActionButton onClick={onSavePositions} variant='contained' loading={busy}>
-						Save
-					</ActionButton>
-				</Box>
-			)}
+
 			<AccountPositionDialog
 				open={showDialog}
+				positions={positions}
 				position={positions.find(pos => pos.id === position)}
 				onClose={closeDialog}
 				onAdd={onAddPosition}

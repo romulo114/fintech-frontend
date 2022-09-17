@@ -8,7 +8,10 @@ import { BusinessPriceDialog } from './business-price-dialog';
 import { BusinessPricesTable } from './business-price-table';
 import { useDialog } from 'hooks/use-dialog';
 
-export const BusinessPrices = () => {
+type BusinessPriceProps = {
+  onDelete: () => Promise<void>;
+}
+export const BusinessPrices = ({ onDelete }: BusinessPriceProps) => {
   const { prices, createPrice, updatePrice, deletePrice } = useBusiness();
   const { openDialog, onClose } = useDialog();
 
@@ -30,12 +33,11 @@ export const BusinessPrices = () => {
     openPriceDialog();
   }
 
-  const handleDelete = async () => {
-    if (!price) return;
-
+  const handleDelete = async (id: number) => {
     setBusy(true);
     try {
-      await deletePrice(price);
+      await deletePrice(id);
+      await onDelete();
       onClose();
     } catch (e: any) {
       setError(e.message ?? JSON.stringify(e));
@@ -45,7 +47,6 @@ export const BusinessPrices = () => {
   }
 
   const onDeletePrice = (id: number) => {
-    setPrice(id);
     openDialog('Delete Price', (
       <Box>
         <Typography sx={{ color: theme => theme.palette.grey['700'], mb: 2 }}>
@@ -53,12 +54,17 @@ export const BusinessPrices = () => {
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 2 }}>
           <Button variant='outlined' onClick={onClose}>Cancel</Button>
-          <ActionButton variant='contained' onClick={handleDelete} color='error' loading={busy}>
+          <ActionButton
+            variant='contained'
+            onClick={() => handleDelete(id)}
+            color='error'
+            loading={busy}
+          >
             Delete
           </ActionButton>
         </Box>
       </Box>
-    ))
+    ));
   }
 
   return (

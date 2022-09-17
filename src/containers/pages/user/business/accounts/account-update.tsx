@@ -12,10 +12,15 @@ export const AccountUpdatePage: React.FC = () => {
   useTitle('Update account')
 
   const { accountId } = useParams<{ accountId: string }>();
+  const id = +(accountId ?? 0);
   const {
     account, loading, error: actionErr,
-    updatePositions
-  } = useAccount(+(accountId ?? 0));
+    updatePositions, refetch
+  } = useAccount(id);
+
+  const onDeletePrice = async () => {
+    await refetch(id);
+  };
 
   return (
     <Container maxWidth='lg' sx={{ p: 3, mt: 2 }}>
@@ -35,7 +40,7 @@ export const AccountUpdatePage: React.FC = () => {
               account={account}
               onUpdatePositions={updatePositions}
             />
-            <BusinessPrices />
+            <BusinessPrices onDelete={onDeletePrice} />
           </Grid>
         </Grid>
       )}
