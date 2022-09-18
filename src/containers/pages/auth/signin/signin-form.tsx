@@ -1,6 +1,6 @@
 import React, { MouseEvent, MouseEventHandler, useState } from 'react'
-import { Navigate, useLocation } from 'react-router-dom'
-import { Box, Button, Link, LinearProgress } from '@mui/material'
+import { Navigate, useLocation, Link } from 'react-router-dom'
+import { Box, Button, LinearProgress } from '@mui/material'
 import { ValidatedInput } from 'components/form'
 import { DASHBOARD_URL } from 'types/user'
 import { ValidatedText } from 'types/validate'
@@ -76,10 +76,10 @@ export const SigninForm: React.FC = () => {
         </Button>
       </Box>
       <Box component='div' className='links'>
-        <Link href='/auth/forgotpass' variant='button'>
+        <Link to='/auth/forgotpass'>
           Forgot Password
         </Link>
-        <Link href='/auth/signup' variant='button'>
+        <Link to='/auth/signup'>
           Sign Up
         </Link>
       </Box>

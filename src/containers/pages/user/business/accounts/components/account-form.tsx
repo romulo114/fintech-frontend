@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, LinearProgress } from '@mui/material'
-import { ValidatedInput } from 'components/form'
-import { ValidatedText } from 'types/validate'
-import { requireValidators } from 'utils/validators'
-import { AccountApis } from 'service/accounts'
-import { Message, MessageType, PageTitle } from 'components/base'
-import { AccountInfo } from 'types'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, LinearProgress, Typography, Box } from '@mui/material';
+import { ValidatedInput } from 'components/form';
+import { ValidatedText } from 'types/validate';
+import { requireValidators } from 'utils/validators';
+import { AccountApis } from 'service/accounts';
+import { Message, MessageType } from 'components/base';
+import { AccountInfo } from 'types';
 
 export type AccountData = {
   accountNo: string;
@@ -29,7 +29,6 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
 
   const navigate = useNavigate()
 
-
   const onSubmit: React.MouseEventHandler = async (e): Promise<void> => {
     e.preventDefault()
 
@@ -43,7 +42,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
           brokerName: brokerName.value
         })
         setError({ type: 'success', message: 'Account updated' })
-       
+
       } else {
         await AccountApis.create({
           accountNo: accountNo.value,
@@ -66,14 +65,13 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
 
   return (
     <form className='account-form'>
-      <PageTitle>
-        {account ? 'Update your Account' : 'Create your Account'}
-      </PageTitle>
-
       {busy && <LinearProgress />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
-      <section className='input-group'>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant='h3' sx={{ fontSize: 20, fontWeight: 600 }}>
+          Summary
+        </Typography>
         <ValidatedInput
           fullWidth
           id='account-no'
@@ -94,13 +92,18 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
           value={brokerName}
           setValue={setBrokerName}
         />
-      </section>
-
-      <section className='actions'>
-        <Button type='submit' variant='contained' onClick={onSubmit} disabled={disabled}>
-          {account ? 'Update' : 'Create'}
-        </Button>
-      </section>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Button
+            type='submit'
+            variant='contained'
+            onClick={onSubmit}
+            disabled={disabled}
+            sx={{ lineHeight: 1.6 }}
+          >
+            {account ? 'Update' : 'Create'}
+          </Button>
+        </Box>
+      </Box>
     </form>
   )
 }

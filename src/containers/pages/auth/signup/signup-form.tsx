@@ -1,17 +1,17 @@
 import React, { useState, MouseEventHandler, MouseEvent } from 'react'
-import { Navigate } from 'react-router-dom'
-import { Box, Button, Link, LinearProgress } from '@mui/material'
-import { ValidatedInput } from 'components/form'
-import { DASHBOARD_URL } from 'types/user'
-import { ValidatedText } from 'types/validate'
+import { Navigate, Link } from 'react-router-dom'
+import { Box, Button, LinearProgress } from '@mui/material';
+import { ValidatedInput } from 'components/form';
+import { DASHBOARD_URL } from 'types/user';
+import { ValidatedText } from 'types/validate';
 import {
   nameValidators,
   emailValidators,
   passValidators,
   confirmValidators
-} from 'utils/validators'
-import { useAuthenticate } from 'hooks/auth'
-import { Message, MessageType } from 'components/base'
+} from 'utils/validators';
+import { useAuthenticate } from 'hooks/auth';
+import { Message, MessageType } from 'components/base';
 
 export const SignupForm: React.FC = () => {
 
@@ -103,10 +103,10 @@ export const SignupForm: React.FC = () => {
         </Button>
       </Box>
       <Box component='div' className='links'>
-        <Link href='/' variant='button'>
+        <Link to='/'>
           Home
         </Link>
-        <Link href='/auth/signin' variant='button'>
+        <Link to='/auth/signin'>
           Sign In
         </Link>
       </Box>

@@ -1,8 +1,8 @@
 import React, { MouseEvent, MouseEventHandler, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Menu, List, ListItem, ListItemText,
-  ListItemIcon, Avatar, Link
+  ListItemIcon, Avatar
 } from '@mui/material';
 import DashIcon from '@mui/icons-material/Dashboard';
 import ABoxIcon from '@mui/icons-material/AccountBox';
@@ -43,7 +43,7 @@ export const UserMenu: React.FC = () => {
 
   if (!user) {
     return (
-      <Link className='menu-item' href='/auth/signin'>
+      <Link className='menu-item' to='/auth/signin'>
         Sign in
       </Link>
     )
