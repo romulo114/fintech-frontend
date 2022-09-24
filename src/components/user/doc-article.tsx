@@ -20,7 +20,7 @@ export const DocArticle: React.FC<DocArticleProps> = (props) => {
                 <h4>
                   {desc.title}
                 </h4>
-                <p>{desc.descs}</p>
+                <p>{desc.descs as string}</p>
               </React.Fragment>
             ))}
           </>

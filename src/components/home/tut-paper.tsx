@@ -4,8 +4,9 @@ import { Paper } from '@mui/material'
 type TutPaperProps = {
   className?: string;
   title?: string;
+  children: React.ReactNode;
 }
-export const TutPaper: React.FC<TutPaperProps> = ({children, className, title}) => {
+export const TutPaper = ({children, className, title}: TutPaperProps) => {
   return (
     <Paper
       sx={{ padding: theme => theme.spacing(3) }}

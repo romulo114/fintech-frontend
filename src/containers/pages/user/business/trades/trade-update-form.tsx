@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
   LinearProgress, Typography,
   Button, FormControlLabel, Checkbox
@@ -9,7 +9,6 @@ import EditIcon from '@mui/icons-material/Edit'
 import CloseIcon from '@mui/icons-material/Close'
 import { ValidatedInput } from 'components/form'
 import { Message, MessageType, PageTitle, CircleIconButton } from 'components/base'
-import { AccountEditTable, StrategySelectTable } from 'components/user'
 import { PortfolioApis } from 'service/portfolios'
 import { TradeApis } from 'service/trade'
 import { requireValidators } from 'utils/validators'
@@ -19,7 +18,7 @@ import { TradeInfo, PortfolioInfo } from 'types'
 export const TradeUpdateForm: React.FC = () => {
 
   const { tradeId } = useParams<{ tradeId: string }>()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [busy, setBusy] = useState(false)
@@ -47,6 +46,7 @@ export const TradeUpdateForm: React.FC = () => {
   }, [trade?.portfolios])
 
   const updateTrade: () => Promise<void> = useCallback(async () => {
+    if (!tradeId) return;
     try {
       setBusy(true)
       setError({})
@@ -64,6 +64,8 @@ export const TradeUpdateForm: React.FC = () => {
   }, [name, status, tradeId])
 
   const updatePortfolios: () => Promise<void> = async () => {
+    if (!tradeId) return;
+
     try {
       setBusy(true)
       setError({})
@@ -86,6 +88,7 @@ export const TradeUpdateForm: React.FC = () => {
   }, [])
 
   const onDelete: () => Promise<void> = async () => {
+    if (!tradeId) return;
     try {
       setBusy(true)
       setError({})
@@ -93,7 +96,7 @@ export const TradeUpdateForm: React.FC = () => {
       await TradeApis.delete(+tradeId)
       setError({ type: 'success', message: 'Trade deleted' })
       setTimeout(() => {
-        history.push('/user/business/trades')
+        navigate('/user/business/trades')
       }, 2000)
     } catch (e: any) {
       setError({ type: 'error', message: e.message })
@@ -122,6 +125,8 @@ export const TradeUpdateForm: React.FC = () => {
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
+      if (!tradeId) return;
+
       try {
         setBusy(true)
         setError({})

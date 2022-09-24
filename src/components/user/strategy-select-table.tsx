@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { ModelInfo } from 'types/model'
 import {
   Table, TableBody, TableCell, TableContainer, Box,
@@ -17,7 +17,7 @@ type StrategySelectTableProps = {
 export const StrategySelectTable: React.FC<StrategySelectTableProps> = (props) => {
 
   const { publics, privates, value, setModel, editing } = props
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const [all, setAll] = useState<ModelInfo[]>([])
   const [pageSize, setPageSize] = useState(2)
@@ -38,24 +38,24 @@ export const StrategySelectTable: React.FC<StrategySelectTableProps> = (props) =
   }, [])
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
-    e.preventDefault()
-    history.push(`/user/business/strategies/${id}`)
-  }
+    e.preventDefault();
+    navigate(`/user/business/strategies/${id}`);
+  };
 
   const onClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-  }, [])
+    e.stopPropagation();
+  }, []);
 
   const onSelectOne = (e: React.ChangeEvent<HTMLInputElement>, model: ModelInfo): void => {
     if (e.target.checked) {
-      setModel(model)
+      setModel(model);
     } else {
-      setModel(null)
+      setModel(null);
     }
-  }
+  };
 
   if (!editing && !value) {
-    return <Box sx={{ my: 2 }}>Not selected</Box>
+    return <Box sx={{ my: 2 }}>Not selected</Box>;
   }
 
   return (

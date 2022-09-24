@@ -1,17 +1,17 @@
-import React, { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Button, LinearProgress, FormControlLabel,
   Checkbox, TextField
-} from '@mui/material'
-import { Message, MessageType, PageTitle, Dialog } from 'components/base'
-import { ValidatedInput } from 'components/form'
-import { EditablePosition } from './editable-position'
-import { useAuthenticate } from 'hooks'
-import { requireValidators } from 'utils/validators'
-import { ValidatedText } from 'types/validate'
-import { ModelInfo, ModelPositionData } from 'types/model'
-import { ModelApis } from 'service/models'
+} from '@mui/material';
+import { Message, MessageType, PageTitle, Dialog } from 'components/base';
+import { ValidatedInput } from 'components/form';
+import { EditablePosition } from './editable-position';
+import { useAuthenticate } from 'hooks';
+import { requireValidators } from 'utils/validators';
+import { ValidatedText } from 'types/validate';
+import { ModelInfo, ModelPositionData } from 'types/model';
+import { ModelApis } from 'service/models';
 
 type StrategyFormProps = {
   model?: ModelInfo;
@@ -32,7 +32,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
   const [open, setOpen] = useState(false)
 
 
-  const history = useHistory()
+  const navigate = useNavigate()
   const { user } = useAuthenticate()
 
   const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +70,7 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
         await ModelApis.updatePositions(result.id, { positions })
         setError({ type: 'success', message: 'Strategy created' })
         setTimeout(() => {
-          history.push('/user/business/strategies')
+          navigate('/user/business/strategies');
         }, 1500)
       }
     } catch (e: any) {
@@ -99,14 +99,14 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       await ModelApis.delete(model.id)
       setError({ type: 'success', message: 'Strategy deleted' })
       setTimeout(() => {
-        history.push('/user/business/strategies')
+        navigate('/user/business/strategies');
       }, 1500)
     } catch (e: any) {
       setError({ type: 'error', message: e.message })
     } finally {
       setBusy(false)
     }
-  }, [model, history])
+  }, [model, navigate])
 
   const disabled = !name.value || !!name.error
 

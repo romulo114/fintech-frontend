@@ -4,7 +4,6 @@ import { Container, LinearProgress } from '@mui/material'
 import { Message, MessageType } from 'components/base'
 import { StrategyForm } from './strategy-form'
 import { useTitle } from 'contexts/app'
-import { useAuthenticate } from 'hooks'
 import { ModelApis } from 'service/models'
 import { ModelInfo } from 'types/model'
 
@@ -16,10 +15,11 @@ export const StrategyUpdate: React.FC = () => {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
   const [model, setModel] = useState<ModelInfo | null>(null)
-  const { tokens } = useAuthenticate()
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
+      if (!strategyId) return;
+
       try {
         setBusy(true)
         const data = await ModelApis.get(+strategyId)

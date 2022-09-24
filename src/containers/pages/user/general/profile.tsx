@@ -19,7 +19,7 @@ export const Profile: React.FC = () => {
 
   useTitle('Profile')
 
-  const { user, tokens } = useAuthenticate()
+  const { user } = useAuthenticate()
   const dispatch = useDispatch()
 
   const [fname, setFname] = useState<ValidatedText>({ value: user?.firstName ?? '', error: '' })

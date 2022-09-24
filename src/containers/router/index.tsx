@@ -1,31 +1,26 @@
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-import { NoSsr } from '@mui/material'
+import { useRoutes } from 'react-router-dom';
+import { NoSsr } from '@mui/material';
 
-import { WithApp, WithAuth } from 'contexts/wrappers'
+import { AppProvider } from 'contexts/app';
+import { AuthProvider } from 'contexts/auth';
 
-import { ProtectedRoute } from './protected-route'
-import { PrivatePages } from './private'
-import { PublicPages } from './public'
-import { Title } from 'components/title'
+import { Title } from 'components/shared/app-title';
+import { PrivateRoutes } from './private';
+import { PublicRoutes } from './public';
+import { AppNotification } from 'components/shared/app-nofitication';
+import { AppDialog } from 'components/shared/app-dialog';
 
 
-export const AppRouter: React.FC = () => {
-	return (
-		<NoSsr>
-			<WithApp>
-				<WithAuth>
-					<Title />
-					<Switch>
-						<ProtectedRoute path='/user'>
-							<PrivatePages />
-						</ProtectedRoute>
-						<Route path='/'>
-							<PublicPages />
-						</Route>
-					</Switch>
-				</WithAuth>
-			</WithApp>
-		</NoSsr>
-	)
-}
+export const AppRouter = () => (
+	<NoSsr>
+		<AppProvider>
+			<AuthProvider>
+				<Title />
+				{useRoutes([PrivateRoutes, PublicRoutes])}
+
+				<AppNotification />
+				<AppDialog />
+			</AuthProvider>
+		</AppProvider>
+	</NoSsr>
+);

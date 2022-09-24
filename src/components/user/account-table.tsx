@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TablePagination, TableRow
-} from '@mui/material'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { AccountInfo } from 'types/account'
-import { CircleIconButton } from 'components/base'
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { AccountInfo } from 'types/account';
+import { CircleIconButton } from 'components/base';
 
 type AccountTableProps = {
   accounts: AccountInfo[];
@@ -16,10 +16,10 @@ type AccountTableProps = {
 }
 export const AccountTable: React.FC<AccountTableProps> = (props) => {
 
-  const { accounts, onDelete, onEdit } = props
-  const [pageSize, setPageSize] = useState(10)
-  const [page, setPage] = useState(0)
-  const history = useHistory()
+  const { accounts, onDelete, onEdit } = props;
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const navigate = useNavigate();
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -28,22 +28,22 @@ export const AccountTable: React.FC<AccountTableProps> = (props) => {
   const changePageSize = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setPageSize(+event.target.value);
     setPage(0);
-  }, [])
+  }, []);
 
   const handleEdit = (e: React.MouseEvent, id: number): void => {
-    e.stopPropagation()
-    onEdit(id)
-  }
+    e.stopPropagation();
+    onEdit(id);
+  };
 
   const handleDelete = (e: React.MouseEvent, id: number): void => {
-    e.stopPropagation()
-    onDelete(id)
-  }
+    e.stopPropagation();
+    onDelete(id);
+  };
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
-    e.preventDefault()
-    history.push(`/user/business/accounts/${id}`)
-  }
+    e.preventDefault();
+    navigate(`/user/business/accounts/${id}`);
+  };
 
   return (
     <>

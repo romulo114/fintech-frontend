@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   Table, TableBody, TableCell, TableContainer,
   TableHead, TablePagination, TableRow
@@ -14,7 +14,7 @@ export const TradeTable: React.FC<TradeTableProps> = (props) => {
   const { trades } = props
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(0)
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -27,7 +27,7 @@ export const TradeTable: React.FC<TradeTableProps> = (props) => {
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
     e.preventDefault()
-    history.push(`/user/business/trades/${id}`)
+    navigate(`/user/business/trades/${id}`)
   }
 
   return (

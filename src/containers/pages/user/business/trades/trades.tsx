@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
-import { LinearProgress, Button, ToggleButtonGroup, ToggleButton } from '@mui/material'
+import { LinearProgress, Button } from '@mui/material'
 import { MessageType, Message, PageTitle } from 'components/base'
 import { ValidatedInput } from 'components/form'
 import { useTitle } from 'contexts/app'
@@ -18,7 +17,6 @@ export const TradeList: React.FC = () => {
   const [busy, setBusy] = useState(false)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState<ValidatedText>({ value: '', error: '' })
-  const history = useHistory()
 
   const [trades, setTrades] = useState<TradeInfo[]>([])
 

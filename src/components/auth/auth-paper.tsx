@@ -1,10 +1,11 @@
-import React from 'react'
-import { Paper } from '@mui/material'
+import React from 'react';
+import { Paper } from '@mui/material';
 
 type AuthPaperProps = {
   className?: string;
+  children: React.ReactNode;
 }
-export const AuthPaper: React.FC<AuthPaperProps> = ({children, className}) => {
+export const AuthPaper: React.FC<AuthPaperProps> = ({ children, className }: AuthPaperProps) => {
   return (
     <Paper
       sx={{

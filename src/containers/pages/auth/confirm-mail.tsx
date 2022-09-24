@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
 import { Message, MessageType, PageTitle } from 'components/base'
@@ -47,7 +47,7 @@ export const ConfirmEmailPage: React.FC = () => {
       setBusy(true)
       setError({})
 
-      await sendConfirm()
+      await sendConfirm(tokens?.accessToken ?? '')
 
       setError({ type: 'success', message: 'Email was sent.' })
     } catch (e: any) {
@@ -58,7 +58,7 @@ export const ConfirmEmailPage: React.FC = () => {
   }
 
   if (redir) {
-    return <Redirect to={redir} />
+    return <Navigate to={redir} />
   }
 
   return (

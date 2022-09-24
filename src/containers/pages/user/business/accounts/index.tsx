@@ -1,25 +1,20 @@
 import React from 'react'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 
 import { AccountsPage } from './accounts'
 import { AccountUpdatePage } from './account-update'
 import { AccountCreatePage } from './account-create'
 
-export const Accounts: React.FC = () => {
-
-  const { path } = useRouteMatch()
-
-  return (
-    <Switch>
-      <Route exact path={`${path}`}>
-        <AccountsPage />
-      </Route>
-      <Route path={`${path}/create`}>
-        <AccountCreatePage />
-      </Route>
-      <Route path={`${path}/:accountId`}>
-        <AccountUpdatePage />
-      </Route>
-    </Switch>
-  )
-}
+export const Accounts: React.FC = () => (
+  <>
+    <Route path='/user/business/accounts'>
+      <AccountsPage />
+    </Route>
+    <Route path='/user/business/accounts/create'>
+      <AccountCreatePage />
+    </Route>
+    <Route path='/user/business/accounts/:accountId'>
+      <AccountUpdatePage />
+    </Route>
+  </>
+);

@@ -1,4 +1,4 @@
-import { useContext, Dispatch, useCallback, useEffect } from 'react'
+import { useContext, Dispatch, useCallback, useEffect } from 'react';
 import {
   AuthActions,
   UserContext,
@@ -27,7 +27,7 @@ interface AuthInterface {
   signup: (email: string, username: string, pass: string) => Promise<void>;
   signout: (token?: string) => Promise<void>;
   confirm: (confirmToken: string) => Promise<void>;
-  sendConfirm: () => Promise<void>;
+  sendConfirm: (accessToken: string) => Promise<void>;
   forgotPass: (email: string) => Promise<void>;
   resetPass: (token: string, pass: string) => Promise<void>;
 }

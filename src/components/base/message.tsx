@@ -5,15 +5,16 @@ export type MessageType = 'error' | 'warning' | 'info' | 'success'
 interface MessageProps {
   type: MessageType;
   duration?: number;
+  children: React.ReactNode;
 }
-export const Message: React.FC<MessageProps> = (props) => {
+export const Message = (props: MessageProps) => {
 
-  const { children, type, duration } = props
-  const [show, setShow] = useState(true)
+  const { children, type, duration } = props;
+  const [show, setShow] = useState(true);
 
   const handleClose = useCallback(() => {
-    setShow(false)
-  }, [])
+    setShow(false);
+  }, []);
 
   return (
     <Snackbar
@@ -26,7 +27,7 @@ export const Message: React.FC<MessageProps> = (props) => {
         {children}
       </Alert>
     </Snackbar>
-  )
+  );
 }
 
 Message.defaultProps = {

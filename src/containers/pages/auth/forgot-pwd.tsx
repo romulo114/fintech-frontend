@@ -1,5 +1,5 @@
 import React, { useState, MouseEventHandler, MouseEvent } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { Box, Link, Button, LinearProgress } from '@mui/material'
 import { AuthPaper } from 'components/auth'
 import { ValidatedInput } from 'components/form'
@@ -38,7 +38,7 @@ export const ForgotPasswordPage: React.FC = () => {
   }
 
   if (user) {
-    return <Redirect to={DASHBOARD_URL} />
+    return <Navigate to={DASHBOARD_URL} />
   }
 
   return (
