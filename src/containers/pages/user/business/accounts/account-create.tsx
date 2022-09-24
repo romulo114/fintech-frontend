@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container } from '@mui/material'
-import { AccountForm } from './components/account-form'
+import { AccountForm } from './components'
 import { PageTitle } from 'components/base';
 import { useTitle } from 'contexts/app'
 

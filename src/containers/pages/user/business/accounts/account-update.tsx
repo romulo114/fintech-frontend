@@ -28,7 +28,7 @@ export const AccountUpdatePage: React.FC = () => {
         {account ? 'Update your Account' : 'Create your Account'}
       </PageTitle>
 
-      {loading && (<LinearProgress />)}
+      {loading && (<LinearProgress sx={{ my: 1 }} />)}
       {!!actionErr && <Message type='error'>{actionErr}</Message>}
       {account && (
         <Grid container spacing={6}>
