@@ -104,7 +104,7 @@ export const Header: React.FC = () => {
           <Link className='menu-item' to='/blogs'>
             Blog
           </Link>
-          <Link className='menu-item' to='/tutorial'>
+          <Link className='menu-item' to='/tutorial' target='_blank'>
             Tutorials
           </Link>
           <Link className='menu-item' to='/about'>
