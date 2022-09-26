@@ -101,14 +101,8 @@ export const Header: React.FC = () => {
           >
             <MenuIcon color='primary' />
           </IconButton>
-          <Link className='menu-item' to='/blogs'>
-            Blog
-          </Link>
-          <Link className='menu-item' to='/tutorial'>
+          <Link className='menu-item' to='/tutorial' target='_blank'>
             Tutorials
-          </Link>
-          <Link className='menu-item' to='/about'>
-            About
           </Link>
 
           <Box sx={{ flexGrow: 1 }} />

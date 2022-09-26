@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { httpClient, BASE_URL } from './base';
 import { AccountInfo, AccountPosition } from 'types/account';
+import { delayedCall } from 'utils/delay';
 
 const ACCOUNTS_BASE = `${BASE_URL}/accounts`;
 
@@ -92,7 +93,7 @@ export const useAccount = (id: number) => {
     const fetchAccount = async (id: number) => {
       setLoading(true);
       try {
-        await refetch(id);
+        await delayedCall(refetch(id));
       } catch (e: any) {
         setError(e.message ?? JSON.stringify(e));
       } finally {
