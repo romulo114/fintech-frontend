@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LinearProgress, Button, ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { LinearProgress, Button, ToggleButtonGroup, ToggleButton, Container } from '@mui/material';
 import { MessageType, Message, PageTitle } from 'components/base';
 import { StrategyTable } from 'components/user';
 import { useTitle } from 'contexts/app';
 import { ModelApis } from 'service/models';
 import { ModelInfo } from 'types/model';
+import { delayedCall } from 'utils/delay';
 
 export const StrategyList: React.FC = () => {
 
@@ -37,10 +38,10 @@ export const StrategyList: React.FC = () => {
         setBusy(true)
         setError({})
         
-        const result = await Promise.all([
+        const result = await delayedCall(Promise.all([
           ModelApis.getAll(false),
           ModelApis.getAll(true)
-        ])
+        ]));
 
         setPrivates(result[0])
         setPublics(result[1])
@@ -59,7 +60,7 @@ export const StrategyList: React.FC = () => {
   }, [mine, publics, privates])
 
   return (
-    <>
+    <Container maxWidth='md'>
       <PageTitle>My Strategies</PageTitle>
 
       {busy && <LinearProgress />}
@@ -87,6 +88,6 @@ export const StrategyList: React.FC = () => {
           Create
         </Button>
       </section>
-    </>
+    </Container>
   )
 }

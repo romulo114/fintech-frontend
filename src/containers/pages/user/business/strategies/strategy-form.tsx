@@ -12,35 +12,36 @@ import { requireValidators } from 'utils/validators';
 import { ValidatedText } from 'types/validate';
 import { ModelInfo, ModelPositionData } from 'types/model';
 import { ModelApis } from 'service/models';
+import { delayedCall } from 'utils/delay';
 
 type StrategyFormProps = {
   model?: ModelInfo;
 }
 export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
 
-  const { model } = props
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [busy, setBusy] = useState(false)
+  const { model } = props;
+  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
+  const [busy, setBusy] = useState(false);
 
-  const [name, setName] = useState<ValidatedText>({ value: model?.name ?? '', error: '' })
-  const [keywords, setKeywords] = useState(model?.keywords?.join(',') ?? '')
-  const [desc, setDesc] = useState(model?.description ?? '')
-  const [shared, setShared] = useState(model?.public ?? false)
+  const [name, setName] = useState<ValidatedText>({ value: model?.name ?? '', error: '' });
+  const [keywords, setKeywords] = useState(model?.keywords?.join(',') ?? '');
+  const [desc, setDesc] = useState(model?.description ?? '');
+  const [shared, setShared] = useState(model?.public ?? false);
 
-  const [positions, setPositions] = useState<ModelPositionData[]>(model?.positions ?? [])
+  const [positions, setPositions] = useState<ModelPositionData[]>(model?.positions ?? []);
 
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
 
-  const navigate = useNavigate()
-  const { user } = useAuthenticate()
+  const navigate = useNavigate();
+  const { user } = useAuthenticate();
 
   const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setShared(e.target.checked)
+    setShared(e.target.checked);
   }, [])
 
   const changeKeywords = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeywords(e.target.value)
+    setKeywords(e.target.value);
   }, [])
 
   const changeDesc = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,11 +49,11 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
   }, [])
 
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      setBusy(true)
-      setError({})
+      setBusy(true);
+      setError({});
 
       const payload = {
         name: name.value,
@@ -62,42 +63,42 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       }
 
       if (model) {
-        const result = await ModelApis.update(model.id, payload)
-        await ModelApis.updatePositions(result.id, { positions })
-        setError({ type: 'success', message: 'Strategy updated' })
+        const result = await ModelApis.update(model.id, payload);
+        await ModelApis.updatePositions(result.id, { positions });
+        setError({ type: 'success', message: 'Strategy updated' });
       } else {
-        const result = await ModelApis.create(payload)
-        await ModelApis.updatePositions(result.id, { positions })
-        setError({ type: 'success', message: 'Strategy created' })
+        const result = await ModelApis.create(payload);
+        await ModelApis.updatePositions(result.id, { positions });
+        setError({ type: 'success', message: 'Strategy created' });
         setTimeout(() => {
           navigate('/user/business/strategies');
         }, 1500)
       }
     } catch (e: any) {
-      setError({ type: 'error', message: e.message })
+      setError({ type: 'error', message: e.message });
     } finally {
-      setBusy(false)
+      setBusy(false);
     }
   }
 
   const handleDelete = useCallback(() => {
-    setOpen(true)
+    setOpen(true);
   }, [])
 
   const handleClose = useCallback(() => {
-    setOpen(false)
+    setOpen(false);
   }, [])
 
   const onDelete: () => Promise<void> = useCallback(async () => {
-    if (!model) return
+    if (!model) return;
 
     try {
-      setOpen(false)
-      setError({})
-      setBusy(true)
+      setOpen(false);
+      setError({});
+      setBusy(true);
 
-      await ModelApis.delete(model.id)
-      setError({ type: 'success', message: 'Strategy deleted' })
+      await delayedCall(ModelApis.delete(model.id));
+      setError({ type: 'success', message: 'Strategy deleted' });
       setTimeout(() => {
         navigate('/user/business/strategies');
       }, 1500)

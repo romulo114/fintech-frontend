@@ -14,38 +14,39 @@ import {
 } from 'utils/validators'
 import { UserApis, UpdatePayload } from 'service/user'
 import { ValidatedText } from 'types/validate'
+import { delayedCall } from 'utils/delay'
 
 export const Profile: React.FC = () => {
 
-  useTitle('Profile')
+  useTitle('Profile');
 
-  const { user } = useAuthenticate()
-  const dispatch = useDispatch()
+  const { user } = useAuthenticate();
+  const dispatch = useDispatch();
 
-  const [fname, setFname] = useState<ValidatedText>({ value: user?.firstName ?? '', error: '' })
-  const [lname, setLname] = useState<ValidatedText>({ value: user?.lastName ?? '', error: '' })
-  const [email, setEmail] = useState<ValidatedText>({ value: user?.email ?? '', error: '' })
-  const [phone, setPhone] = useState<ValidatedText>({ value: user?.phoneNumber ?? '', error: '' })
-  const [company, setCompany] = useState<ValidatedText>({ value: user?.company ?? '', error: '' })
+  const [fname, setFname] = useState<ValidatedText>({ value: user?.firstName ?? '', error: '' });
+  const [lname, setLname] = useState<ValidatedText>({ value: user?.lastName ?? '', error: '' });
+  const [email, setEmail] = useState<ValidatedText>({ value: user?.email ?? '', error: '' });
+  const [phone, setPhone] = useState<ValidatedText>({ value: user?.phoneNumber ?? '', error: '' });
+  const [company, setCompany] = useState<ValidatedText>({ value: user?.company ?? '', error: '' });
 
-  const [pass, setPass] = useState(false)
-  const [oldpwd, setOldpwd] = useState<ValidatedText>({ value: '', error: '' })
-  const [newpwd, setNewpwd] = useState<ValidatedText>({ value: '', error: '' })
-  const [confirm, setConfirm] = useState<ValidatedText>({ value: '', error: '' })
+  const [pass, setPass] = useState(false);
+  const [oldpwd, setOldpwd] = useState<ValidatedText>({ value: '', error: '' });
+  const [newpwd, setNewpwd] = useState<ValidatedText>({ value: '', error: '' });
+  const [confirm, setConfirm] = useState<ValidatedText>({ value: '', error: '' });
 
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
 
   const changePassword: MouseEventHandler = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    setPass(pass => !pass)
+    e.preventDefault();
+    setPass(pass => !pass);
   }
 
   const saveProfile: MouseEventHandler = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      setBusy(true)
-      setError({})
+      setBusy(true);
+      setError({});
 
       const payload: UpdatePayload = {
         email: email.value,
@@ -55,11 +56,11 @@ export const Profile: React.FC = () => {
         phone_number: phone.value
       }
       if (pass) {
-        payload.old_password = oldpwd.value
-        payload.new_password = newpwd.value
+        payload.old_password = oldpwd.value;
+        payload.new_password = newpwd.value;
       }
 
-      const response = await UserApis.update(payload)
+      const response = await delayedCall(UserApis.update(payload));
       dispatch({
         type: AuthActions.setUser,
         payload: {
@@ -74,12 +75,12 @@ export const Profile: React.FC = () => {
             phoneNumber: response.phone_number,
           }
         }
-      })
-      setError({ type: 'success', message: 'Profile saved' })
+      });
+      setError({ type: 'success', message: 'Profile saved' });
     } catch (e: any) {
-      setError({ type: 'error', message: e.message })
+      setError({ type: 'error', message: e.message });
     } finally {
-      setBusy(false)
+      setBusy(false);
     }
   }
 
@@ -89,6 +90,7 @@ export const Profile: React.FC = () => {
     enabled = enabled && !!oldpwd.value && !!newpwd.value && !!confirm.value &&
       !oldpwd.error && !newpwd.error && !confirm.error
   }
+
   return (
     <Container maxWidth='md' className='profile-container'>
       <Paper sx={{ padding: theme => theme.spacing(4), width: '100%' }}>

@@ -6,6 +6,7 @@ import { ValidatedText } from 'types/validate'
 import { requireValidators } from 'utils/validators'
 import { Message, MessageType, PageTitle } from 'components/base'
 import { PortfolioApis } from 'service/portfolios'
+import { delayedCall } from 'utils/delay'
 
 export const PortfolioForm = () => {
 
@@ -24,7 +25,7 @@ export const PortfolioForm = () => {
       setError({});
       setBusy(true);
 
-      await PortfolioApis.create({ name: name.value });
+      await delayedCall(PortfolioApis.create({ name: name.value }));
       setError({ type: 'success', message: 'Portfolio created' });
       setTimeout(() => {
         navigate('/user/business/portfolios');

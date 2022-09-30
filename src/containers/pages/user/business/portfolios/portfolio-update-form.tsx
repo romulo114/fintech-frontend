@@ -15,6 +15,7 @@ import { ValidatedText } from 'types/validate';
 import { AccountInfo } from 'types/account';
 import { PortfolioInfo } from 'types/portfolio';
 import { ModelInfo } from 'types/model';
+import { delayedCall } from 'utils/delay';
 
 export const PortfolioUpdateForm: React.FC = () => {
 
@@ -41,18 +42,18 @@ export const PortfolioUpdateForm: React.FC = () => {
   const [model, setModel] = useState<ModelInfo | null>(portfolio?.model ?? null);
 
   const toggleEditName: () => void = useCallback(() => {
-    setEditName(edit => !edit)
-    setName({ value: portfolio?.name ?? '', error: '' })
+    setEditName(edit => !edit);
+    setName({ value: portfolio?.name ?? '', error: '' });
   }, [portfolio?.name]);
 
   const toggleEditAccount: () => void = useCallback(() => {
-    setEditAccount(edit => !edit)
-    setSelected(portfolio?.accounts ?? [])
+    setEditAccount(edit => !edit);
+    setSelected(portfolio?.accounts ?? []);
   }, [portfolio?.accounts]);
 
   const toggleEditModel: () => void = useCallback(() => {
-    setEditModel(edit => !edit)
-    setModel(portfolio?.model ?? null)
+    setEditModel(edit => !edit);
+    setModel(portfolio?.model ?? null);
   }, [portfolio?.model]);
 
   const updateName: () => Promise<void> = useCallback(async () => {
@@ -61,9 +62,9 @@ export const PortfolioUpdateForm: React.FC = () => {
       setBusy(true);
       setError({});
 
-      const updated = await PortfolioApis.update(
+      const updated = await delayedCall(PortfolioApis.update(
         +portfolioId, { name: name.value }
-      );
+      ));
       setPortfolio(updated);
       setName({ value: updated.name, error: '' });
       setError({ type: 'success', message: 'Name saved' });
@@ -80,9 +81,9 @@ export const PortfolioUpdateForm: React.FC = () => {
       setBusy(true);
       setError({});
 
-      const updated = await PortfolioApis.updateAccounts(
+      const updated = await delayedCall(PortfolioApis.updateAccounts(
         +portfolioId, { accounts: selected.map(sel => sel.id) }
-      );
+      ));
       setPortfolio(updated);
       setEditAccount(false);
       setError({ type: 'success', message: 'Accounts saved' });
@@ -99,10 +100,10 @@ export const PortfolioUpdateForm: React.FC = () => {
       setBusy(true);
       setError({});
 
-      const updated = await PortfolioApis.updateModel(
+      const updated = await delayedCall(PortfolioApis.updateModel(
         +portfolioId,
         { model_id: model?.id ?? null }
-      );
+      ));
       setPortfolio(updated);
       setEditModel(false);
       setError({ type: 'success', message: 'Model changed' });
@@ -119,7 +120,7 @@ export const PortfolioUpdateForm: React.FC = () => {
       setBusy(true);
       setError({});
 
-      await PortfolioApis.delete(+portfolioId);
+      await delayedCall(PortfolioApis.delete(+portfolioId));
       setError({ type: 'success', message: 'Portfolio deleted' });
       setTimeout(() => {
         navigate('/user/business/portfolios');
@@ -134,17 +135,17 @@ export const PortfolioUpdateForm: React.FC = () => {
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
       try {
-        setBusy(true)
-        setError({})
+        setBusy(true);
+        setError({});
 
-        const result = await Promise.all([
+        const result = await delayedCall(Promise.all([
           ModelApis.getAll(true),
           ModelApis.getAll(false)
-        ])
-        setPublics(result[0])
-        setPrivates(result[1])
+        ]));
+        setPublics(result[0]);
+        setPrivates(result[1]);
       } catch (e: any) {
-        setError({ type: 'error', message: e.message })
+        setError({ type: 'error', message: e.message });
       } finally {
         setBusy(false)
       }
@@ -158,35 +159,35 @@ export const PortfolioUpdateForm: React.FC = () => {
       if (!portfolioId) return;
 
       try {
-        setBusy(true)
-        setError({})
+        setBusy(true);
+        setError({});
 
         const result = await Promise.all([
           PortfolioApis.get(+portfolioId),
           AccountApis.getAll()
         ])
-        setPortfolio(result[0])
-        setName({ value: result[0].name, error: '' })
-        setAccounts(result[1])
+        setPortfolio(result[0]);
+        setName({ value: result[0].name, error: '' });
+        setAccounts(result[1]);
       } catch (e: any) {
-        setError({ type: 'error', message: e.message })
+        setError({ type: 'error', message: e.message });
       } finally {
-        setBusy(false)
+        setBusy(false);
       }
     }
 
-    fetchFn()
+    fetchFn();
   }, [portfolioId])
 
   useEffect(() => {
     if (editAccount) {
-      const current = portfolio?.accounts ?? []
-      setSelected([...current])
+      const current = portfolio?.accounts ?? [];
+      setSelected([...current]);
     }
   }, [editAccount, portfolio?.accounts])
 
   useEffect(() => {
-    setModel(portfolio?.model ?? null)
+    setModel(portfolio?.model ?? null);
   }, [portfolio?.model])
 
 

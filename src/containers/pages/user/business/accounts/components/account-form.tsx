@@ -7,6 +7,7 @@ import { requireValidators } from 'utils/validators';
 import { AccountApis } from 'service/accounts';
 import { Message, MessageType } from 'components/base';
 import { AccountInfo } from 'types';
+import { delayedCall } from 'utils/delay';
 
 export type AccountData = {
   accountNo: string;
@@ -20,48 +21,48 @@ export const AccountForm: React.FC<AccountFormProps> = ({ account }) => {
 
   const [accountNo, setAccountNo] = useState<ValidatedText>(
     { value: account?.accountNo ?? '', error: '' }
-  )
+  );
   const [brokerName, setBrokerName] = useState<ValidatedText>(
     { value: account?.brokerName ?? '', error: '' }
-  )
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [busy, setBusy] = useState(false)
+  );
+  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
+  const [busy, setBusy] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const onSubmit: React.MouseEventHandler = async (e): Promise<void> => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      setError({})
-      setBusy(true)
+      setError({});
+      setBusy(true);
 
       if (account) {
-        await AccountApis.update(account.id, {
+        await delayedCall(AccountApis.update(account.id, {
           accountNo: accountNo.value,
           brokerName: brokerName.value
-        })
-        setError({ type: 'success', message: 'Account updated' })
+        }));
+        setError({ type: 'success', message: 'Account updated' });
 
       } else {
-        await AccountApis.create({
+        await delayedCall(AccountApis.create({
           accountNo: accountNo.value,
           brokerName: brokerName.value
-        })
-        setError({ type: 'success', message: 'Account created' })
+        }));
+        setError({ type: 'success', message: 'Account created' });
       }
 
       setTimeout(() => {
         navigate('/user/business/accounts');
       }, 2000)
     } catch (e: any) {
-      setError({ type: 'error', message: e.message })
+      setError({ type: 'error', message: e.message });
     } finally {
-      setBusy(false)
+      setBusy(false);
     }
   }
 
-  const disabled = !!accountNo.error || !!brokerName.error || !accountNo.value || !brokerName.value
+  const disabled = !!accountNo.error || !!brokerName.error || !accountNo.value || !brokerName.value;
 
   return (
     <form className='account-form'>

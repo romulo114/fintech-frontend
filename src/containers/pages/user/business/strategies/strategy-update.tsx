@@ -6,10 +6,11 @@ import { StrategyForm } from './strategy-form'
 import { useTitle } from 'contexts/app'
 import { ModelApis } from 'service/models'
 import { ModelInfo } from 'types/model'
+import { delayedCall } from 'utils/delay'
 
 export const StrategyUpdate: React.FC = () => {
 
-  useTitle('Update strategy')
+  useTitle('Update strategy');
 
   const { strategyId } = useParams<{ strategyId: string }>()
   const [busy, setBusy] = useState(false)
@@ -22,12 +23,12 @@ export const StrategyUpdate: React.FC = () => {
 
       try {
         setBusy(true)
-        const data = await ModelApis.get(+strategyId)
-        setModel(data)
+        const data = await delayedCall(ModelApis.get(+strategyId));
+        setModel(data);
       } catch (e: any) {
-        setError({ type: 'error', message: e.message })
+        setError({ type: 'error', message: e.message });
       } finally {
-        setBusy(false)
+        setBusy(false);
       }
     }
 

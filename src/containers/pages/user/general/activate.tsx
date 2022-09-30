@@ -5,6 +5,7 @@ import { Message, MessageType } from 'components/base';
 import { useTitle } from 'contexts/app';
 import { useAuthenticate } from 'hooks/auth';
 import { DASHBOARD_URL } from 'types/user';
+import { delayedCall } from 'utils/delay';
 
 export const ActivateUser: React.FC = () => {
   useTitle('Activate');
@@ -23,7 +24,7 @@ export const ActivateUser: React.FC = () => {
       setBusy(true);
       setError({});
 
-      await sendConfirm(tokens.accessToken);
+      await delayedCall(sendConfirm(tokens.accessToken));
 
       setError({ type: 'success', message: 'Email was sent.' });
     } catch (e: any) {

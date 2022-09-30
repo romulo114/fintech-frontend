@@ -1,46 +1,46 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { LinearProgress, Button, Container } from '@mui/material'
-import { MessageType, Message, Dialog, PageTitle } from 'components/base'
-import { AccountTable } from '../../../../../components/user/account-table'
-import { useTitle } from 'contexts/app'
-import { AccountApis } from 'service/accounts'
-import { AccountInfo } from 'types/account'
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LinearProgress, Button, Container } from '@mui/material';
+import { MessageType, Message, Dialog, PageTitle } from 'components/base';
+import { AccountTable } from '../../../../../components/user/account-table';
+import { useTitle } from 'contexts/app';
+import { AccountApis } from 'service/accounts';
+import { AccountInfo } from 'types/account';
+import { delayedCall } from 'utils/delay';
 
 export const AccountsPage: React.FC = () => {
 
-  useTitle('My Accounts')
+  useTitle('My Accounts');
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [accounts, setAccounts] = useState<AccountInfo[]>([])
-  const [busy, setBusy] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [deleteId, setDeleteId] = useState(-1)
+  const [accounts, setAccounts] = useState<AccountInfo[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(-1);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFn = async (): Promise<void> => {
       try {
-        setError({})
-        setBusy(true)
-
-        const data = await AccountApis.getAll()
-        setAccounts(data)
+        setError({});
+        setBusy(true);
+        const data = await delayedCall<AccountInfo[]>(AccountApis.getAll());
+        setAccounts(data);
       } catch (e: any) {
-        setError({ type: 'error', message: e.message })
+        setError({ type: 'error', message: e.message });
       } finally {
-        setBusy(false)
+        setBusy(false);
       }
     }
 
-    fetchFn()
+    fetchFn();
   }, [])
 
   const handleCreate: React.MouseEventHandler = useCallback(async (e: React.MouseEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    navigate('/user/business/accounts/create')
+    navigate('/user/business/accounts/create');
     // eslint-disable-next-line
   }, []);
 
@@ -87,7 +87,7 @@ export const AccountsPage: React.FC = () => {
         onCancel={handleClose}
       />
 
-      {busy && <LinearProgress />}
+      {busy && <LinearProgress sx={{ my: 1 }} />}
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
       <section className='data-list'>
