@@ -7,7 +7,7 @@ function map2Trade(data: any): TradeInfo {
     id: data.id,
     name: data.name,
     created: new Date(data.created).toLocaleTimeString(),
-    status: data.status === 'true',
+    status: data.status === 'active',
     portfolios: data.portfolios
   }
 
@@ -22,9 +22,6 @@ type UpdateTradePayload = {
 }
 type UpdatePortfoliosPayload = {
   portfolios: number[];
-}
-type UpdatePositionsPayload = {
-  positions: number[];
 }
 type UpdatePricePayload = {
   iex: boolean;
@@ -46,7 +43,6 @@ export const TradeApis = {
   get: async (id: number): Promise<TradeInfo> => {
     const data = await httpClient.authGet(`${TRADE_BASE}/${id}`)
 
-    console.log('detail: ', data)
     return map2Trade(data)
   },
 
@@ -55,10 +51,13 @@ export const TradeApis = {
   },
 
   update: async (id: number, payload: UpdateTradePayload): Promise<TradeInfo> => {
-    const data = await httpClient.authPut(`${TRADE_BASE}/${id}`, payload)
+    const body = {
+      name: payload.name,
+      status: payload.status ? 'active' : 'inactive'
+    }
+    const data = await httpClient.authPut(`${TRADE_BASE}/${id}`, body);
 
-    console.log('update: ', data)
-    return map2Trade(data)
+    return map2Trade(data);
   },
 
   updatePortfolios: async (
@@ -66,7 +65,6 @@ export const TradeApis = {
   ): Promise<TradeInfo> => {
     const data = await httpClient.authPut(`${TRADE_BASE}/${id}/portfolios`, payload)
 
-    console.log('updatePortfolios: ', data)
     return map2Trade(data)
   },
 
@@ -77,28 +75,24 @@ export const TradeApis = {
     }
     const data = await httpClient.authGet(`${TRADE_BASE}/${id}/positions`, payload)
 
-    console.log('getPositions: ', data)
     return data
   },
 
   updatePositions: async (id: number, positions: number[]): Promise<TradeInfo> => {
     const data = await httpClient.authPut(`${TRADE_BASE}/${id}/positions`, { positions })
     
-    console.log('updatePositions: ', data)
     return map2Trade(data)
   },
 
   getPrices: async (id: number): Promise<PriceInfo[]> => {
     const data = await httpClient.authGet(`${TRADE_BASE}/${id}/prices`)
     
-    console.log('getPrices: ', data)
     return data
   },
 
   updatePrices: async (id: number, payload: UpdatePricePayload): Promise<TradeInfo> => {
     const data = await httpClient.authPost(`${TRADE_BASE}/${id}/prices`, payload)
         
-    console.log('updatePrices: ', data)
     return map2Trade(data)
   }
 }

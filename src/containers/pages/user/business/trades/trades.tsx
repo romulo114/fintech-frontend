@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { LinearProgress, Button } from '@mui/material'
 import { MessageType, Message, PageTitle } from 'components/base'
 import { ValidatedInput } from 'components/form'
 import { useTitle } from 'contexts/app'
 import { TradeApis } from 'service/trade'
 import { requireValidators } from 'utils/validators'
+import { delayedCall } from 'utils/delay';
 import { ValidatedText } from 'types/validate'
 import { TradeInfo } from 'types'
 import { TradeTable } from 'components/user/trade-table'
 
 export const TradeList: React.FC = () => {
-
+  
   useTitle('My Trades')
 
   const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
@@ -23,44 +24,41 @@ export const TradeList: React.FC = () => {
   useEffect(() => {
     const fetch = async (): Promise<void> => {
       try {
-        setBusy(true)
-        setError({})
+        setBusy(true);
+        setError({});
 
-        const trades = await TradeApis.getAll()
-        setTrades(trades)
+        const trades = await delayedCall(TradeApis.getAll());
+        setTrades(trades);
       } catch (e: any) {
-        setError({ type: 'error', message: e.message })
+        setError({ type: 'error', message: e.message });
       } finally {
-        setBusy(false)
+        setBusy(false);
       }
     }
 
-    fetch()
+    fetch();
   }, [])
 
-  const handleCreate = useCallback(async () => {
+  const handleCreate = async () => {
     if (!creating) {
-      setCreating(true)
+      setCreating(true);
     } else {
       try {
-        setBusy(true)
-        setError({})
+        setBusy(true);
+        setError({});
 
-        await TradeApis.create({ name: name.value })
-        const trades = await TradeApis.getAll()
-        console.log(trades)
-        setTrades(trades)
+        await TradeApis.create({ name: name.value });
+        const trades = await TradeApis.getAll();
+        setTrades(trades);
       } catch (e: any) {
-        setError({ type: 'error', message: e.message })
+        setError({ type: 'error', message: e.message });
       } finally {
-        setBusy(false)
+        setBusy(false);
       }
     }
-  }, [creating, name.value])
+  }
 
-  const handleCancel = useCallback(() => {
-    setCreating(false)
-  }, [])
+  const handleCancel = () => setCreating(false);
 
   const disabled = creating && (!name.value || !!name.error)
 

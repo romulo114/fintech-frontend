@@ -43,6 +43,10 @@ export const PortfoliosPage: React.FC = () => {
     // eslint-disable-next-line
   }, []);
 
+  const onSelect = (id: number) => {
+    navigate(`/user/business/portfolios/${id}`);
+  }
+
   return (
     <Container maxWidth='md'>
       <PageTitle>My Portfolios</PageTitle>
@@ -51,7 +55,7 @@ export const PortfoliosPage: React.FC = () => {
       {error.type && <Message type={error.type}>{error.message}</Message>}
 
       <section className='data-list'>
-        <PortfolioTable portfolios={portfolios} />
+        <PortfolioTable portfolios={portfolios} onSelect={onSelect} />
       </section>
       <section className='actions'>
         <Button variant='contained' onClick={handleCreate}>

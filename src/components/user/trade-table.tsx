@@ -12,9 +12,9 @@ type TradeTableProps = {
 
 export const TradeTable: React.FC<TradeTableProps> = (props) => {
   const { trades } = props
-  const [pageSize, setPageSize] = useState(10)
-  const [page, setPage] = useState(0)
-  const navigate = useNavigate()
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(0);
+  const navigate = useNavigate();
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -26,8 +26,8 @@ export const TradeTable: React.FC<TradeTableProps> = (props) => {
   }, [])
 
   const onSelect = (e: React.MouseEvent, id: number): void => {
-    e.preventDefault()
-    navigate(`/user/business/trades/${id}`)
+    e.preventDefault();
+    navigate(`/user/business/trades/${id}`);
   }
 
   return (

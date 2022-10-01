@@ -1,20 +1,21 @@
-import React, { useCallback, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useCallback, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow
-} from '@mui/material'
-import { PortfolioInfo } from 'types/portfolio'
+  TableHead, TablePagination, TableRow, Checkbox
+} from '@mui/material';
+import { PortfolioInfo } from 'types/portfolio';
 
 type PortfolioTableProps = {
   portfolios: PortfolioInfo[];
+  onSelectAll?: (checked: boolean) => void;
+  onSelect: (id: number) => void;
+  selected?: number[];
 }
 export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
 
-  const { portfolios } = props
+  const { portfolios, onSelect, onSelectAll, selected } = props
   const [pageSize, setPageSize] = useState(10)
   const [page, setPage] = useState(0)
-  const navigate = useNavigate()
 
   const changePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage);
@@ -25,10 +26,13 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
     setPage(0);
   }, [])
 
-  const onSelect = (e: React.MouseEvent, id: number): void => {
-    e.preventDefault()
-    navigate(`/user/business/portfolios/${id}`)
+  const handleSelect = (e: React.MouseEvent, id: number): void => {
+    e.preventDefault();
+    onSelect(id);
   }
+
+  const hasCheckbox = !!(onSelectAll && selected);
+  const count = portfolios.length;
 
   return (
     <>
@@ -36,6 +40,16 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
+              {hasCheckbox && (
+                <TableCell padding='checkbox' sx={{ pl: 1 }}>
+                  <Checkbox
+                    color='primary'
+                    checked={count > 0 && selected.length === count}
+                    indeterminate={selected.length > 0 && selected.length < count}
+                    onChange={(_, checked) => onSelectAll(checked)}
+                  />
+                </TableCell>
+              )}
               <TableCell key='id' style={{ minWidth: 120 }}>ID</TableCell>
               <TableCell key='broker' style={{ minWidth: 120 }}>Name</TableCell>
               <TableCell key='portfolio' style={{ minWidth: 120 }}>Keywords</TableCell>
@@ -47,12 +61,19 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
                 hover
                 key={portfolio.id}
                 sx={{ cursor: 'pointer' }}
-                onClick={e => onSelect(e, portfolio.id)}
+                onClick={e => handleSelect(e, portfolio.id)}
               >
+                {hasCheckbox && (
+                  <TableCell padding='checkbox' sx={{ pl: 1 }}>
+                  <Checkbox
+                    color='primary'
+                    checked={selected.includes(portfolio.id)}
+                  />
+                </TableCell>
+                )}
                 <TableCell>{portfolio.id}</TableCell>
                 <TableCell>{portfolio.name}</TableCell>
                 <TableCell>{[]}</TableCell>
-                
               </TableRow>
             ))}
           </TableBody>

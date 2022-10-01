@@ -9,7 +9,7 @@ export const TradeUpdate: React.FC = () => {
   useTitle('Update trade')
 
   return (
-    <Container maxWidth='md' sx={{ p: 3, mt: 4 }}>
+    <Container maxWidth='lg' sx={{ p: 3, mt: 4 }}>
       <TradeUpdateForm />
     </Container>
   )
