@@ -1,7 +1,8 @@
 export interface ModelPositionData {
+  id?: number;
   symbol: string;
   weight: number;
-  price?: number;
+  model_id?: number;
 }
 
 export interface ModelPositionPayload {
