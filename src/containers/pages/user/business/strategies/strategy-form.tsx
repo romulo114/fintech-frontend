@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button, LinearProgress, FormControlLabel,
   Checkbox, TextField
 } from '@mui/material';
-import { Message, MessageType, PageTitle, Dialog } from 'components/base';
+import { PageTitle, Dialog } from 'components/base';
 import { ValidatedInput } from 'components/form';
 import { EditablePosition } from './editable-position';
 import { useAuthenticate } from 'hooks';
@@ -13,47 +13,68 @@ import { ValidatedText } from 'types/validate';
 import { ModelInfo, ModelPositionData } from 'types/model';
 import { ModelApis } from 'service/models';
 import { delayedCall } from 'utils/delay';
+import { useNotification } from 'hooks/use-notification';
 
-type StrategyFormProps = {
-  model?: ModelInfo;
-}
-export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
+export const StrategyForm: React.FC = () => {
 
-  const { model } = props;
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
   const [busy, setBusy] = useState(false);
+  const { sendNotification } = useNotification();
 
-  const [name, setName] = useState<ValidatedText>({ value: model?.name ?? '', error: '' });
-  const [keywords, setKeywords] = useState(model?.keywords?.join(',') ?? '');
-  const [desc, setDesc] = useState(model?.description ?? '');
-  const [shared, setShared] = useState(model?.public ?? false);
+  const { strategyId } = useParams<{ strategyId: string }>();
+  const [model, setModel] = useState<ModelInfo | null>(null);
 
-  const [positions, setPositions] = useState<ModelPositionData[]>(model?.positions ?? []);
+  useEffect(() => {
+    const fetchFn = async (): Promise<void> => {
+      if (!strategyId) return;
+
+      try {
+        setBusy(true)
+        const data = await delayedCall(ModelApis.get(+strategyId));
+        setModel(data);
+      } catch (e: any) {
+        sendNotification(e.message, 'error', 3000);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    fetchFn();
+  }, [sendNotification, strategyId])
+
+
+  const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
+  const [keywords, setKeywords] = useState('');
+  const [desc, setDesc] = useState('');
+  const [shared, setShared] = useState(false);
+  const [positions, setPositions] = useState<ModelPositionData[]>([]);
+
+  useEffect(() => {
+    setName({ value: model?.name ?? '', error: '' });
+    setKeywords(model?.keywords?.join(',') ?? '');
+    setDesc(model?.description ?? '')
+    setShared(model?.public ?? false);
+    setPositions(model?.positions ?? []);
+  }, [model])
 
   const [open, setOpen] = useState(false);
-
-
   const navigate = useNavigate();
   const { user } = useAuthenticate();
 
-  const changeShared = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setShared(e.target.checked);
-  }, [])
-
-  const changeKeywords = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setKeywords(e.target.value);
-  }, [])
-
-  const changeDesc = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setDesc(e.target.value)
-  }, [])
+  const changeShared = (e: React.ChangeEvent<HTMLInputElement>) => setShared(e.target.checked);
+  const changeKeywords = (e: React.ChangeEvent<HTMLInputElement>) => setKeywords(e.target.value);
+  const changeDesc = (e: React.ChangeEvent<HTMLInputElement>) => setDesc(e.target.value);
 
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
     e.preventDefault();
 
     try {
       setBusy(true);
-      setError({});
+
+      const symbols = positions.map(pos => pos.symbol);
+      if (new Set(symbols).size !== symbols.length) {
+        sendNotification('Symbol can not be duplicated.', 'error', 3000);
+        return;
+      }
 
       const payload = {
         name: name.value,
@@ -63,58 +84,56 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       }
 
       if (model) {
-        const result = await ModelApis.update(model.id, payload);
-        await ModelApis.updatePositions(result.id, { positions });
-        setError({ type: 'success', message: 'Strategy updated' });
+        for (const pos of positions) {
+          pos.model_id = model.id;
+        }
+        await ModelApis.update(model.id, payload);
+        const updated = await ModelApis.updatePositions(model.id, { positions });
+        setModel(updated);
+        sendNotification('Strategy updated.', 'success', 3000);
       } else {
         const result = await ModelApis.create(payload);
         await ModelApis.updatePositions(result.id, { positions });
-        setError({ type: 'success', message: 'Strategy created' });
+        sendNotification('Strategy created.', 'success', 3000);
         setTimeout(() => {
           navigate('/user/business/strategies');
         }, 1500)
       }
     } catch (e: any) {
-      setError({ type: 'error', message: e.message });
+      sendNotification(e.message, 'error', 3000);
     } finally {
       setBusy(false);
     }
   }
 
-  const handleDelete = useCallback(() => {
-    setOpen(true);
-  }, [])
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, [])
+  const handleDelete = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const onDelete: () => Promise<void> = useCallback(async () => {
     if (!model) return;
 
     try {
       setOpen(false);
-      setError({});
       setBusy(true);
 
       await delayedCall(ModelApis.delete(model.id));
-      setError({ type: 'success', message: 'Strategy deleted' });
+      sendNotification('Strategy deleted', 'success', 3000);
       setTimeout(() => {
         navigate('/user/business/strategies');
       }, 1500)
     } catch (e: any) {
-      setError({ type: 'error', message: e.message })
+      sendNotification(e.message, 'error', 3000);
     } finally {
       setBusy(false)
     }
-  }, [model, navigate])
+  }, [model, navigate, sendNotification])
 
   const disabled = !name.value || !!name.error
 
   return (
     <form className='strategy-form'>
       <PageTitle>
-        Create a Strategy
+        {model ? 'Update' : 'Create'} a Strategy
       </PageTitle>
 
       <Dialog
@@ -129,7 +148,6 @@ export const StrategyForm: React.FC<StrategyFormProps> = (props) => {
       />
 
       {busy && <LinearProgress />}
-      {error.type && <Message type={error.type}>{error.message}</Message>}
 
       <section className='input-group'>
         <ValidatedInput

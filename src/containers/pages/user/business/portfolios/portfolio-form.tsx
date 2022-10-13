@@ -1,40 +1,40 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Button, LinearProgress } from '@mui/material'
-import { ValidatedInput } from 'components/form'
-import { ValidatedText } from 'types/validate'
-import { requireValidators } from 'utils/validators'
-import { Message, MessageType, PageTitle } from 'components/base'
-import { PortfolioApis } from 'service/portfolios'
-import { delayedCall } from 'utils/delay'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button, LinearProgress } from '@mui/material';
+import { useQueryClient, useMutation } from 'react-query';
+import { PageTitle } from 'components/base';
+import { ValidatedInput } from 'components/form';
+import { useNotification } from 'hooks/use-notification';
+import { PortfolioApis, PortfolioPayload } from 'service/portfolios';
+import { ValidatedText } from 'types/validate';
+import { requireValidators } from 'utils/validators';
+import { delayedCall } from 'utils/delay';
 
 export const PortfolioForm = () => {
-
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({});
-  const [busy, setBusy] = useState(false);
-  const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
-
   const navigate = useNavigate();
-
-  const disabled = !!name.error || !name.value;
-
-  const onSubmit: React.MouseEventHandler = async (e): Promise<void> => {
-    e.preventDefault();
-
-    try {
-      setError({});
-      setBusy(true);
-
-      await delayedCall(PortfolioApis.create({ name: name.value }));
-      setError({ type: 'success', message: 'Portfolio created' });
+  const { sendNotification } = useNotification();
+  const client = useQueryClient();
+  const { isLoading, mutate } = useMutation((body: PortfolioPayload) => {
+    return delayedCall(PortfolioApis.create(body));
+  }, {
+    onSuccess: () => {
+      sendNotification('Portfolio created. Redirecting ...', 'success', 1500);
+      client.invalidateQueries('portfolios');
       setTimeout(() => {
         navigate('/user/business/portfolios');
-      }, 1500)
-    } catch (e: any) {
-      setError({ type: 'error', message: e.message })
-    } finally {
-      setBusy(false)
+      }, 1200);
+    }, 
+    onError: (e: any) => {
+      sendNotification(e.message ?? 'Unknown error', 'error', 3000);
     }
+  })
+
+  const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
+  const disabled = !!name.error || !name.value;
+
+  const onSubmit: React.MouseEventHandler = async (e) => {
+    e.preventDefault();
+    mutate({ name: name.value });
   }
 
   return (
@@ -43,8 +43,7 @@ export const PortfolioForm = () => {
         Create your Portfolio
       </PageTitle>
 
-      {busy && <LinearProgress />}
-      {error.type && <Message type={error.type}>{error.message}</Message>}
+      {isLoading && <LinearProgress />}
 
       <section className='input-group'>
         <ValidatedInput
