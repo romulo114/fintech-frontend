@@ -98,7 +98,7 @@ export const PrivateRoutes = {
               element: <StrategyCreate />
             },
             {
-              path: '/user/business/strategies/:accountId',
+              path: '/user/business/strategies/:strategyId',
               element: <StrategyUpdate />
             }
           ]
