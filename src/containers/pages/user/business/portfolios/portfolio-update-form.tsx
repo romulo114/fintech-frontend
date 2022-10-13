@@ -165,7 +165,7 @@ export const PortfolioUpdateForm: React.FC = () => {
         const result = await Promise.all([
           PortfolioApis.get(+portfolioId),
           AccountApis.getAll()
-        ])
+        ]);
         setPortfolio(result[0]);
         setName({ value: result[0].name, error: '' });
         setAccounts(result[1]);
