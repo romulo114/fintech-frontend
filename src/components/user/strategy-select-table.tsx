@@ -10,8 +10,8 @@ import { usePagedData } from 'hooks/use-paged-data'
 type StrategySelectTableProps = {
   publics: ModelInfo[];
   privates: ModelInfo[];
-  value: ModelInfo | null;
-  setModel: (id: ModelInfo | null) => void;
+  value?: ModelInfo;
+  setModel: (model?: ModelInfo) => void;
   editing: boolean;
 }
 export const StrategySelectTable: React.FC<StrategySelectTableProps> = (props) => {
@@ -50,7 +50,7 @@ export const StrategySelectTable: React.FC<StrategySelectTableProps> = (props) =
     if (e.target.checked) {
       setModel(model);
     } else {
-      setModel(null);
+      setModel();
     }
   };
 
