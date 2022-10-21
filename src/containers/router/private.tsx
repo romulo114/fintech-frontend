@@ -76,7 +76,7 @@ export const PrivateRoutes = {
               element: <PortfolioCreate />
             },
             {
-              path: '/user/business/portfolios/:accountId',
+              path: '/user/business/portfolios/:portfolioId',
               element: <PortfolioUpdate />
             }
           ]

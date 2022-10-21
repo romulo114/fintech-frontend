@@ -6,6 +6,6 @@ export type NotificationContextType = {
     type: MessageType;
     message: React.ReactNode;
     duration: number;
-    sendNotification?: (msg: string, type: MessageType, duration?: number) => void;
+    sendNotification: (msg: string, type: MessageType, duration: number) => void;
     onClose?: () => void;
 }

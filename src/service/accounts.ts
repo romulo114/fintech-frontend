@@ -37,6 +37,11 @@ export const AccountApis = {
     return accounts.map(map2Account);
   },
 
+  getAllWithoutPortfolio: async (): Promise<AccountInfo[]> => {
+    const { accounts } = await httpClient.authGet(`${ACCOUNTS_BASE}`, { free: 'portfolio' });
+    return accounts.map(map2Account);
+  },
+
   create: async (payload: AccountPayload): Promise<AccountInfo[]> => {
     return await httpClient.authPost(`${ACCOUNTS_BASE}`, {
       account_number: payload.accountNo,

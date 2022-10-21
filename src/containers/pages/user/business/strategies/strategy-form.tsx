@@ -32,7 +32,7 @@ export const StrategyForm: React.FC = () => {
         const data = await delayedCall(ModelApis.get(+strategyId));
         setModel(data);
       } catch (e: any) {
-        sendNotification?.(e.message, 'error');
+        sendNotification(e.message, 'error', 3000);
       } finally {
         setBusy(false);
       }
@@ -72,7 +72,7 @@ export const StrategyForm: React.FC = () => {
 
       const symbols = positions.map(pos => pos.symbol);
       if (new Set(symbols).size !== symbols.length) {
-        sendNotification?.('Symbol can not be duplicated.', 'error');
+        sendNotification('Symbol can not be duplicated.', 'error', 3000);
         return;
       }
 
@@ -90,17 +90,17 @@ export const StrategyForm: React.FC = () => {
         await ModelApis.update(model.id, payload);
         const updated = await ModelApis.updatePositions(model.id, { positions });
         setModel(updated);
-        sendNotification?.('Strategy updated.', 'success');
+        sendNotification('Strategy updated.', 'success', 3000);
       } else {
         const result = await ModelApis.create(payload);
         await ModelApis.updatePositions(result.id, { positions });
-        sendNotification?.('Strategy created.', 'success');
+        sendNotification('Strategy created.', 'success', 3000);
         setTimeout(() => {
           navigate('/user/business/strategies');
         }, 1500)
       }
     } catch (e: any) {
-      sendNotification?.(e.message, 'error');
+      sendNotification(e.message, 'error', 3000);
     } finally {
       setBusy(false);
     }
@@ -117,12 +117,12 @@ export const StrategyForm: React.FC = () => {
       setBusy(true);
 
       await delayedCall(ModelApis.delete(model.id));
-      sendNotification?.('Strategy deleted', 'success');
+      sendNotification('Strategy deleted', 'success', 3000);
       setTimeout(() => {
         navigate('/user/business/strategies');
       }, 1500)
     } catch (e: any) {
-      sendNotification?.(e.message, 'error');
+      sendNotification(e.message, 'error', 3000);
     } finally {
       setBusy(false)
     }
