@@ -50,17 +50,17 @@ export const Header: React.FC = () => {
           </ListItemIcon>
           <ListItemText primary='Accounts' />
         </ListItem>
-        <ListItem button onClick={handleLink(`${BASE_URL}/portfolios`)}>
-          <ListItemIcon>
-            <BadgeIcon />
-          </ListItemIcon>
-          <ListItemText primary='Portfolios' />
-        </ListItem>
         <ListItem button onClick={handleLink(`${BASE_URL}/strategies`)}>
           <ListItemIcon>
             <BusinessIcon />
           </ListItemIcon>
           <ListItemText primary='Strategies' />
+        </ListItem>
+        <ListItem button onClick={handleLink(`${BASE_URL}/portfolios`)}>
+          <ListItemIcon>
+            <BadgeIcon />
+          </ListItemIcon>
+          <ListItemText primary='Portfolios' />
         </ListItem>
         <ListItem button onClick={handleLink(`${BASE_URL}/trades`)}>
           <ListItemIcon>

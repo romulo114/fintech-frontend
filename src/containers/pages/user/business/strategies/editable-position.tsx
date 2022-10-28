@@ -138,7 +138,7 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
                 {editingActions}
               </TableRow>
             ) : (
-              <TableRow key={pos.symbol} className='relative hover-wrapper'>
+              <TableRow key={idx} className='relative hover-wrapper'>
                 <TableCell>{pos.symbol}</TableCell>
                 <TableCell>{pos.weight}</TableCell>
                 {normalActions(idx)}

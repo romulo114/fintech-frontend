@@ -76,7 +76,7 @@ export const PrivateRoutes = {
               element: <PortfolioCreate />
             },
             {
-              path: '/user/business/portfolios/:accountId',
+              path: '/user/business/portfolios/:portfolioId',
               element: <PortfolioUpdate />
             }
           ]
@@ -108,7 +108,7 @@ export const PrivateRoutes = {
               element: <StrategyCreate />
             },
             {
-              path: '/user/business/strategies/:accountId',
+              path: '/user/business/strategies/:strategyId',
               element: <StrategyUpdate />
             }
           ]

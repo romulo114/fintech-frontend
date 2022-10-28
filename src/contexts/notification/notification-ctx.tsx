@@ -6,6 +6,7 @@ const initialState: NotificationContextType = {
     message: '',
     type: 'info',
     duration: 3000,
+    sendNotification: () => {},
 };
 
 export const NotificationContext = createContext<NotificationContextType | null>(null);
