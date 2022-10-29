@@ -9,40 +9,37 @@ import {
   FormControlLabel,
   Checkbox,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ActionButton } from 'components/base/action-button';
 import { AccountPosition } from 'types';
-import { useBusiness } from 'hooks/use-business';
-import { BusinessPrice } from 'types/business';
 import { useNotification } from 'hooks/use-notification';
 
 type FormState = {
   symbol: string;
   shares: number;
   isCash: boolean;
+  price: number | null
 }
 const validationSchema = Yup.object().shape({
   symbol: Yup.string().required('Symbol is required'),
   shares: Yup.number().min(0, 'Share must be positive').required('Share is required'),
-  isCash: Yup.boolean()
+  isCash: Yup.boolean(),
+  price: Yup.number().nullable()
 });
 type AccountPositionDialogProps = {
   open: boolean;
-  positions: AccountPosition[];
   position?: AccountPosition;
   onClose: () => void;
-  onAdd: (symbol: string, shares: number, isCash: boolean) => Promise<void>;
-  onUpdate: (id: number, symbol: string, shares: number, isCash: boolean) => Promise<void>;
+  onAdd: (symbol: string, shares: number, price: number | null, isCash: boolean) => Promise<void>;
+  onUpdate: (
+    id: number, symbol: string, shares: number, price: number | null, isCash: boolean
+  ) => Promise<void>;
 }
 export const AccountPositionDialog = (
-  { open, position, positions, onClose, onAdd, onUpdate }: AccountPositionDialogProps
+  { open, position, onClose, onAdd, onUpdate }: AccountPositionDialogProps
 ) => {
-  const { prices } = useBusiness();
   const { sendNotification } = useNotification();
 
   const [busy, setBusy] = useState(false);
@@ -59,6 +56,7 @@ export const AccountPositionDialog = (
       symbol: '',
       shares: 0,
       isCash: false,
+      price: null
     },
     validationSchema,
     onSubmit: async (values: FormState) => {
@@ -66,10 +64,10 @@ export const AccountPositionDialog = (
 
       try {
         if (!position?.id) {
-          await onAdd(values.symbol, values.shares, values.isCash);
+          await onAdd(values.symbol, values.shares, values.price, values.isCash);
         } else {
           onUpdate(
-            position.id, values.symbol, values.shares, values.isCash
+            position.id, values.symbol, values.shares, values.price, values.isCash
           );
         }
         onClose();
@@ -87,60 +85,40 @@ export const AccountPositionDialog = (
         setValues({
           symbol: position.symbol,
           shares: position.shares,
-          isCash: position.isCash
+          isCash: position.isCash,
+          price: position.price.price
         });
       } else {
         setValues({
           symbol: '',
           shares: 0,
-          isCash: false
+          isCash: false,
+          price: null
         });
       }
     }
   }, [open, position, setValues]);
 
-  const availablePrices = prices.filter(price => {
-    return positions.every(pos => pos.symbol !== price.symbol) || price.symbol === position?.symbol;
-  })
   return (
-    <Dialog open={open} maxWidth='md'>
+    <Dialog open={open} maxWidth='sm' fullWidth>
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Typography variant='h3' sx={{ fontSize: 20, fontWeight: 600, my: 2 }}>
             {position ? 'Edit Position' : 'New Position'}
           </Typography>
           <FormControl fullWidth>
-            <InputLabel id="symbol-select">Symbol</InputLabel>
-            <Select
-              labelId="symbol-select"
-              id="symbol"
+            <TextField
               name='symbol'
+              id='symbol'
+              fullWidth
+              label='Symbol'
               value={values.symbol}
-              label="Symbol"
               onChange={handleChange}
-              error={touched.symbol && Boolean(errors.symbol)}
               onBlur={handleBlur}
-              sx={{ width: 400 }}
-            >
-              {availablePrices.map((price: BusinessPrice) => (
-                <MenuItem key={price.id} value={price.symbol}>
-                  {price.symbol}
-                </MenuItem>
-              ))}
-            </Select>
-            {availablePrices.length === 0 && (
-              <Typography
-                variant='body2'
-                sx={{
-                  color: theme => theme.palette.warning.main,
-                  fontWeight: 300,
-                  fontSize: 14,
-                  my: 1
-                }}
-              >
-                There are no available prices. Please add prices first
-              </Typography>
-            )}
+              error={touched.symbol && Boolean(errors.symbol)}
+              helperText={touched.symbol && errors.symbol}
+              sx={{ my: 1 }}
+            />
           </FormControl>
           <TextField
             name='shares'
@@ -155,6 +133,19 @@ export const AccountPositionDialog = (
             helperText={touched.shares && errors.shares}
             sx={{ my: 1 }}
           />
+          <TextField
+						name='price'
+						id='price'
+						type='number'
+						fullWidth
+						label='Price(Optional)'
+						value={values.price}
+						onChange={handleChange}
+						onBlur={handleBlur}
+						error={touched.price && Boolean(errors.price)}
+						helperText={touched.price && errors.price}
+						sx={{ my: 1 }}
+					/>
           <FormControlLabel
             control={
               <Checkbox

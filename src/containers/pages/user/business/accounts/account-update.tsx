@@ -5,7 +5,6 @@ import { Message, PageTitle } from 'components/base';
 import { AccountForm, AccountPositions } from './components';
 import { useTitle } from 'contexts/app';
 import { useAccount } from 'service/accounts';
-import { BusinessPrices } from './components/business-prices';
 
 export const AccountUpdatePage: React.FC = () => {
 
@@ -15,12 +14,12 @@ export const AccountUpdatePage: React.FC = () => {
   const id = +(accountId ?? 0);
   const {
     account, loading, error: actionErr,
-    updatePositions, refetch
+    updatePositions
   } = useAccount(id);
 
-  const onDeletePrice = async () => {
-    await refetch(id);
-  };
+  // const onDeletePrice = async () => {
+  //   await refetch(id);
+  // };
 
   return (
     <Container maxWidth='lg' sx={{ p: 3, mt: 2 }}>
@@ -40,7 +39,7 @@ export const AccountUpdatePage: React.FC = () => {
               account={account}
               onUpdatePositions={updatePositions}
             />
-            <BusinessPrices onDelete={onDeletePrice} />
+            {/* <BusinessPrices onDelete={onDeletePrice} /> */}
           </Grid>
         </Grid>
       )}
