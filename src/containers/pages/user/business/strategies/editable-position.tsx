@@ -11,30 +11,33 @@ import AddIcon from '@mui/icons-material/Add'
 import { CircleIconButton } from 'components/base'
 import { ValidatedInput } from 'components/form'
 import { requireValidators } from 'utils/validators'
-import { ModelPositionData } from 'types/model'
+import { ModelPositionPayload } from 'types/model'
 import { ValidatedText } from 'types/validate'
 
 type EditablePositionProps = {
-  positions: ModelPositionData[];
-  onChange: (data: ModelPositionData[]) => void;
+  positions: ModelPositionPayload[];
+  onChange: (data: ModelPositionPayload[]) => void;
 }
 export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
 
   const { positions, onChange } = props
-  const [symbol, setSymbol] = useState<ValidatedText>({ value: '', error: '' })
-  const [weight, setWeight] = useState<ValidatedText>({ value: '0.0', error: '' })
+  const [symbol, setSymbol] = useState<ValidatedText>({ value: '', error: '' });
+  const [weight, setWeight] = useState<ValidatedText>({ value: '0.0', error: '' });
+  const [price, setPrice] = useState<ValidatedText>({ value: '', error: '' });
   const [editing, setEditing] = useState(-1)
 
   const addNewPosition = (): void => {
-    setSymbol({ value: '', error: '' })
-    setWeight({ value: '0.0', error: '' })
+    setSymbol({ value: '', error: '' });
+    setWeight({ value: '0.0', error: '' });
+    setPrice({ value: '', error: '' });
     setEditing(positions.length)
   }
 
   const editPosition = (idx: number): void => {
-    setEditing(idx)
-    setSymbol({ value: positions[idx].symbol, error: '' })
-    setWeight({ value: `${positions[idx].weight}`, error: '' })
+    setEditing(idx);
+    setSymbol({ value: positions[idx].symbol, error: '' });
+    setWeight({ value: `${positions[idx].weight}`, error: '' });
+    setPrice({ value: '', error: '' });
   }
 
   const deletePosition = (idx: number): void => {
@@ -48,13 +51,19 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
 
   const saveChange = (): void => {
     if (editing === positions.length) {
-      positions.push({ symbol: symbol.value, weight: +weight.value })
+      positions.push({
+        symbol: symbol.value,
+        weight: +weight.value,
+        price: +price.value
+      });
     } else {
-      positions[editing].symbol = symbol.value
-      positions[editing].weight = +weight.value
+      positions[editing].symbol = symbol.value;
+      positions[editing].weight = +weight.value;
+      positions[editing].price = +price.value;
     }
-    onChange([...positions])
-    setEditing(-1)
+
+    onChange([...positions]);
+    setEditing(-1);
   }
 
   const editingPosition = (
@@ -82,22 +91,34 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
           setValue={setWeight}
         />
       </TableCell>
+      <TableCell sx={{ verticalAlign: 'top' }}>
+        <ValidatedInput
+          fullWidth
+          type='number'
+          id='model-price'
+          variant='standard'
+          className='input'
+          validators={[]}
+          value={price}
+          setValue={setPrice}
+        />
+      </TableCell>
     </>
   )
 
   const normalActions = (idx: number): JSX.Element => (
-    <div className='absolute hover-child' style={{ right: 24, top: 8 }}>
+    <td className='absolute hover-child' style={{ right: 24, top: 8 }}>
       <CircleIconButton onClick={() => editPosition(idx)}>
         <EditIcon />
       </CircleIconButton>
       <CircleIconButton onClick={() => deletePosition(idx)}>
         <DeleteIcon />
       </CircleIconButton>
-    </div>
+    </td>
   )
 
   const editingActions = (
-    <div className='absolute hover-child' style={{ right: 24, top: 8 }}>
+    <td className='absolute hover-child' style={{ right: 24, top: 8 }}>
       <CircleIconButton onClick={cancelChange}>
         <CloseIcon />
       </CircleIconButton>
@@ -107,7 +128,7 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
       >
         <CheckIcon />
       </CircleIconButton>
-    </div>
+    </td>
   )
 
 
@@ -129,6 +150,7 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
             <TableRow>
               <TableCell key='symbol' style={{ minWidth: 120 }}>Symbol</TableCell>
               <TableCell key='weight' style={{ minWidth: 120 }}>Weight</TableCell>
+              <TableCell key='price' style={{ minWidth: 120 }}>Price</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -141,6 +163,7 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
               <TableRow key={idx} className='relative hover-wrapper'>
                 <TableCell>{pos.symbol}</TableCell>
                 <TableCell>{pos.weight}</TableCell>
+                <TableCell>{pos.price}</TableCell>
                 {normalActions(idx)}
               </TableRow>
             ))}
