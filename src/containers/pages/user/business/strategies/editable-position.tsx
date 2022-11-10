@@ -54,12 +54,12 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
       positions.push({
         symbol: symbol.value,
         weight: +weight.value,
-        price: +price.value
+        price: price.value ?? ''
       });
     } else {
       positions[editing].symbol = symbol.value;
       positions[editing].weight = +weight.value;
-      positions[editing].price = +price.value;
+      positions[editing].price = price.value;
     }
 
     onChange([...positions]);

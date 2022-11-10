@@ -37,7 +37,7 @@ export const AccountPositions = (
       pos => pos.id !== position
     ).map(pos => ({
       ...pos,
-      price: pos.price.price
+      price: pos.price?.price
     })));
   }, {
     onSuccess: () => {
@@ -51,7 +51,7 @@ export const AccountPositions = (
 
   const { isLoading: adding, mutate: addPosition } = useMutation((body: AccountPositionPayload) => {
     const payload: AccountPositionPayload[] = positions.map(pos => ({
-      ...pos, price: pos.price.price
+      ...pos, price: pos.price?.price
     }));
     return onUpdatePositions([
       ...payload,
@@ -97,13 +97,13 @@ export const AccountPositions = (
   }
 
   const onAddPosition = async (
-    symbol: string, shares: number, price: number | null, isCash: boolean
+    symbol: string, shares: number, price: number | string, isCash: boolean
   ) => {
     return addPosition({ symbol, shares, price, isCash });
   }
 
   const onUpdatePosition = async (
-    id: number, symbol: string, shares: number, price: number | null, isCash: boolean
+    id: number, symbol: string, shares: number, price: number | string, isCash: boolean
   ) => {
     return updatePosition({ id, payload: { symbol, shares, price, isCash }});
   }

@@ -6,7 +6,7 @@ export interface ModelPositionData {
 }
 
 export interface ModelPositionPayload extends ModelPositionData {
-  price: number | null;
+  price: number | string;
 }
 
 export interface ModelPositionUpdatePayload {

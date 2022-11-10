@@ -8,7 +8,7 @@ function map2Model(data: any): ModelInfo {
   return {
     ...others,
     public: is_public,
-    positions: positions?.map((pos: any ) => ({ ...pos, price: pos.price.price }))
+    positions: positions?.map((pos: any ) => ({ ...pos, price: pos.price?.price }))
   }
 }
 

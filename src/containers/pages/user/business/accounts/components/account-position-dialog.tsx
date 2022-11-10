@@ -20,7 +20,7 @@ type FormState = {
   symbol: string;
   shares: number;
   isCash: boolean;
-  price: number | null
+  price: number | string;
 }
 const validationSchema = Yup.object().shape({
   symbol: Yup.string().required('Symbol is required'),
@@ -32,9 +32,9 @@ type AccountPositionDialogProps = {
   open: boolean;
   position?: AccountPosition;
   onClose: () => void;
-  onAdd: (symbol: string, shares: number, price: number | null, isCash: boolean) => Promise<void>;
+  onAdd: (symbol: string, shares: number, price: number | string, isCash: boolean) => Promise<void>;
   onUpdate: (
-    id: number, symbol: string, shares: number, price: number | null, isCash: boolean
+    id: number, symbol: string, shares: number, price: number | string, isCash: boolean
   ) => Promise<void>;
 }
 export const AccountPositionDialog = (
@@ -56,7 +56,7 @@ export const AccountPositionDialog = (
       symbol: '',
       shares: 0,
       isCash: false,
-      price: null
+      price: ''
     },
     validationSchema,
     onSubmit: async (values: FormState) => {
@@ -86,14 +86,14 @@ export const AccountPositionDialog = (
           symbol: position.symbol,
           shares: position.shares,
           isCash: position.isCash,
-          price: position.price.price
+          price: position.price?.price ?? ''
         });
       } else {
         setValues({
           symbol: '',
           shares: 0,
           isCash: false,
-          price: null
+          price: ''
         });
       }
     }

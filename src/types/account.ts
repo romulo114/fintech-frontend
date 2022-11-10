@@ -20,7 +20,7 @@ export interface AccountPositionPayload {
   symbol: string;
   shares: number;
   isCash: boolean;
-  price: number | null;
+  price: number | string;
 }
 
 export interface AccountInfo {

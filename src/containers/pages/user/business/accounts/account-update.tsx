@@ -39,7 +39,6 @@ export const AccountUpdatePage: React.FC = () => {
               account={account}
               onUpdatePositions={updatePositions}
             />
-            {/* <BusinessPrices onDelete={onDeletePrice} /> */}
           </Grid>
         </Grid>
       )}
