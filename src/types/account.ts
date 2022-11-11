@@ -1,3 +1,5 @@
+import { BusinessPrice } from "./business";
+
 export interface Price {
   id: number;
   symbol: string;
@@ -10,6 +12,15 @@ export interface AccountPosition {
   symbol: string;
   shares: number;
   isCash: boolean;
+  price: BusinessPrice;
+}
+
+export interface AccountPositionPayload {
+  id?: number;
+  symbol: string;
+  shares: number;
+  isCash: boolean;
+  price: number | string;
 }
 
 export interface AccountInfo {

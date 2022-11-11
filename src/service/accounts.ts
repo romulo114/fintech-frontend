@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { httpClient, BASE_URL } from './base';
-import { AccountInfo, AccountPosition } from 'types/account';
+import { AccountInfo, AccountPosition, AccountPositionPayload } from 'types/account';
 import { delayedCall } from 'utils/delay';
 
 const ACCOUNTS_BASE = `${BASE_URL}/accounts`;
@@ -76,7 +76,7 @@ export const AccountApis = {
     );
   },
 
-  updatePosition: async (id: number, positions: AccountPosition[]) => {
+  updatePosition: async (id: number, positions: AccountPositionPayload[]) => {
     return httpClient.authPut(
       `${ACCOUNTS_BASE}/${id}/positions`,
       { positions: positions.map(pos => ({ ...pos, is_cash: pos.isCash })) }
@@ -118,7 +118,7 @@ export const useAccount = (id: number) => {
     await refetch(id);
   }, [id]);
 
-  const updatePositions = useCallback(async (positions: AccountPosition[]) => {
+  const updatePositions = useCallback(async (positions: AccountPositionPayload[]) => {
     await AccountApis.updatePosition(id, positions);
     await refetch(id);
   }, [id]);

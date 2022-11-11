@@ -7,7 +7,7 @@ export const StrategyCreate: React.FC = () => {
   useTitle('Create strategy');
 
   return (
-    <Container maxWidth='sm' sx={{ p: 3, mt: 4 }}>
+    <Container maxWidth='md' sx={{ p: 3, mt: 4 }}>
       <StrategyForm />
     </Container>
   )
