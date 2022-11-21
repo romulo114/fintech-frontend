@@ -37,7 +37,7 @@ export const EditablePosition: React.FC<EditablePositionProps> = (props) => {
     setEditing(idx);
     setSymbol({ value: positions[idx].symbol, error: '' });
     setWeight({ value: `${positions[idx].weight}`, error: '' });
-    setPrice({ value: '', error: '' });
+    setPrice({ value: `${positions[idx].price}`, error: '' });
   }
 
   const deletePosition = (idx: number): void => {
