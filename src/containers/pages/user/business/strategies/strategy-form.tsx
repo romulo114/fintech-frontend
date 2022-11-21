@@ -18,7 +18,6 @@ import { useMutation, useQuery } from 'react-query';
 export const StrategyForm: React.FC = () => {
 
   const { sendNotification } = useNotification();
-
   const { strategyId } = useParams<{ strategyId: string }>();
 
   const { isLoading, refetch, data: model } = useQuery('models', {
