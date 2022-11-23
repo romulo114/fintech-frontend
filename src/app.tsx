@@ -1,10 +1,9 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { NoSsr } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
-import { AppRouter } from 'containers/router';
+import { RouterProvider, AppRouter } from 'containers/router';
 import { theme } from 'config/theme.config';
 import { AppProvider } from 'contexts/app';
 import { AuthProvider } from 'contexts/auth';
@@ -17,7 +16,7 @@ const queryClient = new QueryClient();
 
 export const App: React.FC = () => (
   <ThemeProvider theme={theme}>
-    <BrowserRouter>
+    <RouterProvider>
       <QueryClientProvider client={queryClient}>
         <NoSsr>
           <AppProvider>
@@ -32,6 +31,6 @@ export const App: React.FC = () => (
           </AppProvider>
         </NoSsr>
       </QueryClientProvider>
-    </BrowserRouter>
+    </RouterProvider>
   </ThemeProvider>
 );

@@ -1,12 +1,12 @@
-import React, { MouseEvent, MouseEventHandler, useState } from 'react'
-import { Navigate, useLocation, Link } from 'react-router-dom'
-import { Box, Button, LinearProgress } from '@mui/material'
-import { ValidatedInput } from 'components/form'
-import { DASHBOARD_URL } from 'types/user'
-import { ValidatedText } from 'types/validate'
-import { emailValidators, passValidators } from 'utils/validators'
-import { useAuthenticate } from 'hooks/auth'
-import { Message, MessageType } from 'components/base'
+import React, { MouseEvent, MouseEventHandler, useState } from 'react';
+import { Navigate, useLocation, Link } from 'react-router-dom';
+import { Box, Button, LinearProgress } from '@mui/material';
+import { ValidatedInput } from 'components/form';
+import { DASHBOARD_URL } from 'types/user';
+import { ValidatedText } from 'types/validate';
+import { emailValidators, passValidators } from 'utils/validators';
+import { useAuthenticate } from 'hooks/auth';
+import { Message, MessageType } from 'components/base';
 
 
 export const SigninForm: React.FC = () => {
