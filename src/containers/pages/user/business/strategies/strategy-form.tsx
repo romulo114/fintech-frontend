@@ -5,21 +5,33 @@ import {
   Checkbox, TextField, CircularProgress
 } from '@mui/material';
 import { PageTitle, Dialog } from 'components/base';
-import { ValidatedInput } from 'components/form';
 import { EditablePosition } from './editable-position';
-import { requireValidators } from 'utils/validators';
-import { ValidatedText } from 'types/validate';
 import { ModelPositionPayload } from 'types/model';
 import { ModelApis } from 'service/models';
 import { delayedCall, delayedFunc } from 'utils/delay';
 import { useNotification } from 'hooks/use-notification';
 import { useMutation, useQuery } from 'react-query';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-export const StrategyForm: React.FC = () => {
+type StrategyFormData = {
+  name: string;
+  keywords: string;
+  desc: string;
+  shared: boolean;
+  positions: ModelPositionPayload[];
+}
+type StrategyFormProps = {
+  onChanged?: (flag: boolean) => void;
+}
+export const StrategyForm: React.FC<StrategyFormProps> = ({ onChanged }) => {
 
   const { sendNotification } = useNotification();
-
   const { strategyId } = useParams<{ strategyId: string }>();
+
+  const [open, setOpen] = useState(false);
+  const [positionChanged, setPositionChanged] = useState(false);
+  const navigate = useNavigate();
 
   const { isLoading, refetch, data: model } = useQuery('models', {
     queryFn: delayedFunc(async () => {
@@ -31,36 +43,16 @@ export const StrategyForm: React.FC = () => {
     }
   });
 
-  const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
-  const [keywords, setKeywords] = useState('');
-  const [desc, setDesc] = useState('');
-  const [shared, setShared] = useState(false);
-  const [positions, setPositions] = useState<ModelPositionPayload[]>([]);
-
-  useEffect(() => {
-    setName({ value: model?.name ?? '', error: '' });
-    setKeywords(model?.keywords?.join(',') ?? '');
-    setDesc(model?.description ?? '')
-    setShared(model?.public ?? false);
-    setPositions(model?.positions ?? []);
-  }, [model])
-
-  const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const changeShared = (e: React.ChangeEvent<HTMLInputElement>) => setShared(e.target.checked);
-  const changeKeywords = (e: React.ChangeEvent<HTMLInputElement>) => setKeywords(e.target.value);
-  const changeDesc = (e: React.ChangeEvent<HTMLInputElement>) => setDesc(e.target.value);
-
   const { isLoading: updating, mutate: updateModel } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (values: StrategyFormData) => {
       const payload = {
-        name: name.value,
-        keywords: keywords.split(','),
-        description: desc,
-        public: shared
+        name: values.name,
+        keywords: values.keywords.split(','),
+        description: values.desc,
+        public: values.shared
       };
 
+      const { positions } = values;
       if (model) {
         for (const pos of positions) {
           pos.model_id = model.id;
@@ -86,6 +78,49 @@ export const StrategyForm: React.FC = () => {
     }
   });
 
+  const formik = useFormik<StrategyFormData>({
+    initialValues: {
+      name: '',
+      keywords: '',
+      desc: '',
+      shared: false,
+      positions: []
+    },
+    validationSchema: yup.object({
+      name: yup.string().required('Name is required')
+    }),
+    onSubmit: async values => {
+      const symbols = values.positions.map(pos => pos.symbol);
+      if (new Set(symbols).size !== symbols.length) {
+        sendNotification('Symbol can not be duplicated.', 'error', 3000);
+        return;
+      }
+
+      await updateModel(values);
+    }
+  })
+
+  useEffect(() => {
+    onChanged && onChanged(formik.dirty || positionChanged);
+  }, [formik.dirty, onChanged, positionChanged])
+
+  useEffect(() => {
+    formik.resetForm({
+      values: {
+        name: model?.name ?? '',
+        keywords: model?.keywords?.join(',') ?? '',
+        desc: model?.description ?? '',
+        shared: model?.public ?? false,
+        positions: model?.positions ?? []
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [model])
+
+  const changeShared = (e: React.ChangeEvent<HTMLInputElement>) => formik.setFieldValue(
+    'shared', e.target.checked
+  );
+
   const { isLoading: deleting, mutate: deleteModel } = useMutation({
     mutationFn: async () => {
       if (!model) return;
@@ -103,18 +138,6 @@ export const StrategyForm: React.FC = () => {
     }
   })
 
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
-    e.preventDefault();
-
-    const symbols = positions.map(pos => pos.symbol);
-    if (new Set(symbols).size !== symbols.length) {
-      sendNotification('Symbol can not be duplicated.', 'error', 3000);
-      return;
-    }
-
-    await updateModel();
-  }
-
   const handleDelete = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -123,10 +146,8 @@ export const StrategyForm: React.FC = () => {
     await deleteModel();
   }
 
-  const disabled = !name.value || !!name.error
-
   return (
-    <form className='strategy-form'>
+    <form className='strategy-form' onSubmit={formik.handleSubmit}>
       <PageTitle>
         {model ? 'Update' : 'Create'} a Strategy
       </PageTitle>
@@ -145,38 +166,42 @@ export const StrategyForm: React.FC = () => {
       {(isLoading || deleting) && <LinearProgress />}
 
       <section className='input-group'>
-        <ValidatedInput
-          fullWidth
-          id='strategy-name'
+        <TextField
+          name='name'
+          id='name'
           label='Name'
+          fullWidth
           variant='standard'
           className='input'
-          validators={requireValidators}
-          value={name}
-          setValue={setName}
+          value={formik.values.name}
+          onChange={formik.handleChange}
+          helperText={formik.errors.name}
+          error={formik.touched.name && Boolean(formik.errors.name)}
         />
         <TextField
+          name='keywords'
+          id='keywords'
           fullWidth
-          id='strategy-keywords'
           label='Keywords'
           variant='standard'
           className='input'
-          value={keywords}
-          onChange={changeKeywords}
+          value={formik.values.keywords}
+          onChange={formik.handleChange}
         />
         <TextField
+          name='desc'
+          id='desc'
           fullWidth
           multiline
           rows={5}
-          id='strategy-desc'
           label='Description'
           variant='standard'
           className='input'
-          value={desc}
-          onChange={changeDesc}
+          value={formik.values.desc}
+          onChange={formik.handleChange}
         />
         <FormControlLabel
-          control={<Checkbox checked={shared} onChange={changeShared} />}
+          control={<Checkbox checked={formik.values.shared} onChange={changeShared} />}
           label="Public"
           className='input'
         />
@@ -184,13 +209,16 @@ export const StrategyForm: React.FC = () => {
 
       <section className='input-group'>
         <EditablePosition
-          positions={positions}
-          onChange={setPositions}
+          positions={formik.values.positions}
+          onChange={(positions: ModelPositionPayload[]) => {
+            setPositionChanged(true);
+            formik.setFieldValue('positions', positions);
+          }}
         />
       </section>
 
       <section className='actions justify-content-between row-reverse'>
-        <Button type='submit' variant='contained' onClick={onSubmit} disabled={disabled}>
+        <Button type='submit' variant='contained'>
           {model ? 'Update' : 'Create'}
           {updating && <CircularProgress color='warning' sx={{ ml: 1 }} size={20} />}
         </Button>

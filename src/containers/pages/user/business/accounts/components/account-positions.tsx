@@ -73,7 +73,7 @@ export const AccountPositions = (
     const payloads: AccountPositionPayload[] = positions.map(pos => pos.id === id ? ({
       ...pos, ...payload
     }) : ({
-      ...pos, price: pos.price.price
+      ...pos, price: pos.price?.price
     }));
 
     return onUpdatePositions(payloads);
