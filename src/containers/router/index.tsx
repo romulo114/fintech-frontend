@@ -5,3 +5,5 @@ import { PublicRoutes } from './public';
 export const AppRouter = () => (
 	useRoutes([PrivateRoutes, PublicRoutes])
 );
+
+export * from './router';

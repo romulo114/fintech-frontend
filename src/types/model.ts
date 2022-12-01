@@ -5,11 +5,15 @@ export interface ModelPositionData {
   model_id?: number;
 }
 
-export interface ModelPositionPayload {
-  positions: ModelPositionData[];
+export interface ModelPositionPayload extends ModelPositionData {
+  price: number | string;
 }
 
-export interface ModelPosition extends ModelPositionData {
+export interface ModelPositionUpdatePayload {
+  positions: ModelPositionPayload[];
+}
+
+export interface ModelPosition extends ModelPositionPayload {
   id: number;
 }
 
@@ -22,5 +26,4 @@ export interface ModelPayload {
 export interface ModelInfo extends ModelPayload {
   id: number;
   positions: ModelPosition[];
-  userId: number;
 }

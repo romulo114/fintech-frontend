@@ -1,14 +1,14 @@
 import { httpClient, BASE_URL } from './base'
-import { ModelInfo, ModelPayload, ModelPositionPayload } from 'types/model'
+import { ModelInfo, ModelPayload, ModelPositionUpdatePayload } from 'types/model'
 
 const MODELS_BASE = `${BASE_URL}/models`
 
 function map2Model(data: any): ModelInfo {
-  const { user_id, is_public, ...others } = data
+  const { is_public, positions, ...others } = data
   return {
     ...others,
     public: is_public,
-    userId: user_id
+    positions: positions?.map((pos: any ) => ({ ...pos, price: pos.price?.price }))
   }
 }
 
@@ -38,7 +38,7 @@ export const ModelApis = {
   },
 
   updatePositions: async (
-    id: number, payload: ModelPositionPayload
+    id: number, payload: ModelPositionUpdatePayload
   ): Promise<ModelInfo> => {
     const data = await httpClient.authPut(`${MODELS_BASE}/${id}/position`, payload)
     return map2Model(data)
