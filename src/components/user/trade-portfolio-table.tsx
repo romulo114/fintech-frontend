@@ -1,19 +1,18 @@
 import React, { useCallback, useState } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer,
-  TableHead, TablePagination, TableRow, Checkbox
+  TableHead, TablePagination, TableRow, Switch
 } from '@mui/material';
-import { PortfolioInfo } from 'types';
+import { TradePortofolioInfo } from 'types';
 
 type PortfolioTableProps = {
-  portfolios: PortfolioInfo[];
-  onSelectAll?: (checked: boolean) => void;
+  portfolios: TradePortofolioInfo[];
   onSelect: (id: number) => void;
-  selected?: number[];
+  onToggleStatus: (portfolioId: number, checked: boolean) => Promise<void>;
 }
-export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
+export const TradePortfolioTable: React.FC<PortfolioTableProps> = (props) => {
 
-  const { portfolios, onSelect, onSelectAll, selected } = props;
+  const { portfolios, onSelect, onToggleStatus } = props;
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(0);
 
@@ -31,8 +30,10 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
     onSelect(id);
   }
 
-  const isEditing = !!(onSelectAll && selected);
-  const count = portfolios.length;
+  const handleToggle = async (e: React.MouseEvent, id: number, checked: boolean) => {
+    e.stopPropagation();
+    onToggleStatus(id, checked);
+  }
 
   return (
     <>
@@ -40,18 +41,9 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              {isEditing && (
-                <TableCell padding='checkbox' sx={{ pl: 1 }}>
-                  <Checkbox
-                    color='primary'
-                    checked={count > 0 && selected.length === count}
-                    indeterminate={selected.length > 0 && selected.length < count}
-                    onChange={(_, checked) => onSelectAll(checked)}
-                  />
-                </TableCell>
-              )}
               <TableCell key='id' style={{ minWidth: 120 }}>ID</TableCell>
               <TableCell key='broker' style={{ minWidth: 120 }}>Name</TableCell>
+              <TableCell key='active' style={{ minWidth: 120 }}>Active</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -60,18 +52,16 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = (props) => {
                 hover
                 key={portfolio.id}
                 sx={{ cursor: 'pointer' }}
-                onClick={e => handleSelect(e, portfolio.id)}
+                onClick={e => handleSelect(e, portfolio.portfolio.id)}
               >
-                {isEditing && (
-                  <TableCell padding='checkbox' sx={{ pl: 1 }}>
-                    <Checkbox
-                      color='primary'
-                      checked={selected.includes(portfolio.id)}
-                    />
-                  </TableCell>
-                )}
-                <TableCell>{portfolio.id}</TableCell>
-                <TableCell>{portfolio.name}</TableCell>
+                <TableCell>{portfolio.portfolio.id}</TableCell>
+                <TableCell>{portfolio.portfolio.name}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={portfolio.active}
+                    onClick={(e) => handleToggle(e, portfolio.portfolio.id, !portfolio.active)}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

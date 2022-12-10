@@ -15,6 +15,7 @@ import { requireValidators } from 'utils/validators'
 import { ValidatedText } from 'types/validate'
 import { TradeInfo, PortfolioInfo } from 'types'
 import { PortfolioTable } from 'components/user'
+import { TradePortfolioTable } from 'components/user/trade-portfolio-table'
 
 export const TradeUpdateForm: React.FC = () => {
 
@@ -31,7 +32,7 @@ export const TradeUpdateForm: React.FC = () => {
   const [status, setStatus] = useState<boolean>(trade?.status ?? false);
 
   // update portfolios
-  const [portfolios, setPortfolios] = useState<PortfolioInfo[]>([]);
+  const [allPortfolios, setAllPortfolios] = useState<PortfolioInfo[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
   const [editPortfolio, setEditPortfolio] = useState(false);
 
@@ -43,7 +44,7 @@ export const TradeUpdateForm: React.FC = () => {
 
   const toggleEditPortfolio: () => void = useCallback(() => {
     setEditPortfolio(edit => !edit);
-    setSelected((trade?.portfolios ?? []).map(item => (item.id)));
+    setSelected((trade?.portfolios ?? []).map(item => (item.portfolio.id)));
   }, [trade?.portfolios])
 
   const updateTrade: () => Promise<void> = useCallback(async () => {
@@ -84,6 +85,25 @@ export const TradeUpdateForm: React.FC = () => {
     }
   }
 
+  const onToggleStatus = async (portfolioId: number, checked: boolean) => {
+      if (!tradeId) return;
+
+      try {
+        setBusy(true);
+        setError({});
+
+        await TradeApis.updatePortfolio(+tradeId, portfolioId, checked);
+        const updated = await TradeApis.get(+tradeId);
+        setTrade(updated);
+        setEditPortfolio(false);
+        setError({ type: 'success', message: 'Portfolios saved' });
+      } catch (e: any) {
+        setError({ type: 'error', message: e.message });
+      } finally {
+        setBusy(false);
+      }
+    }
+
   const changeStatus = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setStatus(e.target.checked);
   }, [])
@@ -113,7 +133,7 @@ export const TradeUpdateForm: React.FC = () => {
         setError({});
 
         const portfolios = await PortfolioApis.getAll();
-        setPortfolios(portfolios);
+        setAllPortfolios(portfolios);
       } catch (e: any) {
         setError({ type: 'error', message: e.message });
       } finally {
@@ -149,13 +169,13 @@ export const TradeUpdateForm: React.FC = () => {
   useEffect(() => {
     if (editPortfolio) {
       const current = trade?.portfolios ?? [];
-      setSelected(current.map(item => item.id));
+      setSelected(current.map(item => item.portfolio.id));
     }
   }, [editPortfolio, trade?.portfolios])
 
   const onSelectAllPortfolios = (checked: boolean) => {
     if (checked) {
-      setSelected((portfolios ?? []).map(item => item.id));
+      setSelected((allPortfolios ?? []).map(item => item.id));
     } else {
       setSelected([]);
     }
@@ -169,6 +189,10 @@ export const TradeUpdateForm: React.FC = () => {
     } else {
       setSelected([...selected, id]);
     }
+  }
+
+  const onSelect = (id: number) => {
+    navigate(`/user/business/portfolios/${id}`);
   }
 
   return (
@@ -244,15 +268,16 @@ export const TradeUpdateForm: React.FC = () => {
             </div>
             {editPortfolio ? (
               <PortfolioTable
-                portfolios={portfolios}
+                portfolios={allPortfolios}
                 onSelectAll={onSelectAllPortfolios}
                 onSelect={onSelectPortfolio}
                 selected={selected}
               />
             ) : (
-              <PortfolioTable
-                portfolios={portfolios.filter(item => selected.includes(item.id))}
-                onSelect={onSelectPortfolio}
+              <TradePortfolioTable
+                portfolios={trade?.portfolios ?? []}
+                onSelect={onSelect}
+                onToggleStatus={onToggleStatus}
               />
             )}
           </section >

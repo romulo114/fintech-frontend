@@ -68,6 +68,15 @@ export const TradeApis = {
     return map2Trade(data)
   },
 
+  updatePortfolio: (
+    tradeId: number, portfolioId: number, active: boolean
+  ): Promise<void> => {
+    return httpClient.authPut(
+      `${TRADE_BASE}/${tradeId}/portfolios/${portfolioId}`,
+      { active }
+    )
+  },
+
   getPositions: async (id: number, portfolioId?: number): Promise<AccountPositionInfo[]> => {
     const payload: any = {}
     if (portfolioId) {
