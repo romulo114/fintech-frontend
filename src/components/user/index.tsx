@@ -4,3 +4,4 @@ export * from './account-table-edit';
 export * from './portfolio-table';
 export * from './strategy-table';
 export * from './strategy-select-table';
+export * from './trade-portfolio-table';

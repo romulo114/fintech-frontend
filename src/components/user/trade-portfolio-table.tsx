@@ -8,7 +8,7 @@ import { TradePortofolioInfo } from 'types';
 type PortfolioTableProps = {
   portfolios: TradePortofolioInfo[];
   onSelect: (id: number) => void;
-  onToggleStatus: (portfolioId: number, checked: boolean) => Promise<void>;
+  onToggleStatus: (values: { portfolioId: number, status: boolean }) => void;
 }
 export const TradePortfolioTable: React.FC<PortfolioTableProps> = (props) => {
 
@@ -30,9 +30,9 @@ export const TradePortfolioTable: React.FC<PortfolioTableProps> = (props) => {
     onSelect(id);
   }
 
-  const handleToggle = async (e: React.MouseEvent, id: number, checked: boolean) => {
+  const handleToggle = async (e: React.MouseEvent, id: number, status: boolean) => {
     e.stopPropagation();
-    onToggleStatus(id, checked);
+    onToggleStatus({ portfolioId: id, status });
   }
 
   return (
