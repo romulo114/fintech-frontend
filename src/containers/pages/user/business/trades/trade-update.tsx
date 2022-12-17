@@ -4,8 +4,6 @@ import { TradeUpdateForm } from './trade-update-form'
 import { useTitle } from 'contexts/app'
 
 export const TradeUpdate: React.FC = () => {
-
-
   useTitle('Update trade')
 
   return (
@@ -13,5 +11,4 @@ export const TradeUpdate: React.FC = () => {
       <TradeUpdateForm />
     </Container>
   )
-
 }

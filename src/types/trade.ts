@@ -16,10 +16,14 @@ export interface TradePortofolioInfo {
   active: boolean;
   portfolio: ExtPortfolioInfo;
 }
-export interface TradeInfo {
-  id: number;
+
+export type TradeBaseInfo = {
   name: string;
-  created: string;
   status: boolean;
+}
+
+export type TradeInfo = TradeBaseInfo & {
+  id: number;
+  created: string;
   portfolios: TradePortofolioInfo[];
 }

@@ -56,7 +56,13 @@ export const ConfirmDialog = ({
   }
 
   return (
-    <Dialog {...{ sx, open, onClose }}>
+    <Dialog
+      {...{ open, onClose }}
+      sx={{
+        '& .MuiDialog-paper': { py: 2 },
+        ...sx
+      }}
+    >
       <DialogTitle id="alert-dialog-title" sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         {title}
         {target && (
@@ -81,13 +87,13 @@ export const ConfirmDialog = ({
           {description}
         </Box>
       </DialogContent>
-      <DialogActions sx={{ px: 3, alignItems: 'center' }}>
+      <DialogActions sx={{ px: 3, alignItems: 'center', gap: 2 }}>
         {error && <Typography sx={{ flexGrow: 1 }} color='error'>{error}</Typography>}
         <Button
           onClick={onClose}
-          sx={{ width: 80, lineHeight: '24px' }}
+          sx={{ width: 120, lineHeight: '24px' }}
           autoFocus
-          variant='outlined'
+          variant='text'
         >
           {cancel}
         </Button>

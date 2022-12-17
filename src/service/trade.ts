@@ -1,5 +1,5 @@
 import { httpClient, BASE_URL } from './base'
-import { TradeInfo, AccountPositionInfo, PriceInfo } from 'types'
+import { TradeInfo, AccountPositionInfo, PriceInfo, TradeBaseInfo } from 'types';
 const TRADE_BASE = `${BASE_URL}/trades`
 
 function map2Trade(data: any): TradeInfo {
@@ -14,10 +14,6 @@ function map2Trade(data: any): TradeInfo {
   return trade
 }
 type TradePayload = {
-  name: string;
-}
-type UpdateTradePayload = {
-  status: boolean;
   name: string;
 }
 type UpdatePortfoliosPayload = {
@@ -50,7 +46,7 @@ export const TradeApis = {
     return await httpClient.authDelete(`${TRADE_BASE}/${id}`)
   },
 
-  update: async (id: number, payload: UpdateTradePayload): Promise<TradeInfo> => {
+  update: async (id: number, payload: TradeBaseInfo): Promise<TradeInfo> => {
     const body = {
       name: payload.name,
       status: payload.status ? 'active' : 'inactive'
@@ -58,6 +54,10 @@ export const TradeApis = {
     const data = await httpClient.authPut(`${TRADE_BASE}/${id}`, body);
 
     return map2Trade(data);
+  },
+
+  getActivePortfolios: async (): Promise<number[]> => {
+    return await httpClient.authGet(`${TRADE_BASE}/portfolios`);
   },
 
   updatePortfolios: async (

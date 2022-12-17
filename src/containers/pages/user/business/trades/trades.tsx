@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { LinearProgress, Button } from '@mui/material'
-import { MessageType, Message, PageTitle } from 'components/base'
+import { PageTitle } from 'components/base'
 import { ValidatedInput } from 'components/form'
 import { useTitle } from 'contexts/app'
 import { TradeApis } from 'service/trade'
@@ -9,65 +9,62 @@ import { delayedCall } from 'utils/delay';
 import { ValidatedText } from 'types/validate'
 import { TradeInfo } from 'types'
 import { TradeTable } from 'components/user/trade-table'
+import { useMutation, useQuery } from 'react-query'
+import { useNotification } from 'hooks/use-notification'
 
 export const TradeList: React.FC = () => {
   
   useTitle('My Trades')
 
-  const [error, setError] = useState<{ type?: MessageType, message?: string }>({})
-  const [busy, setBusy] = useState(false)
-  const [creating, setCreating] = useState(false)
-  const [name, setName] = useState<ValidatedText>({ value: '', error: '' })
+  const [creating , setCreating] = useState(false);
+  const [name, setName] = useState<ValidatedText>({ value: '', error: '' });
 
+  const { sendNotification } = useNotification();
   const [trades, setTrades] = useState<TradeInfo[]>([])
 
-  useEffect(() => {
-    const fetch = async (): Promise<void> => {
-      try {
-        setBusy(true);
-        setError({});
-
-        const trades = await delayedCall(TradeApis.getAll());
-        setTrades(trades);
-      } catch (e: any) {
-        setError({ type: 'error', message: e.message });
-      } finally {
-        setBusy(false);
-      }
+  const { isLoading, refetch } = useQuery({
+    queryFn: async () => {
+      return await delayedCall(TradeApis.getAll());
+    },
+    onError: (e: any) => {
+      sendNotification(e.message, 'error', 3000);
+    },
+    onSuccess: (data: TradeInfo[]) => {
+      setTrades(data);
     }
+  })
 
-    fetch();
-  }, [])
+  const { mutate: createTrade, isLoading: busy } = useMutation({
+    mutationFn: ({ name }: { name: string }) => {
+      return delayedCall(TradeApis.create({ name }));
+    },
+    onError: (e: any) => {
+      sendNotification(e.message, 'error', 3000);
+    },
+    onSuccess: () => {
+      sendNotification('Trade created successfully', 'success', 3000);
+      setCreating(false);
+      refetch();
+    },
+  });
 
   const handleCreate = async () => {
     if (!creating) {
       setCreating(true);
     } else {
-      try {
-        setBusy(true);
-        setError({});
-
-        await TradeApis.create({ name: name.value });
-        const trades = await TradeApis.getAll();
-        setTrades(trades);
-      } catch (e: any) {
-        setError({ type: 'error', message: e.message });
-      } finally {
-        setBusy(false);
-      }
+      createTrade({ name: name.value });
     }
   }
 
   const handleCancel = () => setCreating(false);
 
-  const disabled = creating && (!name.value || !!name.error)
-
+  const disabled = creating && busy;
+``
   return (
     <>
       <PageTitle>My Trades</PageTitle>
 
-      {busy && <LinearProgress />}
-      {error.type && <Message type={error.type}>{error.message}</Message>}
+      {(isLoading || busy) && <LinearProgress />}
 
       <section className='data-list'>
         <TradeTable trades={trades} />
