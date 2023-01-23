@@ -1,0 +1,61 @@
+@import 'base/mixins';
+@import 'base/placeholders';
+@import 'base/variables';
+
+.public-layout, .private-layout {
+  @extend %shared-layout;
+
+  & header {
+    @extend %shared-header;
+    justify-content: space-between;
+    background-color: white;
+
+    & .menu-item {
+      font-size: 1rem;
+      margin: 0 16px;
+      font-weight: 500;
+      color: #1976d2;
+      text-decoration: none;
+      &:hover {
+        color: #0056b3;
+      }
+
+      @media screen and (max-width: 480px) {
+        font-size: 0.875rem;
+        margin: 0 12px;
+      }
+    }
+  }
+
+  & main {
+    flex-grow: 1;
+  }
+
+  & footer {
+    @extend %shared-footer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #888;
+  }
+}
+
+.public-layout {
+  & main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.private-layout {
+  & main {
+    display: block;
+  }
+}
+
+.drawer-toolbar {
+  & .menu-item {
+    font-size: 1.5rem !important;
+    text-decoration: none !important;
+  }
+}

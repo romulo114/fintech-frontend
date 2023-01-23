@@ -1,0 +1,109 @@
+@import "assets/styles/base/variables";
+@import "assets/styles/base/mixins";
+@import "assets/styles/base/placeholders";
+
+.activate-paper {
+  margin: auto;
+  margin-top: 80px;
+  max-width: 640px;
+
+  & .title {
+    font-weight: 500;
+  }
+
+  & .actions {
+    @extend %actions-base;
+    margin-top: 16px;
+    align-items: center;
+
+    & .desc {
+      margin-right: 16px;
+    }
+  }
+}
+
+.profile-container {
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+
+  & form {
+    width: 100%;
+
+    & .input {
+      margin-top: 16px;
+    }
+
+    & .actions {
+      @extend %actions-base;
+      margin: 32px 0 16px;
+    }
+  }
+}
+
+main .contents {
+  padding: 24px;
+  min-height: 100%;
+
+  & .title {
+    @include my(8);
+  }
+
+  & .accounts-list {
+    @include my(16);
+  }
+
+  & .portfolio-form, .strategy-form {
+    @include my(8);
+
+    .input {
+      @include my(8);
+    }
+
+    .actions {
+      @extend %actions-base;
+      margin-top: 24px;
+    }
+  }
+}
+
+.input-group {
+  @include my(24);
+
+  &.hover-show-wrapper {
+    & .hover-show {
+      visibility: hidden;
+    }
+
+    &:hover {
+      & .hover-show {
+        visibility: visible;
+        margin-left: 32px;
+
+        & button {
+          margin-left: 8px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.strategy-list {
+  @include my(24);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  appearance: textfield;
+}
